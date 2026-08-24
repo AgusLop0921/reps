@@ -94,14 +94,23 @@ function splitByHeadings(markdown: string): RawSection[] {
 export function parse(markdown: string): Question[] {
   const sections = splitByHeadings(markdown)
   const questions: Question[] = []
-  let level: Level = 'basic'
+  let level: Level | null = null
+  let sourceSection: string | null = null
 
   for (const section of sections) {
     if (section.depth === LEVEL_HEADING) {
-      level = detectLevel(section.title) ?? level
+      sourceSection = section.title
+      // null when the heading is not a known level; never inherited (ADR-0014).
+      level = detectLevel(section.title)
       continue
     }
     if (section.depth !== QUESTION_HEADING) continue
+
+    if (sourceSection === null) {
+      throw new Error(
+        `[${SOURCE_ID}] question before any section heading: "${section.title}"`,
+      )
+    }
 
     const answerMd = section.body.trim()
     if (!answerMd) {
@@ -113,6 +122,7 @@ export function parse(markdown: string): Question[] {
       id: makeId(SOURCE_ID, slug),
       sourceId: SOURCE_ID,
       slug,
+      sourceSection,
       tech: 'react',
       lang: 'es',
       level,

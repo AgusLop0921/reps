@@ -32,12 +32,39 @@ describe('parse: sections and levels', () => {
       '¿Qué es fiber?',
     ])
   })
+
+  it('tags each question with its verbatim upstream section', () => {
+    const bySection = new Map(parse(SECTIONS).map((q) => [q.question, q.sourceSection]))
+    expect(bySection.get('¿Qué es React?')).toBe('Principiante')
+    expect(bySection.get('¿Qué es un hook?')).toBe('Intermedio')
+    expect(bySection.get('¿Qué es fiber?')).toBe('Experto')
+  })
+
+  it('leaves level null for a section that maps to no known level, never inheriting', () => {
+    const md = [
+      '### Experto',
+      '#### ¿Qué es fiber?',
+      'El reconciliador.',
+      '### Errores Típicos en React',
+      '#### Mutar el estado directamente',
+      'No lo hagas.',
+    ].join('\n')
+
+    const byQuestion = new Map(parse(md).map((q) => [q.question, q.level]))
+    expect(byQuestion.get('¿Qué es fiber?')).toBe('expert')
+    expect(byQuestion.get('Mutar el estado directamente')).toBeNull()
+  })
+
+  it('fails if a question appears before any section heading', () => {
+    const md = ['#### ¿Qué es React?', 'Una biblioteca.'].join('\n')
+    expect(() => parse(md)).toThrow(/before any section/)
+  })
 })
 
 describe('parse: answer sub-headings', () => {
   it('keeps content under a sub-heading instead of truncating the answer', () => {
     const md = [
-      '## Básico',
+      '### Básico',
       '#### ¿Qué es X?',
       'Antes de la subsección.',
       '##### Un detalle',
@@ -52,7 +79,7 @@ describe('parse: answer sub-headings', () => {
 
   it('does not treat a question whose whole answer sits under sub-headings as empty', () => {
     const md = [
-      '## Básico',
+      '### Básico',
       '#### Un capítulo',
       '##### Sección',
       'Todo el contenido vive aquí.',

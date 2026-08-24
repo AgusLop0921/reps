@@ -18,6 +18,11 @@ export const optionSchema = z.object({
   correct: z.boolean(),
 })
 
+/**
+ * A question, normalized from a source. Adapters MUST return questions in upstream
+ * document order: curriculum section order and positional lesson chunking depend on it
+ * (ADR-0011, ADR-0014).
+ */
 export const questionSchema = z
   .object({
     /** Stable hash of `${sourceId}:${slug}`. Never a positional index (ADR-0004). */
@@ -25,9 +30,12 @@ export const questionSchema = z
     sourceId: z.string().min(1),
     /** Original slug upstream. Used to link back to the source anchor. */
     slug: z.string().min(1),
+    /** Verbatim upstream section heading this question appeared under (ADR-0014). */
+    sourceSection: z.string().min(1),
     tech: techSchema,
     lang: langSchema,
-    level: levelSchema,
+    /** Difficulty when the source declares it; null when it does not (ADR-0014). */
+    level: levelSchema.nullable(),
     topic: z.string().nullable(),
     format: formatSchema,
     question: z.string().min(1),
@@ -41,21 +49,27 @@ export const questionSchema = z
 
 /**
  * A lesson is a small ordered group of questions (ADR-0011).
- * Generated at import time; may be reordered by `src/content/order.ts`.
+ * Generated at import time; may be reordered by `src/content/order.ts`. It carries no
+ * `title` — the UI composes the label from `copy.ts`, with `LESSON_TITLES` as the
+ * exception (ADR-0016) — and no `level`, since difficulty is per-question (ADR-0014).
  */
 export const lessonSchema = z.object({
   id: z.string().min(1),
   /** Position within its section, starting at 1. */
   order: z.number().int().positive(),
-  level: levelSchema,
-  title: z.string().min(1),
   questionIds: z.array(z.string().length(12)).min(1),
 })
 
-/** Sections are the level groupings of the path. Their order is the path order. */
+/**
+ * Sections group the path and their order is the path order. A section is a structural
+ * grouping taken from an upstream heading, not a difficulty level (ADR-0014).
+ */
 export const sectionSchema = z.object({
-  level: levelSchema,
+  /** Stable per source: derived from `sourceId` + the section heading slug. */
+  id: z.string().min(1),
+  /** Upstream section heading, verbatim — imported content, kept in its language. */
   title: z.string().min(1),
+  sourceId: z.string().min(1),
   lessons: z.array(lessonSchema).min(1),
 })
 
