@@ -1,6 +1,6 @@
 # ADR-0007: Content licensing and attribution
 
-- **Status:** Accepted
+- **Status:** Accepted — amended by ADR-0015
 - **Date:** 2026-08-24
 
 ## Context

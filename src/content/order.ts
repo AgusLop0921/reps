@@ -14,7 +14,11 @@ import type { Level } from './schema'
 export const PINNED_FIRST: Partial<Record<Level, string[]>> = {}
 
 /** Question slugs to exclude from the path (still searchable, never taught). */
-export const EXCLUDED_SLUGS: string[] = []
+export const EXCLUDED_SLUGS: string[] = [
+  // A full "JavaScript you need for React" book chapter, not a Q&A card: its answer is a
+  // multi-section primer, too long to sit in a lesson. Kept importable, kept off the path.
+  'qué-javascript-necesito-para-aprender-react',
+]
 
 /** Explicit lesson titles, keyed by lesson id. Otherwise titles are generated. */
 export const LESSON_TITLES: Record<string, string> = {}

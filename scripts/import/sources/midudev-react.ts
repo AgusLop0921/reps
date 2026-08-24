@@ -27,14 +27,14 @@ export const SOURCE_META = {
   lang: 'es',
 } as const
 
-/** Heading depth that marks a level section. */
-const LEVEL_HEADING = 2
+/** Heading depth that marks a section. Upstream uses `###`, not `##`. */
+const LEVEL_HEADING = 3
 /** Heading depth that marks a question. */
 const QUESTION_HEADING = 4
 
 /** Upstream headings are Spanish; our levels are English (ADR-0008). */
 const LEVEL_BY_KEYWORD: Array<[RegExp, Level]> = [
-  [/b[áa]sic/i, 'basic'],
+  [/principiant|b[áa]sic/i, 'basic'],
   [/intermedi/i, 'intermediate'],
   [/avanzad/i, 'advanced'],
   [/expert/i, 'expert'],
@@ -62,7 +62,14 @@ export function makeId(sourceId: string, slug: string): string {
 
 type RawSection = { depth: number; title: string; body: string }
 
-/** Splits markdown on headings with no dependencies, ignoring fenced code blocks. */
+/**
+ * Splits markdown into sections, ignoring fenced code blocks.
+ *
+ * Only headings at or above the question depth are section boundaries. Deeper headings
+ * (`#####` and beyond) are sub-headings *inside* an answer and stay in the body verbatim —
+ * otherwise an answer would be silently truncated at its first sub-heading, which for a
+ * few questions drops the entire answer.
+ */
 function splitByHeadings(markdown: string): RawSection[] {
   const lines = markdown.split('\n')
   const sections: RawSection[] = []
@@ -73,7 +80,7 @@ function splitByHeadings(markdown: string): RawSection[] {
     if (/^\s*```/.test(line)) inFence = !inFence
 
     const match = !inFence ? /^(#{1,6})\s+(.*)$/.exec(line) : null
-    if (match) {
+    if (match && match[1].length <= QUESTION_HEADING) {
       if (current) sections.push(current)
       current = { depth: match[1].length, title: match[2].trim(), body: '' }
       continue
@@ -84,19 +91,80 @@ function splitByHeadings(markdown: string): RawSection[] {
   return sections
 }
 
+/**
+ * Navigation chrome the source adds because the README is one scrollable document
+ * (ADR-0015): a back-to-index link, and the rule separating one question from the next.
+ */
+/** Back-to-index link, e.g. `**[⬆ Volver a índice](#índice)**`. Never authored content. */
+const BACK_TO_INDEX = /^\*\*\[⬆[^\]]*\]\(#índice\)\*\*$/
+/** A horizontal rule. Transport at the end of an answer, but plausible content mid-answer. */
+const HORIZONTAL_RULE = /^-{3,}$/
+
+/** Marks every line inside a fenced code block, delimiters included. */
+function fencedLines(lines: string[]): boolean[] {
+  let inFence = false
+  return lines.map((line) => {
+    if (/^\s*```/.test(line)) {
+      inFence = !inFence
+      return true
+    }
+    return inFence
+  })
+}
+
+/**
+ * Removes transport artifacts from the end of an answer only (ADR-0015). Fenced code is
+ * never transport, so a `---` inside a code block is left alone. A back-to-index link
+ * surviving mid-answer means the format assumption broke — fail loudly rather than delete
+ * content; a bare rule mid-answer is plausible authored content and is kept.
+ */
+function stripTransport(body: string, questionTitle: string): string {
+  const lines = body.trim().split('\n')
+  const fenced = fencedLines(lines)
+
+  let end = lines.length
+  while (end > 0) {
+    const i = end - 1
+    const line = lines[i].trim()
+    const isTrailingArtifact =
+      !fenced[i] && (BACK_TO_INDEX.test(line) || HORIZONTAL_RULE.test(line))
+    if (line === '' || isTrailingArtifact) end--
+    else break
+  }
+
+  for (let i = 0; i < end; i++) {
+    if (!fenced[i] && BACK_TO_INDEX.test(lines[i].trim())) {
+      throw new Error(
+        `[${SOURCE_ID}] transport artifact mid-answer in "${questionTitle}"`,
+      )
+    }
+  }
+
+  return lines.slice(0, end).join('\n').trim()
+}
+
 export function parse(markdown: string): Question[] {
   const sections = splitByHeadings(markdown)
   const questions: Question[] = []
-  let level: Level = 'basic'
+  let level: Level | null = null
+  let sourceSection: string | null = null
 
   for (const section of sections) {
     if (section.depth === LEVEL_HEADING) {
-      level = detectLevel(section.title) ?? level
+      sourceSection = section.title
+      // null when the heading is not a known level; never inherited (ADR-0014).
+      level = detectLevel(section.title)
       continue
     }
     if (section.depth !== QUESTION_HEADING) continue
 
-    const answerMd = section.body.trim()
+    if (sourceSection === null) {
+      throw new Error(
+        `[${SOURCE_ID}] question before any section heading: "${section.title}"`,
+      )
+    }
+
+    const answerMd = stripTransport(section.body, section.title)
     if (!answerMd) {
       throw new Error(`[${SOURCE_ID}] question with no answer: "${section.title}"`)
     }
@@ -106,6 +174,7 @@ export function parse(markdown: string): Question[] {
       id: makeId(SOURCE_ID, slug),
       sourceId: SOURCE_ID,
       slug,
+      sourceSection,
       tech: 'react',
       lang: 'es',
       level,

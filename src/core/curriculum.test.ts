@@ -17,15 +17,14 @@ const qid = (n: number) => String(n).padStart(12, 'q')
 const lesson = (id: string, order: number, questionIds: string[]): Lesson => ({
   id,
   order,
-  level: 'basic',
-  title: `Lesson ${order}`,
   questionIds,
 })
 
-const section = (level: Section['level'], lessons: Lesson[]): Section => ({
-  level,
-  title: level,
-  lessons: lessons.map((l) => ({ ...l, level })),
+const section = (id: string, lessons: Lesson[]): Section => ({
+  id,
+  title: id,
+  sourceId: 'test',
+  lessons,
 })
 
 const done = (lessonId: string): LessonProgress => ({

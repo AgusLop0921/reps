@@ -1,0 +1,6 @@
+# pnpm 11 removed `onlyBuiltDependencies` (and neverBuiltDependencies, ignoreDepScripts,
+# …) in favour of `allowBuilds`, a package -> boolean map. `strictDepBuilds` defaults to
+# true, so an un-approved dependency build script fails `pnpm install`. esbuild (pulled in
+# by vitest and tsx) needs its postinstall to link the platform binary.
+allowBuilds:
+  esbuild: true
