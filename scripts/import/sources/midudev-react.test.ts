@@ -107,7 +107,7 @@ describe('parse: transport artifacts', () => {
     expect(question.answerMd).toBe('La respuesta real.')
   })
 
-  it('fails loudly when a rule appears mid-answer', () => {
+  it('leaves a bare rule mid-answer alone: it is plausible authored content', () => {
     const md = [
       '### Básico',
       '#### ¿Qué es X?',
@@ -118,7 +118,8 @@ describe('parse: transport artifacts', () => {
       'Segunda parte.',
     ].join('\n')
 
-    expect(() => parse(md)).toThrow(/mid-answer/)
+    const [question] = parse(md)
+    expect(question.answerMd).toBe('Primera parte.\n\n---\n\nSegunda parte.')
   })
 
   it('fails loudly when a back-to-index link appears mid-answer', () => {
@@ -133,5 +134,30 @@ describe('parse: transport artifacts', () => {
     ].join('\n')
 
     expect(() => parse(md)).toThrow(/mid-answer/)
+  })
+
+  it('ignores a rule inside a fenced code block', () => {
+    const md = [
+      '### Básico',
+      '#### ¿Qué es X?',
+      'Un ejemplo:',
+      '',
+      '```yaml',
+      'a: 1',
+      '---',
+      'b: 2',
+      '```',
+      '',
+      '**[⬆ Volver a índice](#índice)**',
+      '',
+      '---',
+    ].join('\n')
+
+    const [question] = parse(md)
+    expect(question.answerMd).toContain('```yaml')
+    expect(question.answerMd).toContain('---\nb: 2')
+    expect(question.answerMd).toContain('```')
+    expect(question.answerMd).not.toContain('Volver a índice')
+    expect(question.answerMd.endsWith('```')).toBe(true)
   })
 })

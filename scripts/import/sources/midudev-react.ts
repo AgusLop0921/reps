@@ -93,35 +93,54 @@ function splitByHeadings(markdown: string): RawSection[] {
 
 /**
  * Navigation chrome the source adds because the README is one scrollable document
- * (ADR-0015): a back-to-index link and the rule separating one question from the next.
- * This is transport, not content.
+ * (ADR-0015): a back-to-index link, and the rule separating one question from the next.
  */
-const TRANSPORT_ARTIFACTS: RegExp[] = [
-  /^\*\*\[⬆[^\]]*\]\(#índice\)\*\*$/, // back-to-index link
-  /^-{3,}$/, // horizontal rule between questions
-]
+/** Back-to-index link, e.g. `**[⬆ Volver a índice](#índice)**`. Never authored content. */
+const BACK_TO_INDEX = /^\*\*\[⬆[^\]]*\]\(#índice\)\*\*$/
+/** A horizontal rule. Transport at the end of an answer, but plausible content mid-answer. */
+const HORIZONTAL_RULE = /^-{3,}$/
 
-const isArtifact = (line: string): boolean =>
-  TRANSPORT_ARTIFACTS.some((re) => re.test(line.trim()))
+/** Marks every line inside a fenced code block, delimiters included. */
+function fencedLines(lines: string[]): boolean[] {
+  let inFence = false
+  return lines.map((line) => {
+    if (/^\s*```/.test(line)) {
+      inFence = !inFence
+      return true
+    }
+    return inFence
+  })
+}
 
 /**
- * Removes known transport artifacts from the end of an answer only (ADR-0015). If an
- * artifact survives in the middle of the answer, the format assumption broke: fail loudly
- * rather than delete content.
+ * Removes transport artifacts from the end of an answer only (ADR-0015). Fenced code is
+ * never transport, so a `---` inside a code block is left alone. A back-to-index link
+ * surviving mid-answer means the format assumption broke — fail loudly rather than delete
+ * content; a bare rule mid-answer is plausible authored content and is kept.
  */
 function stripTransport(body: string, questionTitle: string): string {
   const lines = body.trim().split('\n')
-  while (lines.length > 0) {
-    const last = lines[lines.length - 1].trim()
-    if (last === '' || isArtifact(last)) lines.pop()
+  const fenced = fencedLines(lines)
+
+  let end = lines.length
+  while (end > 0) {
+    const i = end - 1
+    const line = lines[i].trim()
+    const isTrailingArtifact =
+      !fenced[i] && (BACK_TO_INDEX.test(line) || HORIZONTAL_RULE.test(line))
+    if (line === '' || isTrailingArtifact) end--
     else break
   }
-  if (lines.some(isArtifact)) {
-    throw new Error(
-      `[${SOURCE_ID}] transport artifact mid-answer in "${questionTitle}"`,
-    )
+
+  for (let i = 0; i < end; i++) {
+    if (!fenced[i] && BACK_TO_INDEX.test(lines[i].trim())) {
+      throw new Error(
+        `[${SOURCE_ID}] transport artifact mid-answer in "${questionTitle}"`,
+      )
+    }
   }
-  return lines.join('\n').trim()
+
+  return lines.slice(0, end).join('\n').trim()
 }
 
 export function parse(markdown: string): Question[] {
