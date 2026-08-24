@@ -62,7 +62,14 @@ export function makeId(sourceId: string, slug: string): string {
 
 type RawSection = { depth: number; title: string; body: string }
 
-/** Splits markdown on headings with no dependencies, ignoring fenced code blocks. */
+/**
+ * Splits markdown into sections, ignoring fenced code blocks.
+ *
+ * Only headings at or above the question depth are section boundaries. Deeper headings
+ * (`#####` and beyond) are sub-headings *inside* an answer and stay in the body verbatim —
+ * otherwise an answer would be silently truncated at its first sub-heading, which for a
+ * few questions drops the entire answer.
+ */
 function splitByHeadings(markdown: string): RawSection[] {
   const lines = markdown.split('\n')
   const sections: RawSection[] = []
@@ -73,7 +80,7 @@ function splitByHeadings(markdown: string): RawSection[] {
     if (/^\s*```/.test(line)) inFence = !inFence
 
     const match = !inFence ? /^(#{1,6})\s+(.*)$/.exec(line) : null
-    if (match) {
+    if (match && match[1].length <= QUESTION_HEADING) {
       if (current) sections.push(current)
       current = { depth: match[1].length, title: match[2].trim(), body: '' }
       continue
