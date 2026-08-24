@@ -31,7 +31,7 @@ change contracts.
 | [0004](0004-content-via-adapters.md) | Third-party content via adapters and a normalized schema | Accepted |
 | [0005](0005-indexeddb-persistence.md) | Local persistence in IndexedDB with Dexie | Accepted |
 | [0006](0006-leitner-spaced-repetition.md) | Spaced repetition with a 5-box Leitner system | Amended by 0012 |
-| [0007](0007-content-licensing.md) | Content licensing and attribution | Accepted |
+| [0007](0007-content-licensing.md) | Content licensing and attribution | Amended by 0015 |
 | [0008](0008-english-repo-spanish-product.md) | English repository, Spanish product | Accepted |
 | [0009](0009-git-workflow.md) | Branch, commit and PR workflow | Accepted |
 | [0010](0010-mobile-first-scroll-replacement.md) | Mobile-first, positioned against aimless scrolling | Accepted |
@@ -39,3 +39,4 @@ change contracts.
 | [0012](0012-review-inside-lessons.md) | Review cards inside lessons | Accepted |
 | [0013](0013-interview-simulation-byok.md) | Interview simulation with the user's own API key | Accepted (v2) |
 | [0014](0014-sections-are-not-levels.md) | Sections are structural, not difficulty levels | Accepted |
+| [0015](0015-strip-transport-artifacts.md) | Strip transport artifacts, not content | Accepted |
