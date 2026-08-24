@@ -91,6 +91,39 @@ function splitByHeadings(markdown: string): RawSection[] {
   return sections
 }
 
+/**
+ * Navigation chrome the source adds because the README is one scrollable document
+ * (ADR-0015): a back-to-index link and the rule separating one question from the next.
+ * This is transport, not content.
+ */
+const TRANSPORT_ARTIFACTS: RegExp[] = [
+  /^\*\*\[⬆[^\]]*\]\(#índice\)\*\*$/, // back-to-index link
+  /^-{3,}$/, // horizontal rule between questions
+]
+
+const isArtifact = (line: string): boolean =>
+  TRANSPORT_ARTIFACTS.some((re) => re.test(line.trim()))
+
+/**
+ * Removes known transport artifacts from the end of an answer only (ADR-0015). If an
+ * artifact survives in the middle of the answer, the format assumption broke: fail loudly
+ * rather than delete content.
+ */
+function stripTransport(body: string, questionTitle: string): string {
+  const lines = body.trim().split('\n')
+  while (lines.length > 0) {
+    const last = lines[lines.length - 1].trim()
+    if (last === '' || isArtifact(last)) lines.pop()
+    else break
+  }
+  if (lines.some(isArtifact)) {
+    throw new Error(
+      `[${SOURCE_ID}] transport artifact mid-answer in "${questionTitle}"`,
+    )
+  }
+  return lines.join('\n').trim()
+}
+
 export function parse(markdown: string): Question[] {
   const sections = splitByHeadings(markdown)
   const questions: Question[] = []
@@ -112,7 +145,7 @@ export function parse(markdown: string): Question[] {
       )
     }
 
-    const answerMd = section.body.trim()
+    const answerMd = stripTransport(section.body, section.title)
     if (!answerMd) {
       throw new Error(`[${SOURCE_ID}] question with no answer: "${section.title}"`)
     }

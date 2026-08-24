@@ -90,3 +90,48 @@ describe('parse: answer sub-headings', () => {
     expect(question.answerMd).toContain('Todo el contenido vive aquí.')
   })
 })
+
+describe('parse: transport artifacts', () => {
+  it('strips the trailing back-to-index link and rule, keeping the answer', () => {
+    const md = [
+      '### Básico',
+      '#### ¿Qué es X?',
+      'La respuesta real.',
+      '',
+      '**[⬆ Volver a índice](#índice)**',
+      '',
+      '---',
+    ].join('\n')
+
+    const [question] = parse(md)
+    expect(question.answerMd).toBe('La respuesta real.')
+  })
+
+  it('fails loudly when a rule appears mid-answer', () => {
+    const md = [
+      '### Básico',
+      '#### ¿Qué es X?',
+      'Primera parte.',
+      '',
+      '---',
+      '',
+      'Segunda parte.',
+    ].join('\n')
+
+    expect(() => parse(md)).toThrow(/mid-answer/)
+  })
+
+  it('fails loudly when a back-to-index link appears mid-answer', () => {
+    const md = [
+      '### Básico',
+      '#### ¿Qué es X?',
+      'Primera parte.',
+      '',
+      '**[⬆ Volver a índice](#índice)**',
+      '',
+      'Segunda parte.',
+    ].join('\n')
+
+    expect(() => parse(md)).toThrow(/mid-answer/)
+  })
+})
