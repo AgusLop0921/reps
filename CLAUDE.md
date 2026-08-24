@@ -54,6 +54,7 @@ Available today:
 pnpm test           # vitest
 pnpm lint           # eslint
 pnpm typecheck      # tsc --noEmit
+pnpm content:import # regenerate src/content/data/* from sources
 pnpm verify         # typecheck + lint + test — run before claiming you are done
 ```
 
@@ -62,7 +63,6 @@ Not scaffolded yet — added with the code they run:
 ```bash
 pnpm dev            # dev server            (arrives with the app: Vite + React)
 pnpm build          # typecheck + prod build (arrives with the app)
-pnpm content:import # regenerate src/content/data/* from sources (arrives with the importer)
 ```
 
 ## Layout and dependency rules

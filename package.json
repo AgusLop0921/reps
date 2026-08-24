@@ -9,6 +9,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "content:import": "tsx scripts/import/index.ts",
     "verify": "pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
