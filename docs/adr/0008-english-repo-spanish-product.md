@@ -1,6 +1,6 @@
 # ADR-0008: English repository, Spanish product
 
-- **Status:** Accepted
+- **Status:** Accepted — amended by ADR-0016
 - **Date:** 2026-08-24
 
 ## Context
