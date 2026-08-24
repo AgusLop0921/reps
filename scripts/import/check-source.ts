@@ -7,7 +7,9 @@
  *
  * Usage: pnpm tsx scripts/import/check-source.ts
  */
-import type { Question } from '../../src/content/schema'
+import type { Question, Section } from '../../src/content/schema'
+import { EXCLUDED_SLUGS, PINNED_FIRST } from '../../src/content/order'
+import { buildSections } from './curriculum'
 import * as midudevReact from './sources/midudev-react'
 
 type SourceModule = {
@@ -52,12 +54,30 @@ function report(id: string, questions: Question[]): void {
   }
 }
 
+function reportCurriculum(sections: Section[]): void {
+  const total = sections.reduce((n, s) => n + s.lessons.length, 0)
+  console.log(`\ncurriculum: ${sections.length} sections, ${total} lessons`)
+  for (const s of sections) {
+    const sizes = s.lessons.map((l) => l.questionIds.length)
+    console.log(
+      `  ${String(s.lessons.length).padStart(3)} lessons  [${sizes.join(', ')}]  ${s.title}`,
+    )
+  }
+}
+
 async function main(): Promise<void> {
   for (const source of SOURCES) {
     const { id, rawUrl } = source.SOURCE_META
     const res = await fetch(rawUrl)
     if (!res.ok) throw new Error(`failed to fetch ${rawUrl} for ${id}: ${res.status}`)
-    report(id, source.parse(await res.text()))
+    const questions = source.parse(await res.text())
+    report(id, questions)
+
+    // Mirror index.ts: level-keyed pins flatten to a slug list (placement is by section).
+    const pinnedFirst = Object.values(PINNED_FIRST)
+      .flat()
+      .filter((slug): slug is string => typeof slug === 'string')
+    reportCurriculum(buildSections(questions, { excludedSlugs: EXCLUDED_SLUGS, pinnedFirst }))
   }
 }
 
