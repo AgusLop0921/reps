@@ -35,6 +35,7 @@ change contracts.
 | [0008](0008-english-repo-spanish-product.md) | English repository, Spanish product | Accepted |
 | [0009](0009-git-workflow.md) | Branch, commit and PR workflow | Accepted |
 | [0010](0010-mobile-first-scroll-replacement.md) | Mobile-first, positioned against aimless scrolling | Accepted |
-| [0011](0011-linear-lesson-path.md) | A linear lesson path as the primary structure | Accepted |
+| [0011](0011-linear-lesson-path.md) | A linear lesson path as the primary structure | Partially superseded by 0014 |
 | [0012](0012-review-inside-lessons.md) | Review cards inside lessons | Accepted |
 | [0013](0013-interview-simulation-byok.md) | Interview simulation with the user's own API key | Accepted (v2) |
+| [0014](0014-sections-are-not-levels.md) | Sections are structural, not difficulty levels | Accepted |

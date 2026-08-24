@@ -1,6 +1,6 @@
 # ADR-0011: A linear lesson path as the primary structure
 
-- **Status:** Accepted
+- **Status:** Accepted — section/level coupling superseded by ADR-0014
 - **Date:** 2026-08-24
 
 ## Context
