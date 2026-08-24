@@ -27,14 +27,14 @@ export const SOURCE_META = {
   lang: 'es',
 } as const
 
-/** Heading depth that marks a level section. */
-const LEVEL_HEADING = 2
+/** Heading depth that marks a section. Upstream uses `###`, not `##`. */
+const LEVEL_HEADING = 3
 /** Heading depth that marks a question. */
 const QUESTION_HEADING = 4
 
 /** Upstream headings are Spanish; our levels are English (ADR-0008). */
 const LEVEL_BY_KEYWORD: Array<[RegExp, Level]> = [
-  [/b[áa]sic/i, 'basic'],
+  [/principiant|b[áa]sic/i, 'basic'],
   [/intermedi/i, 'intermediate'],
   [/avanzad/i, 'advanced'],
   [/expert/i, 'expert'],

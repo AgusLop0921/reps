@@ -1,6 +1,39 @@
 import { describe, expect, it } from 'vitest'
 import { parse } from './midudev-react'
 
+const SECTIONS = [
+  '### Principiante',
+  '#### ¿Qué es React?',
+  'Una biblioteca.',
+  '#### ¿Qué es JSX?',
+  'Azúcar sintáctico.',
+  '### Intermedio',
+  '#### ¿Qué es un hook?',
+  'Una función especial.',
+  '### Experto',
+  '#### ¿Qué es fiber?',
+  'El reconciliador.',
+].join('\n')
+
+describe('parse: sections and levels', () => {
+  it('detects sections at depth 3 and maps their keywords to levels', () => {
+    const byQuestion = new Map(parse(SECTIONS).map((q) => [q.question, q.level]))
+    expect(byQuestion.get('¿Qué es React?')).toBe('basic')
+    expect(byQuestion.get('¿Qué es JSX?')).toBe('basic')
+    expect(byQuestion.get('¿Qué es un hook?')).toBe('intermediate')
+    expect(byQuestion.get('¿Qué es fiber?')).toBe('expert')
+  })
+
+  it('returns questions in upstream document order', () => {
+    expect(parse(SECTIONS).map((q) => q.question)).toEqual([
+      '¿Qué es React?',
+      '¿Qué es JSX?',
+      '¿Qué es un hook?',
+      '¿Qué es fiber?',
+    ])
+  })
+})
+
 describe('parse: answer sub-headings', () => {
   it('keeps content under a sub-heading instead of truncating the answer', () => {
     const md = [
