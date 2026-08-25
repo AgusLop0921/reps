@@ -5,7 +5,7 @@
  * carries no `sourceId` attribution and never touches the imported `answerMd`.
  *
  * BYOK: reads ANTHROPIC_API_KEY from the environment (the maintainer's key). The key is
- * never written to disk, logged, or committed. Runs on the Principiante section only.
+ * never written to disk, logged, or committed. Runs on the Principiante path only.
  *
  * Usage: ANTHROPIC_API_KEY=sk-ant-... pnpm tsx scripts/import/generate-checks.ts
  *
@@ -31,13 +31,18 @@ if (!apiKey) {
   process.exit(1)
 }
 
-/** A generated check. Note: no `sourceId` — generated checks are ours (see file header). */
+/**
+ * A generated check. Options range 2–4: a question that supports fewer than three genuine
+ * misconceptions gets fewer distractors rather than padded ones. Stored order is arbitrary
+ * — the UI shuffles options with a seed at display time. No `sourceId`: these are ours.
+ */
 const checkSchema = z.object({
   questionId: z.string().length(12),
   stem: z.string().min(1),
   options: z
     .array(z.object({ text: z.string().min(1), correct: z.boolean() }))
-    .length(4)
+    .min(2)
+    .max(4)
     .refine((opts) => opts.filter((o) => o.correct).length === 1, 'exactly one correct option'),
   explanation: z.string().min(1),
 })
@@ -51,19 +56,23 @@ const checksFileSchema = z.object({
 
 type Check = z.infer<typeof checkSchema>
 
-/** What the model returns per question: the correct option and three distractors, unmixed. */
+/** What the model returns per question. */
 const modelOutputSchema = z.object({
+  suitable: z.boolean(),
+  reason: z.string(), // may be '' when suitable; the "which questions can't sustain a check" signal
   stem: z.string().min(1),
   correct: z.string().min(1),
-  distractors: z.array(z.string().min(1)),
+  distractors: z.array(z.string()), // 0–3 genuine misconceptions; fewer is fine, never padded
   explanation: z.string().min(1),
 })
 
 const OUTPUT_JSON_SCHEMA = {
   type: 'object',
   additionalProperties: false,
-  required: ['stem', 'correct', 'distractors', 'explanation'],
+  required: ['suitable', 'reason', 'stem', 'correct', 'distractors', 'explanation'],
   properties: {
+    suitable: { type: 'boolean' },
+    reason: { type: 'string' },
     stem: { type: 'string' },
     correct: { type: 'string' },
     distractors: { type: 'array', items: { type: 'string' } },
@@ -73,32 +82,45 @@ const OUTPUT_JSON_SCHEMA = {
 
 const SYSTEM = [
   'You write ONE multiple-choice comprehension check for a React interview question.',
-  'Everything you output (stem, correct, distractors, explanation) must be in Spanish.',
-  'You are given a QUESTION and its REFERENCE ANSWER. Produce:',
-  '- stem: a clear question testing whether the learner understood the key point. It may',
-  '  rephrase the original but must be answerable from the reference answer.',
-  '- correct: the correct option, concise.',
-  '- distractors: exactly three incorrect options. Each must be plausible and tempting —',
-  '  grounded in common React misconceptions or partial understanding — similar in length',
-  '  and register to the correct option, and not trivially eliminable. No "all of the',
-  '  above", no joke answers, no near-duplicates of the correct option.',
-  '- explanation: one sentence saying why the correct option is right.',
-  'Only assert what the reference answer supports. Do not invent facts beyond it.',
+  'Everything learner-facing (stem, correct, distractors, explanation) must be in Spanish.',
+  'You are given a QUESTION and its REFERENCE ANSWER.',
   '',
-  'Hard requirements:',
-  '- All four options must be within ~20% of each other in length and match in level of',
-  '  detail and specificity. The correct option must NOT be the longest, most detailed, or',
-  '  most hedged — it must not be identifiable by length or wording alone.',
-  '- Write a standalone exercise. Never refer to "the reference answer", the source, the',
-  '  question author, or these instructions (no "según la respuesta de referencia" etc.).',
-  '- Output only the requested fields. Never emit control tokens, role markers, apologies,',
-  '  or meta-commentary about your own formatting.',
+  'Stem — prefer application over definition. When the reference answer supports it, ask',
+  'what happens, which option breaks something, or why a snippet fails ("¿qué pasa si…?",',
+  '"¿cuál de estos rompe…?", "¿por qué este código no…?") rather than "¿qué es X?".',
+  '',
+  'Distractors — this is what makes the check hard or worthless:',
+  '- Every distractor must be a mistake a real React developer could actually make: a',
+  '  genuine misconception or a partial truth. NEVER invent an option that anyone who has',
+  '  written React would dismiss instantly (e.g. "un archivo de configuración de rutas" as',
+  '  an answer to "what is a component").',
+  '- Strongly prefer distractors that are TRUE statements about a DIFFERENT thing — a',
+  '  correct description of useMemo offered as the answer about useEffect; a correct',
+  '  description of state offered as the answer about props. These are hard because nothing',
+  '  in them is false.',
+  '- Exactly ONE option may be defensibly correct. If two options could be argued correct,',
+  '  the item is broken (ambiguity, not difficulty) — fix it until only one is defensible.',
+  '- All options must match in length (within ~20%) and in specificity. The correct one',
+  '  must not be identifiable by being longer, more detailed, or more hedged.',
+  '',
+  'No padding. If the reference answer supports fewer than three genuine misconceptions,',
+  'return fewer distractors (two, or one). If it cannot support even one — or the concept',
+  'cannot be tested this way — set suitable=false and say what is missing in `reason`; do',
+  'not fabricate a check. When suitable=true, use `reason` to note how many genuine',
+  'misconceptions the answer sustains.',
+  '',
+  'Only assert what the reference answer supports. Write a standalone exercise: never refer',
+  'to "the reference answer", the source, or these instructions in a learner-facing field.',
+  'Never emit control tokens, role markers, apologies, or meta-commentary about formatting.',
 ].join('\n')
+
+const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
 /**
  * Signs of a malformed generation: leaked chat control tokens, apologetic meta-text, a
  * meta-reference to the source, or unbalanced braces (a real leak passed Zod once —
  * `}}<|im_start|>assistant Sorry, I made a formatting error...`). Any hit fails the item.
+ * Run on learner-facing fields only — `reason` legitimately mentions the reference answer.
  */
 const MALFORMED: Array<[RegExp, string]> = [
   [/<\||\|>/, 'control-token marker'],
@@ -108,20 +130,10 @@ const MALFORMED: Array<[RegExp, string]> = [
   [/respuesta de referencia|reference answer|seg[úu]n (la|el) (respuesta|texto|documento)/i, 'meta-reference to the source'],
 ]
 
-/** Returns a reason string if `text` looks malformed, else null. */
 function malformedReason(text: string): string | null {
   for (const [re, reason] of MALFORMED) if (re.test(text)) return reason
   if ((text.match(/{/g)?.length ?? 0) !== (text.match(/}/g)?.length ?? 0)) return 'unbalanced braces'
   return null
-}
-
-const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
-
-/** Deterministic correct-option position from the questionId, so it is not always first. */
-function correctIndex(questionId: string): number {
-  let sum = 0
-  for (const ch of questionId) sum += ch.charCodeAt(0)
-  return sum % 4
 }
 
 async function callApi(body: unknown): Promise<unknown> {
@@ -161,7 +173,11 @@ function extractJson(raw: unknown): z.infer<typeof modelOutputSchema> {
   return modelOutputSchema.parse(JSON.parse(text))
 }
 
-async function generateOne(question: Question): Promise<Check> {
+type GenResult =
+  | { ok: true; check: Check; misconceptions: number }
+  | { ok: false; questionId: string; reason: string }
+
+async function generateOne(question: Question): Promise<GenResult> {
   const body = {
     model: MODEL,
     max_tokens: 8000,
@@ -186,30 +202,36 @@ async function generateOne(question: Question): Promise<Check> {
       continue
     }
 
+    if (!out.suitable) {
+      return { ok: false, questionId: question.id, reason: out.reason.trim() || 'marked unsuitable' }
+    }
+
     const correct = out.correct.trim()
-    const distractors = [...new Set(out.distractors.map((d) => d.trim()))].filter(
-      (d) => d && d !== correct,
-    )
-    if (distractors.length < 3) {
-      lastError = `only ${distractors.length} usable distractors`
+    const distractors = [...new Set(out.distractors.map((d) => d.trim()))]
+      .filter((d) => d && d !== correct)
+      .slice(0, 3)
+    if (distractors.length < 1) {
+      lastError = 'suitable but no usable distractors'
       continue
     }
 
     const stem = out.stem.trim()
     const explanation = out.explanation.trim()
-    const fields = [stem, explanation, correct, ...distractors.slice(0, 3)]
-    const bad = fields.map(malformedReason).find(Boolean)
+    const bad = [stem, explanation, correct, ...distractors].map(malformedReason).find(Boolean)
     if (bad) {
       lastError = `malformed content (${bad})`
       continue
     }
 
-    const idx = correctIndex(question.id)
-    let d = 0
-    const options = Array.from({ length: 4 }, (_, pos) =>
-      pos === idx ? { text: correct, correct: true } : { text: distractors[d++], correct: false },
-    )
-    return { questionId: question.id, stem, options, explanation }
+    const options = [
+      { text: correct, correct: true },
+      ...distractors.map((text) => ({ text, correct: false })),
+    ]
+    return {
+      ok: true,
+      check: { questionId: question.id, stem, options, explanation },
+      misconceptions: distractors.length,
+    }
   }
   // Fail loudly rather than write a malformed check (same rule as the adapters).
   throw new Error(`generate-checks: "${question.question}" failed after 3 attempts — ${lastError}`)
@@ -228,19 +250,6 @@ async function mapPool<T, R>(items: T[], size: number, fn: (item: T) => Promise<
   return results
 }
 
-function printChecks(checks: Check[], questionById: Map<string, Question>): void {
-  const letter = ['A', 'B', 'C', 'D']
-  checks.forEach((check, i) => {
-    const q = questionById.get(check.questionId)
-    const ref = (q?.answerMd ?? '').replace(/\s+/g, ' ').trim()
-    console.log(`\n=== ${i + 1}/${checks.length} — ${q?.question} ===`)
-    console.log(`Ref: ${ref.slice(0, 400)}${ref.length > 400 ? '…' : ''}`)
-    console.log(`P: ${check.stem}`)
-    check.options.forEach((o, j) => console.log(`  ${letter[j]}) ${o.text}${o.correct ? '  [✓]' : ''}`))
-    console.log(`  → ${check.explanation}`)
-  })
-}
-
 const wordCount = (s: string): number => s.trim().split(/\s+/).length
 
 const STOPWORDS = new Set([
@@ -249,7 +258,6 @@ const STOPWORDS = new Set([
   'the', 'and', 'for',
 ])
 
-/** Content-word token set for a stem, accent- and stopword-stripped. */
 function stemTokens(stem: string): Set<string> {
   const words = stem
     .toLowerCase()
@@ -267,26 +275,59 @@ function jaccard(a: Set<string>, b: Set<string>): number {
   return union === 0 ? 0 : inter / union
 }
 
-/** The mechanical checks: length tell + near-duplicate stems. Reported, not enforced. */
-function reportStats(checks: Check[]): void {
-  // How often the correct option is the single longest (the pickable-by-length tell).
+function printResults(results: GenResult[], questionById: Map<string, Question>): void {
+  const letter = ['A', 'B', 'C', 'D']
+  results.forEach((r, i) => {
+    const q = questionById.get(r.ok ? r.check.questionId : r.questionId)
+    const ref = (q?.answerMd ?? '').replace(/\s+/g, ' ').trim()
+    console.log(`\n=== ${i + 1}/${results.length} — ${q?.question} ===`)
+    console.log(`Ref: ${ref.slice(0, 400)}${ref.length > 400 ? '…' : ''}`)
+    if (!r.ok) {
+      console.log(`UNSUITABLE — ${r.reason}`)
+      return
+    }
+    console.log(`P: ${r.check.stem}   (misconceptions: ${r.misconceptions})`)
+    r.check.options.forEach((o, j) => console.log(`  ${letter[j]}) ${o.text}${o.correct ? '  [✓]' : ''}`))
+    console.log(`  → ${r.check.explanation}`)
+  })
+}
+
+function reportStats(results: GenResult[]): void {
+  const suitable = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok)
+  const unsuitable = results.filter((r): r is Extract<GenResult, { ok: false }> => !r.ok)
+
+  // Which questions the corpus can sustain a good check for.
+  const withThree = suitable.filter((r) => r.misconceptions === 3).length
+  console.log(
+    `\nsuitability: ${suitable.length}/${results.length} suitable; ` +
+      `${withThree} sustain 3 misconceptions, ` +
+      `${suitable.filter((r) => r.misconceptions === 2).length} sustain 2, ` +
+      `${suitable.filter((r) => r.misconceptions === 1).length} sustain 1; ` +
+      `${unsuitable.length} unsuitable`,
+  )
+  results.forEach((r, i) => {
+    if (!r.ok) console.log(`  #${i + 1} UNSUITABLE — ${r.reason}`)
+    else if (r.misconceptions < 3) console.log(`  #${i + 1} only ${r.misconceptions} misconception(s)`)
+  })
+
+  // Length tell: how often the correct option is the single longest (pickable by length).
   let correctLongest = 0
-  for (const c of checks) {
-    const lens = c.options.map((o) => wordCount(o.text))
+  for (const { check } of suitable) {
+    const lens = check.options.map((o) => wordCount(o.text))
     const max = Math.max(...lens)
-    const correctLen = wordCount(c.options.find((o) => o.correct)?.text ?? '')
+    const correctLen = wordCount(check.options.find((o) => o.correct)?.text ?? '')
     if (correctLen === max && lens.filter((l) => l === max).length === 1) correctLongest++
   }
-  const pct = Math.round((100 * correctLongest) / checks.length)
+  const pct = suitable.length ? Math.round((100 * correctLongest) / suitable.length) : 0
   console.log(
-    `\ncorrect option is the single longest: ${correctLongest}/${checks.length} (${pct}%) — target ~25%`,
+    `\ncorrect option is the single longest: ${correctLongest}/${suitable.length} (${pct}%) — target ~25%`,
   )
 
-  // Near-duplicate stems across the section.
-  const tokens = checks.map((c) => stemTokens(c.stem))
+  // Near-duplicate stems across the suitable checks.
+  const tokens = suitable.map((r) => stemTokens(r.check.stem))
   const pairs: Array<{ i: number; j: number; sim: number }> = []
-  for (let i = 0; i < checks.length; i++) {
-    for (let j = i + 1; j < checks.length; j++) {
+  for (let i = 0; i < suitable.length; i++) {
+    for (let j = i + 1; j < suitable.length; j++) {
       const sim = jaccard(tokens[i], tokens[j])
       if (sim >= 0.45) pairs.push({ i, j, sim })
     }
@@ -297,8 +338,8 @@ function reportStats(checks: Check[]): void {
   } else {
     console.log(`near-duplicate stems (Jaccard ≥ 0.45): ${pairs.length}`)
     for (const { i, j, sim } of pairs) {
-      console.log(`  [${sim.toFixed(2)}] #${i + 1} "${checks[i].stem}"`)
-      console.log(`         #${j + 1} "${checks[j].stem}"`)
+      console.log(`  [${sim.toFixed(2)}] "${suitable[i].check.stem}"`)
+      console.log(`         "${suitable[j].check.stem}"`)
     }
   }
 }
@@ -312,9 +353,10 @@ async function main(): Promise<void> {
   const questions = questionsFile.questions.filter(
     (q) => q.sourceSection === SECTION && !excluded.has(q.slug),
   )
-  console.error(`Generating ${questions.length} checks for "${SECTION}" with ${MODEL}...`)
+  console.error(`Generating checks for ${questions.length} "${SECTION}" cards with ${MODEL}...`)
 
-  const checks = await mapPool(questions, CONCURRENCY, generateOne)
+  const results = await mapPool(questions, CONCURRENCY, generateOne)
+  const checks = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok).map((r) => r.check)
 
   const file = checksFileSchema.parse({
     generatedAt: new Date().toISOString(),
@@ -324,9 +366,12 @@ async function main(): Promise<void> {
   })
   writeFileSync(`${DATA_DIR}checks-principiante.json`, `${JSON.stringify(file, null, 2)}\n`)
 
-  printChecks(checks, new Map(questions.map((q) => [q.id, q])))
-  reportStats(checks)
-  console.error(`\nWrote ${checks.length} checks -> src/content/data/checks-principiante.json`)
+  const questionById = new Map(questions.map((q) => [q.id, q]))
+  printResults(results, questionById)
+  reportStats(results)
+  console.error(
+    `\nWrote ${checks.length} checks (of ${results.length} questions) -> src/content/data/checks-principiante.json`,
+  )
 }
 
 main().catch((err: unknown) => {
