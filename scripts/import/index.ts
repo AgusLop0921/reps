@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { curriculumSchema, questionsFileSchema } from '../../src/content/schema'
-import { EXCLUDED_SLUGS, PINNED_FIRST } from '../../src/content/order'
+import { EXCLUDED_SLUGS, LESSON_SIZE_BY_SECTION, PINNED_FIRST } from '../../src/content/order'
 import { buildSections } from './curriculum'
 import * as midudevReact from './sources/midudev-react'
 
@@ -43,6 +43,7 @@ async function main(): Promise<void> {
     sections: buildSections(questions, {
       excludedSlugs: EXCLUDED_SLUGS,
       pinnedFirst: PINNED_FIRST,
+      lessonSizeBySection: LESSON_SIZE_BY_SECTION,
     }),
   })
 

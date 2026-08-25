@@ -8,7 +8,7 @@
  * Usage: pnpm tsx scripts/import/check-source.ts
  */
 import type { Question, Section } from '../../src/content/schema'
-import { EXCLUDED_SLUGS, PINNED_FIRST } from '../../src/content/order'
+import { EXCLUDED_SLUGS, LESSON_SIZE_BY_SECTION, PINNED_FIRST } from '../../src/content/order'
 import { buildSections } from './curriculum'
 import * as midudevReact from './sources/midudev-react'
 
@@ -124,6 +124,7 @@ async function main(): Promise<void> {
     const sections = buildSections(questions, {
       excludedSlugs: EXCLUDED_SLUGS,
       pinnedFirst: PINNED_FIRST,
+      lessonSizeBySection: LESSON_SIZE_BY_SECTION,
     })
     reportCurriculum(sections)
     reportLessonText(sections, questions)

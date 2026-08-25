@@ -8,12 +8,17 @@ import type { Lesson, Question, Section } from '../../src/content/schema'
  * the transformation is testable in isolation; `index.ts` supplies the real overrides.
  */
 
-/** Target questions per lesson (ADR-0011: "about five"). */
-export const LESSON_SIZE = 5
+/**
+ * Default questions per lesson. Chosen so a lesson stays under ~4,000 characters given
+ * midudev answers of ~870 chars (median); sections with much longer answers override it
+ * via `lessonSizeBySection` (ADR-0011).
+ */
+export const DEFAULT_LESSON_SIZE = 3
 
 /**
  * A trailing lesson smaller than this is merged into the previous one, so no lesson is a
- * lone card. With LESSON_SIZE 5 this merges a remainder of 1 or 2.
+ * lone card. This merges a remainder of 1 or 2 — but only when the section's lessons hold
+ * more than one card (see chunk()).
  */
 const MIN_TRAILING_LESSON = 3
 
@@ -22,6 +27,8 @@ export type Overrides = {
   excludedSlugs: readonly string[]
   /** Section id -> slugs to move to the front of that section, in this order. */
   pinnedFirst: Readonly<Record<string, readonly string[]>>
+  /** Section id -> lesson size; sections not listed use DEFAULT_LESSON_SIZE. */
+  lessonSizeBySection: Readonly<Record<string, number>>
 }
 
 /** Section id component from the upstream heading. Same rules the adapter uses for slugs. */
@@ -34,15 +41,16 @@ function sectionSlug(heading: string): string {
 }
 
 /**
- * Chunk ids into lessons of LESSON_SIZE, then fold a trailing remainder of <2 lessons'
- * worth (1 or 2 cards) into the previous lesson.
+ * Chunk ids into lessons of `size`, then fold a trailing remainder of 1 or 2 cards into
+ * the previous lesson. With size 1 every card is its own lesson and there is no remainder
+ * to merge.
  */
-function chunk(questionIds: readonly string[]): string[][] {
+function chunk(questionIds: readonly string[], size: number): string[][] {
   const lessons: string[][] = []
-  for (let i = 0; i < questionIds.length; i += LESSON_SIZE) {
-    lessons.push(questionIds.slice(i, i + LESSON_SIZE))
+  for (let i = 0; i < questionIds.length; i += size) {
+    lessons.push(questionIds.slice(i, i + size))
   }
-  if (lessons.length > 1) {
+  if (size > 1 && lessons.length > 1) {
     const last = lessons[lessons.length - 1]
     if (last.length < MIN_TRAILING_LESSON) {
       lessons[lessons.length - 2].push(...last)
@@ -81,7 +89,8 @@ export function buildSections(questions: Question[], overrides: Overrides): Sect
 
   return [...groups.values()].map((group) => {
     const ordered = applyPinned(group.questions, overrides.pinnedFirst[group.id] ?? [])
-    const lessons: Lesson[] = chunk(ordered.map((q) => q.id)).map((questionIds, i) => ({
+    const size = overrides.lessonSizeBySection[group.id] ?? DEFAULT_LESSON_SIZE
+    const lessons: Lesson[] = chunk(ordered.map((q) => q.id), size).map((questionIds, i) => ({
       id: `${group.id}:${i + 1}`,
       order: i + 1,
       questionIds,
