@@ -66,3 +66,10 @@ data under `src/content/data/checks-<section>.json`.
   it; check generation is separate.
 - The generator and the generated data are committed separately (ADR-0009): the script is
   code, the JSON is generated content.
+- **The length tell is harder to suppress at higher difficulty.** The share of checks whose
+  correct option is the single longest rises with the section's difficulty — ~32% for
+  Principiante, 39% for Intermedio, 48% for Experto — against a ~25% target. Advanced
+  answers seem to need more words to stay correct, so the correct option resists being made
+  as terse as its distractors. The generator retries to balance length and only writes the
+  imbalanced item as a flag; we accept the residual rather than distort correct answers to
+  hit a number. If it matters later, the lever is per-section, not global.
