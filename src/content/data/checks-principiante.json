@@ -1,0 +1,881 @@
+{
+  "generatedAt": "2026-08-25T19:58:25.360Z",
+  "model": "claude-opus-4-8",
+  "sourceSection": "Principiante",
+  "checks": [
+    {
+      "questionId": "859805c2ddb1",
+      "stem": "¿Cuál de estas afirmaciones describe correctamente qué es React y cómo funciona?",
+      "options": [
+        {
+          "text": "Es una biblioteca de JavaScript para construir interfaces de usuario dividiéndolas en componentes que tienen estado local y reciben datos por props.",
+          "correct": true
+        },
+        {
+          "text": "Es un framework completo de JavaScript que incluye enrutamiento, gestión de estado global y peticiones HTTP integradas de forma nativa.",
+          "correct": false
+        },
+        {
+          "text": "Es un lenguaje de programación creado por Facebook que compila a JavaScript para construir interfaces web.",
+          "correct": false
+        },
+        {
+          "text": "Es un motor de plantillas del lado del servidor que genera HTML estático a partir de datos de una base de datos.",
+          "correct": false
+        }
+      ],
+      "explanation": "React es una biblioteca (no un framework completo ni un lenguaje) centrada en la vista, basada en componentes con estado local y props. Las otras opciones describen cosas distintas: un framework integral como Angular, un lenguaje compilado, o un motor de plantillas de servidor, ninguna de las cuales corresponde a la naturaleza de React."
+    },
+    {
+      "questionId": "57ae0588d92a",
+      "stem": "¿Cómo funciona el Virtual DOM cuando cambia el estado de un componente en React?",
+      "options": [
+        {
+          "text": "React actualiza una representación en memoria del DOM, la compara con la versión anterior y aplica al DOM real solo los cambios necesarios",
+          "correct": true
+        },
+        {
+          "text": "React reemplaza por completo el DOM real cada vez que cambia el estado, sin comparar versiones previas",
+          "correct": false
+        },
+        {
+          "text": "React permite que los datos fluyan libremente entre componentes padres e hijos en ambas direcciones",
+          "correct": false
+        },
+        {
+          "text": "React describe cómo realizar cada paso de la manipulación del DOM de forma imperativa",
+          "correct": false
+        }
+      ],
+      "explanation": "El Virtual DOM es una representación en memoria del DOM real; ante un cambio de estado, React genera una nueva versión, la compara con la anterior (diffing) y aplica al DOM real solo las diferencias, lo que mejora el rendimiento. La opción del reemplazo total es falsa porque justamente evita eso; las otras describen el flujo de datos (que es unidireccional, no bidireccional) y el paradigma imperativo (React es declarativo), características distintas del Virtual DOM."
+    },
+    {
+      "questionId": "20852735d252",
+      "stem": "En un componente de React que muestra una lista, ¿cuál de estas afirmaciones describe correctamente el enfoque declarativo de React?",
+      "options": [
+        {
+          "text": "Describes cómo debe verse la UI para el estado actual, y React se encarga de actualizar el DOM para reflejarlo.",
+          "correct": true
+        },
+        {
+          "text": "Escribes paso a paso las instrucciones para crear, modificar y eliminar los nodos del DOM manualmente.",
+          "correct": false
+        },
+        {
+          "text": "Seleccionas los elementos del DOM con métodos como `document.querySelector` y les asignas su contenido directamente.",
+          "correct": false
+        },
+        {
+          "text": "Controlas el orden exacto en que se ejecutan las operaciones sobre el DOM cada vez que cambia un dato.",
+          "correct": false
+        }
+      ],
+      "explanation": "El enfoque declarativo consiste en declarar el 'qué' (el resultado deseado de la UI para un estado dado) y dejar que React resuelva el 'cómo' actualizar el DOM. Las otras opciones describen el enfoque imperativo, en el que el desarrollador manipula el DOM manualmente paso a paso, algo que React precisamente busca evitar para hacer el código más predecible."
+    },
+    {
+      "questionId": "45ad6f03c64b",
+      "stem": "En una aplicación React, ¿cuál de estas afirmaciones describe correctamente qué es un componente?",
+      "options": [
+        {
+          "text": "Una pieza de interfaz autónoma y reutilizable que encapsula su estructura, comportamiento y a veces su estado.",
+          "correct": true
+        },
+        {
+          "text": "Un objeto que almacena datos de entrada de solo lectura pasados de un padre a un hijo.",
+          "correct": false
+        },
+        {
+          "text": "Una función especial que permite suscribirse al ciclo de vida y ejecutar efectos secundarios.",
+          "correct": false
+        },
+        {
+          "text": "Un valor cacheado que se recalcula solo cuando cambian sus dependencias para optimizar el rendimiento.",
+          "correct": false
+        }
+      ],
+      "explanation": "El componente es la unidad de construcción de React: agrupa JSX, lógica y opcionalmente estado, y se compone con otros para formar la interfaz. Los distractores describen otros conceptos reales: las props (datos de solo lectura del padre), un hook como useEffect (efectos y ciclo de vida) y useMemo (valor cacheado por dependencias), ninguno de los cuales es un componente."
+    },
+    {
+      "questionId": "73c41a300d68",
+      "stem": "En un componente de React, ¿en qué se transforma la expresión `<h1>Hola Mundo</h1>` escrita con JSX?",
+      "options": [
+        {
+          "text": "En una llamada a `React.createElement('h1', null, 'Hola Mundo')`",
+          "correct": true
+        },
+        {
+          "text": "En una cadena de texto HTML que el navegador interpreta directamente sin procesar",
+          "correct": false
+        },
+        {
+          "text": "En una plantilla que se inserta con `innerHTML` en el DOM en tiempo de ejecución",
+          "correct": false
+        },
+        {
+          "text": "En un nodo del DOM real creado inmediatamente con `document.createElement('h1')`",
+          "correct": false
+        }
+      ],
+      "explanation": "JSX es azúcar sintáctico: durante la compilación cada etiqueta se convierte en llamadas a `React.createElement`, que devuelven objetos describiendo la interfaz (elementos de React), no HTML ni nodos del DOM reales. Las otras opciones confunden JSX con cadenas de HTML, plantillas de `innerHTML` o la API del DOM del navegador, cuando en realidad React construye primero una representación en memoria."
+    },
+    {
+      "questionId": "315b0a7d961f",
+      "stem": "¿Por qué es necesario un transpilador como Babel o SWC para trabajar con JSX en la mayoría de los navegadores?",
+      "options": [
+        {
+          "text": "Porque el JSX no es JavaScript válido que el navegador entienda, así que debe convertirse a llamadas de función que sí puede ejecutar",
+          "correct": true
+        },
+        {
+          "text": "Porque el JSX se ejecuta en el servidor y el transpilador lo convierte en HTML estático antes de enviarlo al navegador",
+          "correct": false
+        },
+        {
+          "text": "Porque el navegador entiende JSX pero necesita el transpilador para optimizar el rendimiento y minificar el código",
+          "correct": false
+        },
+        {
+          "text": "Porque el JSX requiere que el transpilador cargue el DOM virtual en tiempo de ejecución dentro del navegador",
+          "correct": false
+        }
+      ],
+      "explanation": "El JSX es una extensión de sintaxis que el navegador no comprende de forma nativa; un transpilador como Babel o SWC lo convierte en llamadas JavaScript válidas (por ejemplo a React.createElement o al nuevo runtime JSX). No se trata de renderizar HTML en el servidor ni de minificar: es una transformación de sintaxis. Existen entornos como Deno con soporte nativo para JSX donde este paso no hace falta."
+    },
+    {
+      "questionId": "4fa62de282bc",
+      "stem": "En React, ¿qué distingue a un componente de un elemento?",
+      "options": [
+        {
+          "text": "Un componente es una función o clase que recibe props y devuelve un elemento; el elemento es un objeto plano que describe un nodo del DOM o una instancia de componente.",
+          "correct": true
+        },
+        {
+          "text": "Un elemento es una función o clase que recibe props y devuelve un componente; el componente es un objeto plano que describe la interfaz.",
+          "correct": false
+        },
+        {
+          "text": "Un componente es un objeto inmutable que React reconcilia con el DOM; el elemento es la lógica reutilizable que envuelve varios componentes.",
+          "correct": false
+        },
+        {
+          "text": "Un componente representa un único nodo del DOM real ya montado; el elemento agrupa varios nodos del DOM en memoria.",
+          "correct": false
+        }
+      ],
+      "explanation": "El componente es la definición (función o clase) que produce salida a partir de props, mientras que el elemento es un objeto ligero e inmutable que describe qué debe aparecer en pantalla. Los distractores invierten estos roles o los confunden con nodos reales del DOM, pero un elemento no es DOM real ni una función, y un componente no es un objeto plano."
+    },
+    {
+      "questionId": "6fb466d4cd3d",
+      "stem": "Tienes este componente funcional y lo usas con `<helloWorld />` dentro de otro componente. ¿Qué ocurre?\n\n```jsx\nfunction helloWorld() {\n  return <h1>Hello World!</h1>\n}\n```",
+      "options": [
+        {
+          "text": "React lo interpreta como una etiqueta HTML normal, no como tu componente, porque su nombre empieza en minúscula",
+          "correct": true
+        },
+        {
+          "text": "React lo renderiza correctamente, ya que el nombre de un componente puede empezar en mayúscula o minúscula sin diferencia",
+          "correct": false
+        },
+        {
+          "text": "React lanza un error obligándote a convertirlo en componente de clase antes de poder usarlo",
+          "correct": false
+        },
+        {
+          "text": "React lo renderiza pero pierde la capacidad de recibir props hasta que renombres la función",
+          "correct": false
+        }
+      ],
+      "explanation": "React distingue componentes de etiquetas HTML por la mayúscula inicial: los nombres en minúscula se tratan como etiquetas nativas del DOM, así que `<helloWorld />` no invoca tu función. Basta con renombrarlo a `HelloWorld` para que se interprete como componente. Los componentes funcionales son válidos hoy y no requieren clases, y el nombre en minúscula no tiene relación con las props."
+    },
+    {
+      "questionId": "6d7b97f29f2b",
+      "stem": "Tienes el componente `function Button(props) { return <button>{props.text}</button> }` y lo usas así: `<Button text=\"Enviar\" />`. ¿Cuál afirmación describe correctamente el papel de las props aquí?",
+      "options": [
+        {
+          "text": "Son datos que el componente padre pasa al hijo para parametrizarlo y reutilizarlo con distintos valores.",
+          "correct": true
+        },
+        {
+          "text": "Son datos internos que el propio componente puede modificar con una función actualizadora para volver a renderizar.",
+          "correct": false
+        },
+        {
+          "text": "Son valores memorizados que solo se recalculan cuando cambian sus dependencias, evitando cálculos costosos.",
+          "correct": false
+        },
+        {
+          "text": "Son referencias mutables que persisten entre renders sin provocar un nuevo renderizado al cambiar.",
+          "correct": false
+        }
+      ],
+      "explanation": "Las props son datos que fluyen del padre al hijo y sirven para configurar un componente reutilizable, como `text` en `Button`. El hijo las recibe como solo lectura y no debe modificarlas. Los distractores describen en realidad el estado (`useState`), `useMemo` y `useRef` respectivamente: son ciertos, pero de otros conceptos, no de las props."
+    },
+    {
+      "questionId": "8efa11fe1453",
+      "stem": "Dado el componente `function Card(props) { return <div>{props.children}</div> }`, ¿qué renderiza al usarlo como `<Card><p>Hola</p></Card>`?",
+      "options": [
+        {
+          "text": "Un `<div>` que contiene el elemento `<p>Hola</p>` que fue anidado dentro de `<Card>`",
+          "correct": true
+        },
+        {
+          "text": "Un `<div>` vacío, porque `children` solo funciona si se pasa explícitamente como atributo `children={...}`",
+          "correct": false
+        },
+        {
+          "text": "Un `<div>` con el texto literal `props.children`, ya que no se está pasando ninguna prop llamada así",
+          "correct": false
+        },
+        {
+          "text": "Un `<div>` que contiene el estado interno del componente `Card` accesible mediante `children`",
+          "correct": false
+        }
+      ],
+      "explanation": "La prop `children` es una prop especial que contiene automáticamente todo lo que se anida entre las etiquetas de apertura y cierre de un componente; aquí eso es `<p>Hola</p>`. No hace falta pasarla como atributo explícito, y no tiene relación con el estado interno del componente, que se maneja con `useState`, no con `children`."
+    },
+    {
+      "questionId": "22b6da2e7148",
+      "stem": "En un componente que recibe datos de su padre y además mantiene un contador que cambia al hacer clic, ¿cómo se clasifican correctamente esos datos?",
+      "options": [
+        {
+          "text": "Los datos que vienen del padre son props (inmutables dentro del componente) y el contador es state (memoria interna que evoluciona)",
+          "correct": true
+        },
+        {
+          "text": "Los datos del padre son state (memoria interna que evoluciona) y el contador son props (inmutables dentro del componente)",
+          "correct": false
+        },
+        {
+          "text": "Ambos son props porque cualquier dato que afecte al renderizado se recibe siempre desde el componente padre",
+          "correct": false
+        },
+        {
+          "text": "Ambos son state porque todo dato que el componente utilice se guarda en su memoria interna y puede modificarse libremente",
+          "correct": false
+        }
+      ],
+      "explanation": "Las props son datos de entrada que llegan desde fuera (el padre) y el componente las trata como inmutables; el state es memoria interna que cambia con el tiempo, como un contador que aumenta al hacer clic. El primer distractor invierte ambas definiciones, mientras que los otros dos aplican una única categoría a todo, ignorando que el origen (externo vs. interno) y la mutabilidad los distinguen."
+    },
+    {
+      "questionId": "dd0fcda98d06",
+      "stem": "Un componente hijo hace `const [number, setNumber] = useState(count)`, donde `count` es una prop que el padre incrementa al pulsar un botón. ¿Qué se verá en pantalla al pulsar el botón?",
+      "options": [
+        {
+          "text": "Seguirá mostrando el valor inicial, porque el estado solo se inicializa una vez al montar y no se sincroniza con los cambios de la prop",
+          "correct": true
+        },
+        {
+          "text": "El valor se actualizará en cada clic, porque cambiar la prop provoca un re-render que vuelve a ejecutar `useState` con el nuevo valor",
+          "correct": false
+        },
+        {
+          "text": "El valor se actualizará solo si envuelves el `useState` en un `useMemo` que dependa de `count`",
+          "correct": false
+        },
+        {
+          "text": "Se lanzará un error, porque no se puede pasar una prop como argumento inicial de `useState`",
+          "correct": false
+        }
+      ],
+      "explanation": "El argumento de `useState` solo se usa en el montaje inicial; en los siguientes renders React ignora ese valor y conserva el estado actual, así que la prop cambiante no actualiza el estado. La opción del re-render es un error clásico: aunque el componente se vuelve a renderizar, `useState` no reinicializa su valor. Si necesitas el valor actualizado, lo mejor es usar la prop directamente en lugar de copiarla al estado."
+    },
+    {
+      "questionId": "e78d4e456696",
+      "stem": "¿Por qué `return listArray?.length && listArray.map(item => item)` puede mostrar un `0` inesperado en pantalla?",
+      "options": [
+        {
+          "text": "Cuando `length` es 0, el operador `&&` devuelve ese 0, y React renderiza el número 0 en el DOM en lugar de no mostrar nada",
+          "correct": true
+        },
+        {
+          "text": "Cuando `length` es 0, el operador `&&` devuelve `false`, y React renderiza la cadena \"false\" como texto en el DOM",
+          "correct": false
+        },
+        {
+          "text": "El operador `?.` convierte el array vacío en `undefined`, valor que React renderiza siempre como un 0 por defecto",
+          "correct": false
+        },
+        {
+          "text": "El `.map` sobre un array vacío devuelve 0 como resultado, ya que no hay elementos que recorrer ni transformar",
+          "correct": false
+        }
+      ],
+      "explanation": "El operador `&&` devuelve su primer operando cuando este es falsy; como 0 es un valor falsy pero React sí renderiza los números, aparece un 0 en pantalla. React ignora `false`, `null` y `undefined`, por eso el problema surge específicamente con 0. Por eso conviene usar el operador ternario, que permite devolver `null` explícitamente cuando no se quiere renderizar nada."
+    },
+    {
+      "questionId": "859840368491",
+      "stem": "En este componente, ¿por qué debes escribir `className='button'` en lugar de `class='button'`?\n\n```jsx\nfunction Button({ text }) {\n  return <button className='button'>{text}</button>\n}\n```",
+      "options": [
+        {
+          "text": "Porque `class` es una palabra reservada de JavaScript, así que JSX usa `className` para generar el atributo `class` del HTML",
+          "correct": true
+        },
+        {
+          "text": "Porque `class` solo funciona en componentes de clase y no en componentes de función como este",
+          "correct": false
+        },
+        {
+          "text": "Porque `className` aplica estilos en línea, mientras que `class` solo sirve para hojas de estilo externas",
+          "correct": false
+        },
+        {
+          "text": "Porque `class` inyecta el CSS de forma aislada al componente y evita que afecte a otros elementos de la página",
+          "correct": false
+        }
+      ],
+      "explanation": "En JSX se usa `className` porque `class` es una palabra reservada de JavaScript; React la traduce al atributo `class` del HTML, útil para CSS, tests o selectores. `className` funciona igual en componentes de función y de clase, no genera estilos en línea ni aísla el CSS por sí sola: el aislamiento requiere herramientas como CSS Modules o styled-components."
+    },
+    {
+      "questionId": "316ce6cd97bf",
+      "stem": "¿Cuál de estas formas aplica correctamente estilos en línea a un elemento en React?",
+      "options": [
+        {
+          "text": "`<button style={{ backgroundColor: 'red', borderRadius: '2px' }}>Ok</button>`",
+          "correct": true
+        },
+        {
+          "text": "`<button style=\"background-color: red; border-radius: 2px\">Ok</button>`",
+          "correct": false
+        },
+        {
+          "text": "`<button style={{ 'background-color': 'red', 'border-radius': '2px' }}>Ok</button>`",
+          "correct": false
+        },
+        {
+          "text": "`<button style={ backgroundColor: 'red', borderRadius: '2px' }>Ok</button>`",
+          "correct": false
+        }
+      ],
+      "explanation": "En React la prop `style` recibe un objeto JavaScript, por eso se usan dobles llaves: las externas indican una expresión JS y las internas crean el objeto. Las propiedades CSS deben escribirse en camelCase (`backgroundColor`), no como cadena de texto al estilo HTML ni con guiones. Además, faltando un par de llaves no se estaría pasando un objeto válido."
+    },
+    {
+      "questionId": "1111ffce7cef",
+      "stem": "Dado el componente `function Button({ primary }) { return <button className={classnames('button', { primary })}>OK</button> }`, ¿qué clases tendrá el botón cuando `primary` sea `true`?",
+      "options": [
+        {
+          "text": "Tendrá `button` y `primary`, porque `button` se aplica siempre y `primary` se añade solo cuando su valor es verdadero",
+          "correct": true
+        },
+        {
+          "text": "Tendrá solo `primary`, porque `classnames` sustituye la cadena inicial por las claves del objeto que sean verdaderas",
+          "correct": false
+        },
+        {
+          "text": "Tendrá solo `button`, ya que las claves de un objeto pasado a `classnames` se ignoran y solo se usan las cadenas sueltas",
+          "correct": false
+        },
+        {
+          "text": "Tendrá `button primary` únicamente cuando además se defina la prop `style` con un ternario sobre `primary`",
+          "correct": false
+        }
+      ],
+      "explanation": "`classnames` concatena las cadenas fijas siempre y añade las claves de un objeto solo cuando su valor asociado es verdadero; por eso `button` está siempre y `primary` aparece cuando la prop es `true`. Las cadenas sueltas no se sustituyen ni se ignoran, y la prop `style` es independiente de `className`, no condiciona qué clases se aplican."
+    },
+    {
+      "questionId": "aa79810b70b3",
+      "stem": "En el componente `List`, ¿por qué cada `<li>` debe incluir la prop `key={item.id}`?",
+      "options": [
+        {
+          "text": "Para que React pueda identificar cada elemento de forma única y actualizar la lista de manera eficiente al detectar cambios",
+          "correct": true
+        },
+        {
+          "text": "Para que React ordene automáticamente los elementos de la lista según el valor de la key",
+          "correct": false
+        },
+        {
+          "text": "Para pasar el identificador al elemento hijo como una prop accesible mediante `props.key`",
+          "correct": false
+        },
+        {
+          "text": "Para que el método `map` sepa cuántas iteraciones debe realizar sobre el array",
+          "correct": false
+        }
+      ],
+      "explanation": "La prop `key` da a React una identidad estable a cada elemento, lo que le permite hacer una reconciliación eficiente sabiendo qué elementos se agregaron, movieron o eliminaron. No ordena la lista ni controla las iteraciones de `map`, y además `key` es una prop reservada que React no pasa al componente hijo (no es accesible como `props.key`)."
+    },
+    {
+      "questionId": "7284338431e3",
+      "stem": "¿Cómo debes escribir un comentario dentro del JSX que retorna un componente?",
+      "options": [
+        {
+          "text": "Envolviendo el comentario de bloque entre llaves, así: `{/* comentario */}`",
+          "correct": true
+        },
+        {
+          "text": "Usando `//` directamente antes del elemento JSX, sin llaves ni etiquetas",
+          "correct": false
+        },
+        {
+          "text": "Escribiéndolo con la sintaxis de comentario HTML, así: `<!-- comentario -->`",
+          "correct": false
+        },
+        {
+          "text": "Colocando `/* comentario */` directamente dentro de las etiquetas, sin llaves",
+          "correct": false
+        }
+      ],
+      "explanation": "Dentro del JSX el contenido se evalúa como expresiones de JavaScript, por lo que un comentario debe ir entre llaves y usar la sintaxis de bloque: `{/* ... */}`. Un `//` dentro de las llaves comentaría la propia llave de cierre y rompería el código, y `<!-- -->` es sintaxis de HTML que JSX no reconoce. Fuera del render sí puedes usar `//` o `/* */` normalmente."
+    },
+    {
+      "questionId": "eaf1e683533d",
+      "stem": "En un elemento JSX, ¿cuál de estas formas registra correctamente un manejador para el evento de clic sin ejecutarlo durante el render?",
+      "options": [
+        {
+          "text": "`<button onClick={handleClick}>Enviar</button>`",
+          "correct": true
+        },
+        {
+          "text": "`<button onClick={handleClick()}>Enviar</button>`",
+          "correct": false
+        },
+        {
+          "text": "`<button onclick={handleClick}>Enviar</button>`",
+          "correct": false
+        },
+        {
+          "text": "`<button on:click={handleClick}>Enviar</button>`",
+          "correct": false
+        }
+      ],
+      "explanation": "En React los eventos se registran con props en camelCase (`onClick`) a las que se pasa una referencia a la función, no el resultado de invocarla. Escribir `onClick={handleClick()}` ejecuta la función durante el render en lugar de al hacer clic; `onclick` en minúsculas y `on:click` no son la convención válida de React y no conectan el manejador."
+    },
+    {
+      "questionId": "a84eab9936cc",
+      "stem": "En un componente `Button` que recibe las props `id` y `onClick`, ¿cuál de estas opciones ejecuta correctamente `onClick` con `id` solo cuando el usuario hace clic?",
+      "options": [
+        {
+          "text": "`<button onClick={() => onClick(id)}>Click</button>`",
+          "correct": true
+        },
+        {
+          "text": "`<button onClick={onClick(id)}>Click</button>`",
+          "correct": false
+        },
+        {
+          "text": "`<button onClick={onClick(id)()}>Click</button>`",
+          "correct": false
+        },
+        {
+          "text": "`<button click={() => onClick(id)}>Click</button>`",
+          "correct": false
+        }
+      ],
+      "explanation": "Al envolver la llamada en una función anónima (`() => onClick(id)`), React guarda esa función y la ejecuta solo al hacer clic, pasándole `id`. En cambio, `onClick={onClick(id)}` invoca la función inmediatamente durante el render y asigna su valor de retorno al manejador, no lo que queremos. El atributo correcto en JSX es `onClick`, no `click`."
+    },
+    {
+      "questionId": "ee428b87abca",
+      "stem": "En un componente funcional, ¿cuál es la forma correcta de actualizar el valor de un contador guardado en el estado con `useState`?",
+      "options": [
+        {
+          "text": "Llamar a la función actualizadora que devuelve `useState`, por ejemplo `setCount(count + 1)`, lo que provoca un nuevo renderizado",
+          "correct": true
+        },
+        {
+          "text": "Reasignar directamente la variable del estado, por ejemplo `count = count + 1`, y React detectará el cambio",
+          "correct": false
+        },
+        {
+          "text": "Modificar el valor mediante `this.setState({ count: count + 1 })` dentro de la función",
+          "correct": false
+        },
+        {
+          "text": "Pasar el nuevo valor como segundo argumento a `useState`, por ejemplo `useState(0, count + 1)`",
+          "correct": false
+        }
+      ],
+      "explanation": "`useState` devuelve un array con el valor actual y una función actualizadora; solo llamando a esa función (`setCount`) se cambia el estado y se dispara un nuevo renderizado. Reasignar la variable no notifica a React ni actualiza la interfaz. `this.setState` pertenece a los componentes de clase, no a los funcionales, y el segundo argumento de `useState` no existe: su único parámetro es el estado inicial."
+    },
+    {
+      "questionId": "3da0e7e85459",
+      "stem": "¿Cuál es el propósito principal de los hooks en React?",
+      "options": [
+        {
+          "text": "Permitir usar estado, efectos y otras capacidades de React dentro de componentes funcionales",
+          "correct": true
+        },
+        {
+          "text": "Definir la estructura visual del componente usando sintaxis JSX que se transforma en llamadas a `React.createElement`",
+          "correct": false
+        },
+        {
+          "text": "Recibir datos de solo lectura desde un componente padre hacia un componente hijo",
+          "correct": false
+        },
+        {
+          "text": "Envolver componentes para capturar errores durante el renderizado y mostrar una interfaz alternativa",
+          "correct": false
+        }
+      ],
+      "explanation": "Los hooks son funciones especiales que dan acceso a estado, efectos y otras capacidades de React desde componentes funcionales, evitando la necesidad de componentes de clase. Los distractores describen otras cosas reales de React: JSX define la estructura, las props pasan datos de padre a hijo, y los error boundaries capturan errores, pero ninguna de ellas es la función de los hooks."
+    },
+    {
+      "questionId": "313c17b0c2ef",
+      "stem": "En un componente con `const [count, setCount] = useState(0)`, ¿qué ocurre al llamar a `setCount(count + 1)` dentro de un evento `onClick`?",
+      "options": [
+        {
+          "text": "Se actualiza el valor de `count` y React vuelve a renderizar el componente con el nuevo valor",
+          "correct": true
+        },
+        {
+          "text": "Se actualiza `count` de inmediato pero el componente no se vuelve a renderizar hasta la próxima recarga de la página",
+          "correct": false
+        },
+        {
+          "text": "Se guarda el valor entre renders sin provocar un nuevo renderizado, ideal para datos que no afectan a la interfaz",
+          "correct": false
+        },
+        {
+          "text": "Se recalcula un valor derivado y se memoriza para evitar cálculos costosos en cada render",
+          "correct": false
+        }
+      ],
+      "explanation": "`useState` devuelve el valor y una función `set`; llamar a la función `set` actualiza el estado y provoca una re-renderización del componente para reflejar el nuevo valor. El distractor sobre guardar valores sin renderizar describe `useRef`, y el de memorizar un valor derivado describe `useMemo`: ambos son ciertos, pero de otros hooks."
+    },
+    {
+      "questionId": "53b9d3bc5887",
+      "stem": "En un componente que gestiona un estado con varios campos y muchas acciones distintas, ¿por qué convendría usar `useReducer` en lugar de `useState`?",
+      "options": [
+        {
+          "text": "Porque centraliza la lógica de actualización en una función pura `reducer(state, action)` a la que envías acciones con `dispatch`",
+          "correct": true
+        },
+        {
+          "text": "Porque memoriza el resultado de un cálculo costoso y solo lo recalcula cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "Porque ejecuta efectos secundarios después del renderizado y permite limpiarlos con una función de retorno",
+          "correct": false
+        },
+        {
+          "text": "Porque comparte el estado con componentes hijos sin pasar props manualmente por cada nivel del árbol",
+          "correct": false
+        }
+      ],
+      "explanation": "`useReducer` devuelve `[state, dispatch]` y concentra todas las transiciones de estado en una única función pura, ideal cuando hay múltiples acciones y campos relacionados. Las otras opciones describen correctamente a `useMemo` (memorización de cálculos), `useEffect` (efectos secundarios) y `useContext` (compartir datos por el árbol), no a `useReducer`."
+    },
+    {
+      "questionId": "c57461488483",
+      "stem": "Dos componentes hermanos, `GiftList` y `TotalGifts`, necesitan compartir la misma lista de regalos, pero cada uno tiene su propio estado local y no logran sincronizarse. Según el patrón de \"subir el estado\", ¿cuál es la solución correcta?",
+      "options": [
+        {
+          "text": "Mover el estado compartido al ancestro común más cercano (por ejemplo `App`) y pasarlo a cada hijo como prop",
+          "correct": true
+        },
+        {
+          "text": "Memorizar el valor con `useMemo` en cada hijo para que ambos recalculen la lista sin volver a renderizar",
+          "correct": false
+        },
+        {
+          "text": "Guardar la lista en una variable normal fuera de los componentes y reasignarla dentro de cada hijo cuando cambie",
+          "correct": false
+        },
+        {
+          "text": "Duplicar el mismo `useState` en ambos hermanos y sincronizarlos mediante un `useEffect` en cada uno",
+          "correct": false
+        }
+      ],
+      "explanation": "Cuando varios componentes necesitan los mismos datos, se eleva el estado hasta su ancestro común más cercano, que lo mantiene y lo distribuye como props; así una sola fuente de verdad mantiene a todos sincronizados. `useMemo` solo memoriza cálculos y no comparte estado entre hermanos; una variable externa no dispara re-renders al reasignarse; y duplicar `useState` recrea justamente el problema de estados desincronizados que se busca evitar."
+    },
+    {
+      "questionId": "958ee4660ec3",
+      "stem": "Dado `useEffect(() => { console.log('cambió') }, [count])`, ¿cuándo se ejecuta la función del efecto?",
+      "options": [
+        {
+          "text": "Tras el primer renderizado y luego cada vez que cambia el valor de `count`",
+          "correct": true
+        },
+        {
+          "text": "Solo una vez, en cada renderizado del componente, sin importar el array de dependencias",
+          "correct": false
+        },
+        {
+          "text": "Únicamente cuando cambia `count`, pero nunca en el renderizado inicial",
+          "correct": false
+        },
+        {
+          "text": "Antes de cada renderizado, para calcular y memorizar un valor derivado de `count`",
+          "correct": false
+        }
+      ],
+      "explanation": "`useEffect` ejecuta su función después del render inicial y, en los renders siguientes, solo cuando alguna dependencia del array cambia; por eso corre la primera vez y luego cada vez que cambia `count`. El efecto siempre corre en el montaje inicial, no solo ante cambios. La opción de memorizar un valor derivado describe a `useMemo`, no a `useEffect`, que no devuelve valores ni corre antes del render."
+    },
+    {
+      "questionId": "9d5cb2a51f2e",
+      "stem": "Necesitas suscribirte al evento `resize` del navegador cuando el componente se monta y eliminar esa suscripción cuando se desmonta. ¿Cómo debes usar `useEffect` para lograrlo correctamente?",
+      "options": [
+        {
+          "text": "Registrar el listener dentro del efecto con dependencias vacías `[]` y devolver una función de limpieza que elimine el listener",
+          "correct": true
+        },
+        {
+          "text": "Registrar el listener dentro del efecto sin arreglo de dependencias, de modo que se ejecute solo una vez al montar",
+          "correct": false
+        },
+        {
+          "text": "Envolver la suscripción con `useMemo` para memorizar el listener y evitar volver a suscribirse en cada render",
+          "correct": false
+        },
+        {
+          "text": "Registrar el listener directamente en el cuerpo del componente, ya que así se ejecuta en cada render manteniendo la suscripción activa",
+          "correct": false
+        }
+      ],
+      "explanation": "Con dependencias `[]` el efecto se ejecuta una vez al montar y la función de limpieza devuelta se ejecuta al desmontar, eliminando el listener y evitando fugas de memoria. Omitir el arreglo de dependencias hace que el efecto se ejecute tras cada render, no solo al montar; `useMemo` sirve para memorizar valores calculados, no para gestionar suscripciones; y ejecutar código con efectos secundarios en el cuerpo del componente rompe el patrón, ya que se dispara en cada render sin control de limpieza."
+    },
+    {
+      "questionId": "ce62238987b7",
+      "stem": "Al suscribirte a un evento del navegador dentro de `useEffect`, ¿qué debe hacer la función que retornas dentro del efecto?",
+      "options": [
+        {
+          "text": "Desuscribirse del evento con `removeEventListener` cuando el componente se desmonta, para evitar fugas de memoria",
+          "correct": true
+        },
+        {
+          "text": "Memorizar el resultado de un cálculo costoso para que solo se recalcule cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "Devolver el JSX que el componente renderiza tras suscribirse al evento",
+          "correct": false
+        },
+        {
+          "text": "Volver a suscribirse al evento en cada render para mantener el listener siempre actualizado",
+          "correct": false
+        }
+      ],
+      "explanation": "La función retornada por `useEffect` es la función de limpieza: React la ejecuta al desmontar el componente (o antes de reejecutar el efecto), por eso ahí llamamos a `removeEventListener` y evitamos que se acumulen listeners. Memorizar cálculos es tarea de `useMemo`, no de la limpieza de un efecto. El JSX se devuelve desde el componente, no desde el efecto, y volver a suscribirse en cada render provocaría justamente la fuga que la limpieza previene."
+    },
+    {
+      "questionId": "d60862771d16",
+      "stem": "Tienes un componente `PasswordField` que se renderiza varias veces en la misma página y necesitas vincular un `<input>` con su `<p>` descriptivo mediante `aria-describedby`. ¿Por qué conviene usar `useId` en lugar de escribir un ID fijo como `\"password-hint\"`?",
+      "options": [
+        {
+          "text": "Porque `useId` genera un identificador único por cada instancia del componente, evitando IDs duplicados cuando se renderiza varias veces",
+          "correct": true
+        },
+        {
+          "text": "Porque `useId` memoriza un valor calculado y solo lo recalcula cuando cambian sus dependencias, mejorando el rendimiento",
+          "correct": false
+        },
+        {
+          "text": "Porque `useId` genera un ID nuevo en cada render, lo que fuerza a React a volver a montar el input y su descripción",
+          "correct": false
+        },
+        {
+          "text": "Porque `useId` guarda el valor del input entre renders y provoca un re-render cada vez que ese valor cambia",
+          "correct": false
+        }
+      ],
+      "explanation": "`useId` produce un identificador estable y único por instancia, ideal para conectar atributos de accesibilidad como `aria-describedby` sin colisiones aunque el componente aparezca varias veces. No recalcula por dependencias (eso es `useMemo`), no cambia entre renders (es estable, no genera uno nuevo cada vez) ni almacena estado que dispare re-renders (eso sería `useState`)."
+    },
+    {
+      "questionId": "bcd059851645",
+      "stem": "¿Cuál es la forma correcta de ejecutar código una sola vez cuando el componente se monta?",
+      "options": [
+        {
+          "text": "Usar `useEffect` pasando un array de dependencias vacío `[]` como segundo argumento",
+          "correct": true
+        },
+        {
+          "text": "Usar `useEffect` sin pasar el segundo argumento, para que se ejecute solo al montar",
+          "correct": false
+        },
+        {
+          "text": "Usar `useMemo` con un array de dependencias vacío `[]` para ejecutar el efecto al montar",
+          "correct": false
+        },
+        {
+          "text": "Usar `useState` con una función inicializadora que ejecute el código al montar",
+          "correct": false
+        }
+      ],
+      "explanation": "Con `useEffect` y un array vacío `[]`, el efecto se ejecuta solo tras el montaje, ya que no tiene dependencias que provoquen re-ejecuciones. Si se omite el segundo argumento, el efecto se ejecuta después de cada render, no solo al montar. `useMemo` sirve para memorizar valores calculados, no para efectos secundarios, y `useState` solo inicializa estado, no está pensado para ejecutar lógica de montaje."
+    },
+    {
+      "questionId": "1f8b277ffb2f",
+      "stem": "Un componente debe devolver varios elementos hermanos y necesitas evitar añadir nodos extra al DOM. ¿Qué opción resuelve esto correctamente?",
+      "options": [
+        {
+          "text": "Envolver los elementos en un `Fragment` (`<>...</>`), que los agrupa bajo una raíz sin generar un nodo HTML adicional",
+          "correct": true
+        },
+        {
+          "text": "Envolver los elementos en un `div`, que agrupa el contenido pero añade un nodo extra al DOM que puede afectar al layout",
+          "correct": false
+        },
+        {
+          "text": "Devolver un array de elementos memoizado para que React solo recalcule los nodos cuando cambien sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "Usar la abreviatura `<>...</>` pasándole una `key` directamente para identificar cada elemento hermano en una lista",
+          "correct": false
+        }
+      ],
+      "explanation": "Un Fragment agrupa elementos hermanos bajo una única raíz sin insertar nodos extra en el DOM, evitando el `div` innecesario que sí afectaría al layout o los estilos. La sintaxis abreviada `<>...</>` no admite atributos como `key`; para ello hay que usar la forma explícita `<Fragment key={...}>`. Memoizar arrays es una técnica de rendimiento sin relación con agrupar la salida JSX."
+    },
+    {
+      "questionId": "0fa178d81dab",
+      "stem": "Al envolver varios elementos JSX, ¿qué ventaja real ofrece usar un Fragment (`<>...</>`) en lugar de un `<div>`?",
+      "options": [
+        {
+          "text": "No añade un nodo extra al DOM, evitando problemas de layout con `flex` o `grid` del padre",
+          "correct": true
+        },
+        {
+          "text": "Permite que los componentes hijos compartan estado automáticamente sin pasar props",
+          "correct": false
+        },
+        {
+          "text": "Crea un límite de error que captura excepciones de los componentes que envuelve",
+          "correct": false
+        },
+        {
+          "text": "Memoriza el resultado del renderizado para evitar recálculos innecesarios en cada render",
+          "correct": false
+        }
+      ],
+      "explanation": "Un Fragment agrupa varios elementos sin generar un nodo adicional en el DOM, por lo que no interfiere con propiedades CSS como `flex` o `grid` del contenedor padre ni añade profundidad innecesaria. Las otras opciones describen mecanismos distintos: compartir estado se logra con context o props, capturar errores es tarea de un Error Boundary, y memorizar cálculos corresponde a useMemo, no a un Fragment."
+    },
+    {
+      "questionId": "549428ae6ac3",
+      "stem": "Estás construyendo un componente `<Tabs>` que coordina varios `<Tab>` hijos. ¿Cuál es la ventaja principal de aplicar el Compound Components Pattern en este caso?",
+      "options": [
+        {
+          "text": "Permite componer una estructura declarativa donde el padre gestiona el estado compartido y provee lo necesario a sus hijos",
+          "correct": true
+        },
+        {
+          "text": "Memoriza el resultado de un cálculo costoso para que no se recalcule en cada render mientras sus dependencias no cambien",
+          "correct": false
+        },
+        {
+          "text": "Aísla cada componente en su propio árbol para que ninguno pueda compartir estado ni comunicarse con otro",
+          "correct": false
+        },
+        {
+          "text": "Obliga a pasar todos los datos mediante una única prop de configuración en el padre, evitando por completo el uso de `children`",
+          "correct": false
+        }
+      ],
+      "explanation": "El Compound Components Pattern crea un padre que coordina y provee propiedades o estado a sus hijos, logrando una API declarativa y limpia como `<Tabs><Tab/></Tabs>`. La opción de memorizar cálculos describe `useMemo`, no este patrón. Las otras contradicen la esencia del patrón, que justamente permite compartir estado entre padre e hijos y se apoya en `children`."
+    },
+    {
+      "questionId": "ebe13d3e8a66",
+      "stem": "Quieres crear un nuevo proyecto de React con Vite. ¿Cuál de estos comandos es el correcto?",
+      "options": [
+        {
+          "text": "`npm create vite@latest my-app -- --template react`",
+          "correct": true
+        },
+        {
+          "text": "`npx create-react-app my-app --template vite`",
+          "correct": false
+        },
+        {
+          "text": "`npm init react-app my-app --bundler vite`",
+          "correct": false
+        },
+        {
+          "text": "`npx vite-react create my-app`",
+          "correct": false
+        }
+      ],
+      "explanation": "El comando oficial para inicializar un proyecto con Vite es `npm create vite@latest my-app -- --template react`, donde `--template react` selecciona la plantilla de React. La opción con `create-react-app` corresponde a otra herramienta distinta (CRA) y no acepta un flag `--template vite`; los demás comandos no existen. Hoy Vite es la opción más recomendada por su rápido entorno de desarrollo."
+    },
+    {
+      "questionId": "d8418bb8ff02",
+      "stem": "En una aplicación web creada con React, ¿cuál es la responsabilidad específica de React DOM?",
+      "options": [
+        {
+          "text": "Renderizar los componentes de React en el navegador, conectándolos con el DOM real",
+          "correct": true
+        },
+        {
+          "text": "Definir los componentes, hooks y el sistema de props y estado que usa la aplicación",
+          "correct": false
+        },
+        {
+          "text": "Renderizar los componentes de React en dispositivos móviles usando componentes nativos",
+          "correct": false
+        },
+        {
+          "text": "Gestionar las peticiones al servidor y almacenar en caché los datos remotos de la aplicación",
+          "correct": false
+        }
+      ],
+      "explanation": "React DOM es la librería encargada de tomar los componentes de React y renderizarlos en el navegador, sincronizándolos con el DOM real. El motor de componentes, hooks, props y estado pertenece a la biblioteca 'react' a secas; el renderizado en móviles corresponde a React Native. Separar estas responsabilidades permite que React se use en distintos entornos con una librería de renderizado específica para cada uno."
+    },
+    {
+      "questionId": "6ca7827b96eb",
+      "stem": "¿Por qué se dice que el Virtual DOM mejora el rendimiento en una app React?",
+      "options": [
+        {
+          "text": "Porque React compara el árbol virtual nuevo con el anterior y aplica al DOM real solo las mutaciones mínimas necesarias",
+          "correct": true
+        },
+        {
+          "text": "Porque el Virtual DOM es una versión del DOM del navegador que ejecuta las operaciones de forma nativa más veloz",
+          "correct": false
+        },
+        {
+          "text": "Porque mantiene una copia inmutable de props y estado que evita re-renderizar los componentes cuando los valores no cambian",
+          "correct": false
+        },
+        {
+          "text": "Porque reemplaza por completo el DOM real del navegador y renderiza toda la interfaz directamente en memoria",
+          "correct": false
+        }
+      ],
+      "explanation": "La ganancia no viene de un DOM \"más rápido\", sino de evitar trabajo innecesario: React genera un nuevo árbol virtual, lo compara (diff) con el anterior y solo aplica al DOM real las mutaciones mínimas, que es la parte costosa. El distractor sobre no re-renderizar cuando los valores no cambian describe más bien la memoización o la comparación de props, no el propósito del Virtual DOM, y este no reemplaza ni es más nativo que el DOM del navegador."
+    },
+    {
+      "questionId": "084b6296b6fd",
+      "stem": "Tienes `const [user, setUser] = useState({ name: 'midu', age: 30 })` y ejecutas `user.age = 31; setUser(user)`. ¿Qué problema tiene este código?",
+      "options": [
+        {
+          "text": "React compara la referencia del objeto y, al ser la misma, puede no detectar el cambio y no re-renderizar la UI",
+          "correct": true
+        },
+        {
+          "text": "React lanza un error en tiempo de ejecución porque los objetos de estado son inmutables y no se pueden reasignar sus propiedades",
+          "correct": false
+        },
+        {
+          "text": "React re-renderiza correctamente, pero pierde el resto de propiedades del objeto porque `setUser` reemplaza todo el estado",
+          "correct": false
+        },
+        {
+          "text": "React agrupa varias mutaciones y solo aplica la última, por lo que se pierde la actualización de `age`",
+          "correct": false
+        }
+      ],
+      "explanation": "React decide si volver a renderizar comparando la referencia anterior con la nueva; al mutar el mismo objeto y pasarlo a `setUser`, la referencia no cambia y React puede omitir el re-render, dejando la UI desactualizada. Lo correcto es crear una nueva referencia con `setUser({ ...user, age: 31 })`. No se lanza ningún error al mutar (JavaScript lo permite), y `setUser` con un objeto completo no descarta propiedades por sí mismo."
+    },
+    {
+      "questionId": "b099d91fc14a",
+      "stem": "Necesitas que un componente `Card` muestre contenido arbitrario que decida el padre (un `Avatar`, texto, botones, etc.). ¿Cuál es la forma que React recomienda para lograr esto?",
+      "options": [
+        {
+          "text": "Usar composición: `Card` renderiza `{children}` y el padre pasa el contenido entre las etiquetas `<Card>...</Card>`.",
+          "correct": true
+        },
+        {
+          "text": "Crear una clase base `Card` y hacer que cada variante extienda de ella mediante herencia para reutilizar su UI.",
+          "correct": false
+        },
+        {
+          "text": "Guardar el contenido en el estado interno de `Card` y actualizarlo con `setState` cuando el padre lo necesite.",
+          "correct": false
+        },
+        {
+          "text": "Definir `Card` como una función pura que memoriza su resultado con `useMemo` para evitar re-renderizados del contenido.",
+          "correct": false
+        }
+      ],
+      "explanation": "La composición con `children` permite que el padre decida qué se renderiza dentro sin acoplar jerarquías rígidas, y React la prefiere sobre la herencia de clases para reutilizar UI. La herencia se vuelve frágil; el estado interno no sirve porque el contenido lo controla el padre; y `useMemo` es una optimización de valores calculados, no un mecanismo para inyectar contenido."
+    }
+  ]
+}

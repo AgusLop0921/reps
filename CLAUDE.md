@@ -41,10 +41,12 @@ should change, propose an ADR — do not act on it.
 - No feed, no infinite scroll, no recommendation algorithm.
 - No backend, no database, no authentication, no accounts, no cross-device sync.
 - No global state library. React state and context are enough.
-- No AI calls. Interview simulation is v2 and lands under ADR-0013.
+- No AI calls in the app at runtime. Interview simulation is v2 and lands under ADR-0013;
+  build-time check generation (maintainer's key, output committed) is ADR-0017.
 - No i18n framework.
 - No punishing streaks, no push notifications, no guilt mechanics (ADR-0010).
-- No hand-written questions. Content comes from imported sources.
+- No hand-written questions. Imported content comes from sources; multiple-choice checks
+  are generated at build time and kept separate from it (ADR-0017).
 
 ## Commands
 
@@ -108,7 +110,9 @@ Non-negotiable: **`core/` is pure and tested**. If a function needs `Date.now()`
 2. **One structural decision = one ADR.** Use `/adr`.
 3. **New dependencies: always ask.**
 4. **Never invent content.** If an adapter cannot parse something, fail loudly. Do not
-   fill a missing answer from your own knowledge — content stays traceable to its source.
+   fill a missing answer from your own knowledge — imported content stays traceable to its
+   source. The one exception is generated MCQ checks (ADR-0017): ours, never mixed into an
+   imported answer, and reviewed once — not continuously validated.
 5. **Definition of done:** `pnpm verify` green, ADR written if needed, PR open.
 
 ## Third-party content
