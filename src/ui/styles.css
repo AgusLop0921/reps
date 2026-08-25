@@ -1,32 +1,38 @@
-/* Design tokens. Every visual value comes from here, and every one has a dark variant. */
+/*
+ * Design tokens — "Papel nocturno". Dark is the designed default (from the prototype); the
+ * light block is a conservative derivation and is untested against a real design.
+ */
 :root {
-  --bg: #ffffff;
-  --surface: #f6f7f8;
-  --surface-2: #eceef0;
-  --text: #16181d;
-  --muted: #61656e;
-  --border: #e3e5e9;
-  --accent: #2f6f4f; /* sparingly: eyebrow, links (ADR-0007 source link) */
-  --danger: #b4453a;
+  --bg: #080706;
+  --surface: #100f0d;
+  --surface-2: #17150f;
+  --text: #ede8e0;
+  --muted: #9a9086;
+  --border: #262320;
+  --accent: #c79a5e; /* gold: links, primary, current, the "Casi" verdict */
+  --correct: #8fa98c; /* sage: the correct answer and the "Correcto" verdict */
+  --danger: #c77a5e; /* reserved — the UI teaches with gold, not red */
 
   --radius: 14px;
   --space: 16px;
   --maxw: 640px;
 
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font: var(--font-serif);
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --bg: #0f1116;
-    --surface: #171a21;
-    --surface-2: #1f232c;
-    --text: #e8e9ec;
-    --muted: #9aa0ab;
-    --border: #272b34;
-    --accent: #7cba98;
-    --danger: #e0796d;
+    --bg: #f3f0e9;
+    --surface: #fbf9f4;
+    --surface-2: #efeadf;
+    --text: #1b1712;
+    --muted: #6e655a;
+    --border: #e1dacc;
+    --accent: #9a6b2f;
+    --correct: #46654c;
+    --danger: #a85a3e;
   }
 }
 
@@ -197,7 +203,8 @@ body {
   justify-content: space-between;
   gap: 10px;
   text-align: left;
-  font-size: 0.95rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
   border: 1px solid var(--border);
   background: var(--surface-2);
   color: var(--text);
@@ -208,7 +215,7 @@ body {
 }
 
 .option-correct {
-  border-color: var(--accent);
+  border-color: var(--correct);
 }
 
 .option-chosen {
@@ -229,7 +236,7 @@ body {
 }
 
 .option-mark-correct {
-  color: var(--accent);
+  color: var(--correct);
   font-size: 0.95rem;
 }
 
@@ -250,11 +257,11 @@ body {
 }
 
 .verdict-right {
-  color: var(--accent);
+  color: var(--correct);
 }
 
 .verdict-wrong {
-  color: var(--danger);
+  color: var(--accent);
 }
 
 .feedback-explanation {
@@ -510,24 +517,24 @@ button {
 
 /* ---- Syntax highlighting (rehype-highlight / hljs classes) ------------------ */
 :root {
-  --hl-comment: #6a737d;
-  --hl-keyword: #d73a49;
-  --hl-string: #032f62;
-  --hl-number: #005cc5;
-  --hl-title: #6f42c1;
-  --hl-built: #22863a;
-  --hl-attr: #005cc5;
+  --hl-comment: #5f584f;
+  --hl-keyword: #c79a5e;
+  --hl-string: #b98e63;
+  --hl-number: #8fa98c;
+  --hl-title: #8fa98c;
+  --hl-built: #8fa98c;
+  --hl-attr: #8fa98c;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --hl-comment: #8b949e;
-    --hl-keyword: #ff7b72;
-    --hl-string: #a5d6ff;
-    --hl-number: #79c0ff;
-    --hl-title: #d2a8ff;
-    --hl-built: #7ee787;
-    --hl-attr: #79c0ff;
+    --hl-comment: #8a8275;
+    --hl-keyword: #9a6b2f;
+    --hl-string: #7a5a33;
+    --hl-number: #46654c;
+    --hl-title: #46654c;
+    --hl-built: #46654c;
+    --hl-attr: #46654c;
   }
 }
 
