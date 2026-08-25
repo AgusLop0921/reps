@@ -1,5 +1,3 @@
-import type { Level } from './schema'
-
 /**
  * Hand-curated overrides on top of the generated curriculum (ADR-0011).
  *
@@ -10,8 +8,26 @@ import type { Level } from './schema'
  * Empty is a valid state: it means the generated order is good enough so far.
  */
 
-/** Question slugs to place at the start of their section, in this order. */
-export const PINNED_FIRST: Partial<Record<Level, string[]>> = {}
+/**
+ * Question slugs to place at the start of a section, keyed by section id
+ * (e.g. `"midudev-react:principiante"`), in the order given. Section ids are the ones in
+ * the generated curriculum — sections, not levels (ADR-0014).
+ */
+export const PINNED_FIRST: Record<string, string[]> = {}
+
+/**
+ * Lesson size for specific sections, keyed by section id. Sections not listed use
+ * `DEFAULT_LESSON_SIZE` (3). A lesson is measured in text, not cards: the default keeps a
+ * lesson under ~4,000 characters where answers run ~870 chars (median).
+ *
+ * "midudev-react:errores-típicos-en-react" answers are ~3× longer than the rest (median
+ * 2,542 chars, p90 4,353), so even two cards blow past that ceiling. Size 1 makes it six
+ * single-card lessons of ~2,500 chars — one card is the natural unit there, in line with
+ * the rest of the path.
+ */
+export const LESSON_SIZE_BY_SECTION: Record<string, number> = {
+  'midudev-react:errores-típicos-en-react': 1,
+}
 
 /** Question slugs to exclude from the path (still searchable, never taught). */
 export const EXCLUDED_SLUGS: string[] = [

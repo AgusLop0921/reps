@@ -1,0 +1,457 @@
+{
+  "generatedAt": "2026-08-25T14:44:23.162Z",
+  "sections": [
+    {
+      "id": "midudev-react:principiante",
+      "title": "Principiante",
+      "sourceId": "midudev-react",
+      "lessons": [
+        {
+          "id": "midudev-react:principiante:1",
+          "order": 1,
+          "questionIds": [
+            "859805c2ddb1",
+            "57ae0588d92a",
+            "20852735d252"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:2",
+          "order": 2,
+          "questionIds": [
+            "45ad6f03c64b",
+            "73c41a300d68",
+            "315b0a7d961f"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:3",
+          "order": 3,
+          "questionIds": [
+            "4fa62de282bc",
+            "6fb466d4cd3d",
+            "6d7b97f29f2b"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:4",
+          "order": 4,
+          "questionIds": [
+            "8efa11fe1453",
+            "22b6da2e7148",
+            "dd0fcda98d06"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:5",
+          "order": 5,
+          "questionIds": [
+            "e78d4e456696",
+            "859840368491",
+            "316ce6cd97bf"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:6",
+          "order": 6,
+          "questionIds": [
+            "1111ffce7cef",
+            "aa79810b70b3",
+            "7284338431e3"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:7",
+          "order": 7,
+          "questionIds": [
+            "eaf1e683533d",
+            "a84eab9936cc",
+            "ee428b87abca"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:8",
+          "order": 8,
+          "questionIds": [
+            "3da0e7e85459",
+            "313c17b0c2ef",
+            "53b9d3bc5887"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:9",
+          "order": 9,
+          "questionIds": [
+            "c57461488483",
+            "958ee4660ec3",
+            "9d5cb2a51f2e"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:10",
+          "order": 10,
+          "questionIds": [
+            "ce62238987b7",
+            "d60862771d16",
+            "bcd059851645"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:11",
+          "order": 11,
+          "questionIds": [
+            "1f8b277ffb2f",
+            "0fa178d81dab",
+            "549428ae6ac3"
+          ]
+        },
+        {
+          "id": "midudev-react:principiante:12",
+          "order": 12,
+          "questionIds": [
+            "ebe13d3e8a66",
+            "d8418bb8ff02",
+            "6ca7827b96eb",
+            "084b6296b6fd",
+            "b099d91fc14a"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "midudev-react:intermedio",
+      "title": "Intermedio",
+      "sourceId": "midudev-react",
+      "lessons": [
+        {
+          "id": "midudev-react:intermedio:1",
+          "order": 1,
+          "questionIds": [
+            "9c0274fba6ca",
+            "adf7a3871513",
+            "d02a33d57ca8"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:2",
+          "order": 2,
+          "questionIds": [
+            "ab25c2e2f347",
+            "84cf092f3bfa",
+            "1ce02f99534a"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:3",
+          "order": 3,
+          "questionIds": [
+            "91815ac8cadd",
+            "6e3ae2abb4fd",
+            "7438e6697690"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:4",
+          "order": 4,
+          "questionIds": [
+            "72a48ae8baa7",
+            "f5e90c7fd58c",
+            "d5d2658bfbf3"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:5",
+          "order": 5,
+          "questionIds": [
+            "85a2a593e06e",
+            "6447a00e05ef",
+            "dc52742cefd0"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:6",
+          "order": 6,
+          "questionIds": [
+            "5f28876cd9ae",
+            "7cd2fdbe2cf7",
+            "45f3e54a4449"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:7",
+          "order": 7,
+          "questionIds": [
+            "f460e608c89c",
+            "d3a8775b8813",
+            "15c78555049a"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:8",
+          "order": 8,
+          "questionIds": [
+            "be086b9b90ca",
+            "ad7c82be1a42",
+            "ddd23d3b5a1e"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:9",
+          "order": 9,
+          "questionIds": [
+            "7c24fc1d1a60",
+            "8dbdd6e9c5ca",
+            "53c6f275a5dd"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:10",
+          "order": 10,
+          "questionIds": [
+            "078852de8d2d",
+            "d8487d922ba3",
+            "3d845ccbb963"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:11",
+          "order": 11,
+          "questionIds": [
+            "c0192d88df64",
+            "f5a0f2db0ec9",
+            "b733b54f13da"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:12",
+          "order": 12,
+          "questionIds": [
+            "45660c735946",
+            "29ce94552a60",
+            "0816eb9f2818"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:13",
+          "order": 13,
+          "questionIds": [
+            "46474886353e",
+            "e2abf9db28b0",
+            "ab759b4bfd25"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:14",
+          "order": 14,
+          "questionIds": [
+            "7ef827e297af",
+            "78d17fd0feaa",
+            "b64869f623f3"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:15",
+          "order": 15,
+          "questionIds": [
+            "e9c846ac61b0",
+            "b989acc7a6e5",
+            "388057def963"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:16",
+          "order": 16,
+          "questionIds": [
+            "a88925fd0f8e",
+            "fd8aae12963e",
+            "603c7f0492f8"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:17",
+          "order": 17,
+          "questionIds": [
+            "bf2f593d0a19",
+            "6baf061c53ec",
+            "0113a0a3dbac"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:18",
+          "order": 18,
+          "questionIds": [
+            "c6d23b5ef45a",
+            "bf32d7f6f459",
+            "365aa07d16d1"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:19",
+          "order": 19,
+          "questionIds": [
+            "c83b0dd116b5",
+            "3d83ab173c81",
+            "2d76f7b855df"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:20",
+          "order": 20,
+          "questionIds": [
+            "d6f34b9ff28e",
+            "59a9a1b120e6",
+            "fc628e0eedd2"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:21",
+          "order": 21,
+          "questionIds": [
+            "99fc823039ba",
+            "3b0e2aa0155d",
+            "6399f2949e8b"
+          ]
+        },
+        {
+          "id": "midudev-react:intermedio:22",
+          "order": 22,
+          "questionIds": [
+            "36eb419724e1",
+            "e4a7052eb415",
+            "f3e3dde139f4",
+            "d6381dfe4215"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "midudev-react:experto",
+      "title": "Experto",
+      "sourceId": "midudev-react",
+      "lessons": [
+        {
+          "id": "midudev-react:experto:1",
+          "order": 1,
+          "questionIds": [
+            "b9e10069f489",
+            "07d8484ace9b",
+            "b2f4ba268006"
+          ]
+        },
+        {
+          "id": "midudev-react:experto:2",
+          "order": 2,
+          "questionIds": [
+            "e630905286d9",
+            "fde7c9ed7956",
+            "7b72931af067"
+          ]
+        },
+        {
+          "id": "midudev-react:experto:3",
+          "order": 3,
+          "questionIds": [
+            "41ecb7a9a4ee",
+            "8d3854c24245",
+            "5cd544842c89"
+          ]
+        },
+        {
+          "id": "midudev-react:experto:4",
+          "order": 4,
+          "questionIds": [
+            "b4f84dc75b8b",
+            "a402a2777a25",
+            "64787a38bbe1"
+          ]
+        },
+        {
+          "id": "midudev-react:experto:5",
+          "order": 5,
+          "questionIds": [
+            "453012f2a102",
+            "3263b41dc9ef",
+            "fa286b78496b"
+          ]
+        },
+        {
+          "id": "midudev-react:experto:6",
+          "order": 6,
+          "questionIds": [
+            "bad188688738",
+            "a3b9e1d021e8",
+            "3f532507c59f"
+          ]
+        },
+        {
+          "id": "midudev-react:experto:7",
+          "order": 7,
+          "questionIds": [
+            "733fa86de9f2",
+            "721f4b1beac4",
+            "5ea5cd701591"
+          ]
+        },
+        {
+          "id": "midudev-react:experto:8",
+          "order": 8,
+          "questionIds": [
+            "c5fa8764f66e",
+            "6647bce15e8d",
+            "5460d17e4801",
+            "9e833ebb0d99"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "midudev-react:errores-típicos-en-react",
+      "title": "Errores Típicos en React",
+      "sourceId": "midudev-react",
+      "lessons": [
+        {
+          "id": "midudev-react:errores-típicos-en-react:1",
+          "order": 1,
+          "questionIds": [
+            "ed3626b2359a"
+          ]
+        },
+        {
+          "id": "midudev-react:errores-típicos-en-react:2",
+          "order": 2,
+          "questionIds": [
+            "00bc0da163ec"
+          ]
+        },
+        {
+          "id": "midudev-react:errores-típicos-en-react:3",
+          "order": 3,
+          "questionIds": [
+            "ffe9a4847183"
+          ]
+        },
+        {
+          "id": "midudev-react:errores-típicos-en-react:4",
+          "order": 4,
+          "questionIds": [
+            "e1732243cc75"
+          ]
+        },
+        {
+          "id": "midudev-react:errores-típicos-en-react:5",
+          "order": 5,
+          "questionIds": [
+            "f191440624b2"
+          ]
+        },
+        {
+          "id": "midudev-react:errores-típicos-en-react:6",
+          "order": 6,
+          "questionIds": [
+            "e3a882636e97"
+          ]
+        }
+      ]
+    }
+  ]
+}
