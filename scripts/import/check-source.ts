@@ -73,11 +73,11 @@ async function main(): Promise<void> {
     const questions = source.parse(await res.text())
     report(id, questions)
 
-    // Mirror index.ts: level-keyed pins flatten to a slug list (placement is by section).
-    const pinnedFirst = Object.values(PINNED_FIRST)
-      .flat()
-      .filter((slug): slug is string => typeof slug === 'string')
-    reportCurriculum(buildSections(questions, { excludedSlugs: EXCLUDED_SLUGS, pinnedFirst }))
+    const sections = buildSections(questions, {
+      excludedSlugs: EXCLUDED_SLUGS,
+      pinnedFirst: PINNED_FIRST,
+    })
+    reportCurriculum(sections)
   }
 }
 

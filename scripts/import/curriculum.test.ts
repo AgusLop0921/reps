@@ -21,7 +21,7 @@ const q = (slug: string, sourceSection: string, sourceId = 'src'): Question => (
 const many = (title: string, n: number, sourceId = 'src'): Question[] =>
   Array.from({ length: n }, (_, i) => q(`${title}-${i + 1}`, title, sourceId))
 
-const NO_OVERRIDES = { excludedSlugs: [], pinnedFirst: [] }
+const NO_OVERRIDES = { excludedSlugs: [], pinnedFirst: {} }
 const sizes = (s: Section): number[] => s.lessons.map((l) => l.questionIds.length)
 
 describe('buildSections: sections', () => {
@@ -79,20 +79,22 @@ describe('buildSections: chunking', () => {
 describe('buildSections: order.ts overrides', () => {
   it('drops excluded slugs from the path', () => {
     const questions = [q('keep-1', 'S'), q('drop', 'S'), q('keep-2', 'S')]
-    const [section] = buildSections(questions, { excludedSlugs: ['drop'], pinnedFirst: [] })
+    const [section] = buildSections(questions, { excludedSlugs: ['drop'], pinnedFirst: {} })
     expect(section.lessons[0].questionIds).toHaveLength(2)
   })
 
   it('omits a section whose questions are all excluded (no empty section)', () => {
     const questions = [q('a', 'Principiante'), q('only', 'Errores')]
-    const sections = buildSections(questions, { excludedSlugs: ['only'], pinnedFirst: [] })
+    const sections = buildSections(questions, { excludedSlugs: ['only'], pinnedFirst: {} })
     expect(sections.map((s) => s.title)).toEqual(['Principiante'])
   })
 
-  it('pins slugs to the front of their section, in order', () => {
+  it('pins slugs to the front of their section, in order, keyed by section id', () => {
     const questions = [q('a', 'S'), q('b', 'S'), q('c', 'S'), q('d', 'S')]
-    const [section] = buildSections(questions, { excludedSlugs: [], pinnedFirst: ['c', 'a'] })
-    // Map the resulting ids back to slugs to assert order.
+    const [section] = buildSections(questions, {
+      excludedSlugs: [],
+      pinnedFirst: { 'src:s': ['c', 'a'] },
+    })
     const bySlug = new Map(questions.map((x) => [x.id, x.slug]))
     expect(section.lessons[0].questionIds.map((id) => bySlug.get(id))).toEqual([
       'c',
@@ -100,5 +102,16 @@ describe('buildSections: order.ts overrides', () => {
       'b',
       'd',
     ])
+  })
+
+  it('applies pins only to the keyed section, leaving others in document order', () => {
+    const questions = [q('a1', 'A'), q('a2', 'A'), q('b1', 'B'), q('b2', 'B')]
+    const [a, b] = buildSections(questions, {
+      excludedSlugs: [],
+      pinnedFirst: { 'src:b': ['b2'] },
+    })
+    const bySlug = new Map(questions.map((x) => [x.id, x.slug]))
+    expect(a.lessons[0].questionIds.map((id) => bySlug.get(id))).toEqual(['a1', 'a2'])
+    expect(b.lessons[0].questionIds.map((id) => bySlug.get(id))).toEqual(['b2', 'b1'])
   })
 })

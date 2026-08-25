@@ -1,5 +1,3 @@
-import type { Level } from './schema'
-
 /**
  * Hand-curated overrides on top of the generated curriculum (ADR-0011).
  *
@@ -10,8 +8,12 @@ import type { Level } from './schema'
  * Empty is a valid state: it means the generated order is good enough so far.
  */
 
-/** Question slugs to place at the start of their section, in this order. */
-export const PINNED_FIRST: Partial<Record<Level, string[]>> = {}
+/**
+ * Question slugs to place at the start of a section, keyed by section id
+ * (e.g. `"midudev-react:principiante"`), in the order given. Section ids are the ones in
+ * the generated curriculum — sections, not levels (ADR-0014).
+ */
+export const PINNED_FIRST: Record<string, string[]> = {}
 
 /** Question slugs to exclude from the path (still searchable, never taught). */
 export const EXCLUDED_SLUGS: string[] = [

@@ -20,8 +20,8 @@ const MIN_TRAILING_LESSON = 3
 export type Overrides = {
   /** Slugs to drop from the path entirely (still importable/searchable). */
   excludedSlugs: readonly string[]
-  /** Slugs to move to the front of their section, in this order. */
-  pinnedFirst: readonly string[]
+  /** Section id -> slugs to move to the front of that section, in this order. */
+  pinnedFirst: Readonly<Record<string, readonly string[]>>
 }
 
 /** Section id component from the upstream heading. Same rules the adapter uses for slugs. */
@@ -80,7 +80,7 @@ export function buildSections(questions: Question[], overrides: Overrides): Sect
   }
 
   return [...groups.values()].map((group) => {
-    const ordered = applyPinned(group.questions, overrides.pinnedFirst)
+    const ordered = applyPinned(group.questions, overrides.pinnedFirst[group.id] ?? [])
     const lessons: Lesson[] = chunk(ordered.map((q) => q.id)).map((questionIds, i) => ({
       id: `${group.id}:${i + 1}`,
       order: i + 1,

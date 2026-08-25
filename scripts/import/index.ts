@@ -38,15 +38,12 @@ async function main(): Promise<void> {
     questions,
   })
 
-  // order.ts pins are keyed by level (a pre-ADR-0014 shape); placement is by the question's
-  // actual section, so only the slug list matters here. Flatten it.
-  const pinnedFirst = Object.values(PINNED_FIRST)
-    .flat()
-    .filter((slug): slug is string => typeof slug === 'string')
-
   const curriculum = curriculumSchema.parse({
     generatedAt,
-    sections: buildSections(questions, { excludedSlugs: EXCLUDED_SLUGS, pinnedFirst }),
+    sections: buildSections(questions, {
+      excludedSlugs: EXCLUDED_SLUGS,
+      pinnedFirst: PINNED_FIRST,
+    }),
   })
 
   await mkdir(DATA_DIR, { recursive: true })
