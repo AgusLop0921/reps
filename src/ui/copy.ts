@@ -1,29 +1,30 @@
 /**
  * Every user-facing string in the app (ADR-0008). Spanish only — nothing user-facing lives
- * outside this file, and nothing English belongs in it.
+ * outside this file, and nothing English belongs in it. Voice: Rioplatense (voseo).
  */
 export const copy = {
   appName: 'Reps',
-  tagline: 'Una lección por día.',
+  tagline: 'React en tarjetas cortas. Tres por día, cuatro minutos, y se termina.',
 
   lessonLabel: 'Lección',
   reviewBadge: 'Repaso',
-  progress: (current: number, total: number): string => `${current} / ${total}`,
+  cardCount: (current: number, total: number): string => `${current}/${total}`,
 
-  reveal: 'Ver respuesta',
-  gradePrompt: '¿Cómo te fue?',
-  grades: {
-    1: 'Otra vez',
-    2: 'Difícil',
-    3: 'Bien',
-    4: 'Fácil',
-  },
+  verdictRight: 'Correcto',
+  verdictWrong: 'Casi',
+  correctMark: '✓',
+  yourAnswer: 'tu respuesta',
 
-  sourceLabel: 'Fuente',
-  sourceBy: 'por',
+  nextCard: (next: number, total: number): string => `Tarjeta ${next} de ${total}`,
+  finishLesson: 'Terminar la lección',
 
-  endTitle: 'Lección completada',
-  endSubtitle: 'Eso es todo por hoy.',
+  // Attribution for the imported question/answer (ADR-0007). The generated check has none
+  // — it is ours, not the source's (ADR-0017).
+  sourcePrefix: 'Contenido de',
+
+  endDone: 'terminada',
+  endTitle: 'Listo por hoy.',
+  endSubtitle: 'Mañana sigue la próxima. No hay nada más que hacer acá.',
   restart: 'Empezar de nuevo',
 
   noLesson: 'No hay ninguna lección para mostrar.',
