@@ -1,0 +1,145 @@
+{
+  "generatedAt": "2026-08-25T20:46:44.645Z",
+  "model": "claude-opus-4-8",
+  "sourceSection": "Errores Típicos en React",
+  "checks": [
+    {
+      "questionId": "ed3626b2359a",
+      "stem": "Al renderizar una lista con `.map()`, aparece en consola: `Warning: Each child in a list should have a unique key prop`. ¿Por qué muestra React esta advertencia?",
+      "options": [
+        {
+          "text": "Falta la prop `key` en los elementos generados, y React la necesita para identificar qué items cambiaron, se agregaron o reordenaron al reconciliar con el DOM",
+          "correct": true
+        },
+        {
+          "text": "Falta la prop `key`, que React inyecta como atributo `id` en el HTML final para que puedas seleccionar los elementos con CSS o querySelector",
+          "correct": false
+        },
+        {
+          "text": "Los elementos del listado no están envueltos en un fragmento o en un contenedor padre único, y React exige un único nodo raíz al renderizar arrays",
+          "correct": false
+        },
+        {
+          "text": "Se está mutando el estado directamente dentro del `.map()`, y React detecta que la lista se modificó sin pasar por la función actualizadora de estado",
+          "correct": false
+        }
+      ],
+      "explanation": "La prop `key` da a React un identificador estable por elemento para que, durante la reconciliación, sepa qué items cambiaron, se agregaron, eliminaron o reordenaron, optimizando el re-render. No se convierte en un atributo `id` del DOM ni sirve para CSS; tampoco tiene relación con envolver nodos en fragmentos ni con la mutación del estado."
+    },
+    {
+      "questionId": "00bc0da163ec",
+      "stem": "El siguiente componente provoca el error \"React Hook useState is called conditionally\". ¿Por qué falla?\n\n```jsx\nfunction Counter() {\n  const [count, setCount] = useState(0)\n  if (count === 0) return null\n  const [name, setName] = useState('midu')\n  return <div>{count} {name}</div>\n}\n```",
+      "options": [
+        {
+          "text": "El `return null` puede interrumpir la ejecución antes de llegar al segundo `useState`, así que ese hook no siempre se llama y el orden de los hooks cambia entre renderizados.",
+          "correct": true
+        },
+        {
+          "text": "No puedes declarar dos `useState` dentro del mismo componente; React solo permite un hook de estado por función y por eso lanza el error.",
+          "correct": false
+        },
+        {
+          "text": "El problema es que `setName` nunca se usa, y React exige que toda función actualizadora devuelta por `useState` se invoque en el render.",
+          "correct": false
+        },
+        {
+          "text": "`useState('midu')` recibe un string como valor inicial, pero React requiere que el estado se inicialice siempre con un objeto o `null`.",
+          "correct": false
+        }
+      ],
+      "explanation": "Aunque el segundo `useState` no está dentro de un `if`, el `return null` previo hace que a veces no se ejecute, rompiendo la regla de llamar siempre los hooks en el mismo orden. La solución es mover ambos `useState` al nivel superior, antes de cualquier `return` condicional. Los demás enunciados describen restricciones inexistentes: React permite múltiples `useState`, no obliga a invocar las funciones actualizadoras, ni impone un tipo concreto para el valor inicial."
+    },
+    {
+      "questionId": "ffe9a4847183",
+      "stem": "Un componente hace una petición asíncrona en `useEffect` y llama a `setState` cuando resuelve. Si el usuario navega a otra página antes de que la petición termine, aparece el aviso \"Can't perform a React state update on an unmounted component\". ¿Qué estrategia lo resuelve correctamente?",
+      "options": [
+        {
+          "text": "Guardar la petición o su cancelación en el `return` de cleanup del `useEffect`, usando `AbortController` para abortarla al desmontar, o una bandera que impida ejecutar el `setState`.",
+          "correct": true
+        },
+        {
+          "text": "Envolver el `setState` en un `useMemo` para que React memorice el valor y no lo recalcule tras el desmontaje.",
+          "correct": false
+        },
+        {
+          "text": "Usar `useCallback` sobre la función que hace el fetch, así React la conserva entre renders y el aviso desaparece.",
+          "correct": false
+        },
+        {
+          "text": "Aumentar el array de dependencias del `useEffect` para que se vuelva a ejecutar y sincronice el estado antes de desmontarse.",
+          "correct": false
+        }
+      ],
+      "explanation": "El aviso surge porque el `setState` intenta actualizar un componente que ya no está montado; la solución es limpiar el efecto en su `return` (abortando la petición con `AbortController` o comprobando una bandera de montaje) antes de llamar a `setState`. `useMemo` memoriza valores calculados y `useCallback` memoriza funciones entre renders: ninguno controla efectos asíncronos ni el ciclo de desmontaje. Modificar las dependencias solo cambia cuándo se re-ejecuta el efecto, no evita el `setState` tardío."
+    },
+    {
+      "questionId": "e1732243cc75",
+      "stem": "Observa este botón: `<button onClick={setCount(count + 1)}>Incrementar</button>`. ¿Por qué provoca el error \"Too many re-renders\"?",
+      "options": [
+        {
+          "text": "Porque `setCount(count + 1)` se ejecuta durante el renderizado en lugar de esperar al clic, lo que actualiza el estado y vuelve a renderizar en un bucle",
+          "correct": true
+        },
+        {
+          "text": "Porque el evento `onClick` debe recibir siempre una cadena con el nombre de la función, no una llamada",
+          "correct": false
+        },
+        {
+          "text": "Porque falta pasar el array de dependencias al `onClick` para limitar cuántas veces se ejecuta",
+          "correct": false
+        },
+        {
+          "text": "Porque `count` debe leerse con una función getter dentro del JSX antes de poder incrementarse",
+          "correct": false
+        }
+      ],
+      "explanation": "Al escribir `setCount(count + 1)` sin envolverlo en una función, la llamada se ejecuta mientras React renderiza el componente; eso actualiza el estado, dispara otro render, y así sucesivamente. La solución es pasar un callback: `onClick={() => setCount(count + 1)}`, para que la actualización ocurra solo al hacer clic. El array de dependencias pertenece a `useEffect`, no a los manejadores de eventos, y `onClick` espera una referencia o función, no una cadena."
+    },
+    {
+      "questionId": "f191440624b2",
+      "stem": "Un desarrollador confunde Shadow DOM con Virtual DOM. ¿Cuál afirmación distingue correctamente ambos conceptos?",
+      "options": [
+        {
+          "text": "El Shadow DOM es una API del navegador para encapsular un árbol de nodos aislado dentro de un elemento, mientras que el Virtual DOM es una representación en memoria que React compara con la anterior para aplicar los cambios mínimos al DOM real",
+          "correct": true
+        },
+        {
+          "text": "El Shadow DOM es la copia en memoria que React compara entre renders, mientras que el Virtual DOM es una API del navegador usada por los Web Components",
+          "correct": false
+        },
+        {
+          "text": "Ambos son APIs nativas del navegador que encapsulan estilos y marcado para que no interfieran con el resto de la aplicación",
+          "correct": false
+        },
+        {
+          "text": "El Shadow DOM y el Virtual DOM son términos equivalentes que describen el proceso de reconciliación que React ejecuta en cada actualización de estado",
+          "correct": false
+        }
+      ],
+      "explanation": "El Shadow DOM es una característica del navegador que aísla el marcado y los estilos de un componente (habitual en Web Components), mientras que el Virtual DOM es una estructura en memoria que bibliotecas como React usan para diferenciar (diff) estados y minimizar las operaciones sobre el DOM real. El primer distractor simplemente intercambia las definiciones, y los otros ignoran que el Virtual DOM no es una API nativa ni sinónimo del Shadow DOM."
+    },
+    {
+      "questionId": "e3a882636e97",
+      "stem": "En el modelo de datos de React, ¿qué caracteriza al One-Way Binding (enlace unidireccional)?",
+      "options": [
+        {
+          "text": "El flujo de datos va desde el estado hacia la vista: cuando cambia el estado se actualiza el render, pero la vista no modifica el estado por sí sola",
+          "correct": true
+        },
+        {
+          "text": "El flujo de datos es bidireccional de forma nativa: la vista y el estado se sincronizan automáticamente en ambos sentidos sin necesidad de manejadores de eventos",
+          "correct": false
+        },
+        {
+          "text": "El estado se comparte automáticamente entre componentes hermanos sin necesidad de pasarlo por props ni levantarlo a un ancestro común",
+          "correct": false
+        },
+        {
+          "text": "La vista puede escribir directamente en el estado a través del atributo `value`, sin necesidad de una función como `setName`",
+          "correct": false
+        }
+      ],
+      "explanation": "En el One-Way Binding el flujo es unidireccional: el estado alimenta la vista, y para que la vista influya en el estado hay que capturar eventos (como `onChange`) que llamen al setter. La opción del enlace bidireccional automático describe el Two-Way Binding, que React no ofrece de forma nativa. Las demás mezclan conceptos ajenos: la comunicación entre componentes se hace por props, y el atributo `value` por sí solo no actualiza el estado, solo refleja su valor."
+    }
+  ]
+}

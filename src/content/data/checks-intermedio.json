@@ -1,0 +1,1548 @@
+{
+  "generatedAt": "2026-08-25T20:30:51.981Z",
+  "model": "claude-opus-4-8",
+  "sourceSection": "Intermedio",
+  "checks": [
+    {
+      "questionId": "9c0274fba6ca",
+      "stem": "Estás extrayendo la lógica de un contador a una función reutilizable que llama internamente a `useState`. ¿Qué condición debe cumplir esa función para ser un hook personalizado válido?",
+      "options": [
+        {
+          "text": "Su nombre debe empezar con `use` (por ejemplo `useCounter`), lo que permite que React aplique las reglas de los hooks al llamarla.",
+          "correct": true
+        },
+        {
+          "text": "Debe extender la clase `Component` y devolver JSX desde un método `render`.",
+          "correct": false
+        },
+        {
+          "text": "Debe estar envuelta con `React.memo` para poder llamar a otros hooks en su interior.",
+          "correct": false
+        },
+        {
+          "text": "Debe recibir siempre las props como primer argumento y devolver un elemento JSX.",
+          "correct": false
+        }
+      ],
+      "explanation": "Un hook personalizado es simplemente una función que empieza con `use` y que puede llamar a otros hooks como `useState`; ese prefijo es lo que permite a React verificar las reglas de los hooks. Las demás opciones describen otras cosas: heredar de `Component` corresponde a los componentes de clase, `React.memo` optimiza el re-render de componentes y devolver JSX a partir de props es lo propio de un componente de función, no de un hook."
+    },
+    {
+      "questionId": "adf7a3871513",
+      "stem": "En un componente que se suscribe a eventos del navegador, sincroniza datos con una API y persiste estado en `localStorage`, ¿cuál es el enfoque recomendado con `useEffect`?",
+      "options": [
+        {
+          "text": "Usar varios `useEffect` separados, uno por cada responsabilidad, ya que cada uno tiene su propio ciclo de vida y arreglo de dependencias",
+          "correct": true
+        },
+        {
+          "text": "Concentrar toda la lógica en un solo `useEffect` para garantizar que los efectos se ejecuten en orden y compartan el mismo cierre",
+          "correct": false
+        },
+        {
+          "text": "Usar como máximo dos `useEffect` por componente, porque React solo procesa dos efectos por render de forma fiable",
+          "correct": false
+        },
+        {
+          "text": "Reemplazar los `useEffect` por `useMemo`, que memoriza el resultado de un cálculo y solo lo recalcula cuando cambian sus dependencias",
+          "correct": false
+        }
+      ],
+      "explanation": "React no impone límite en la cantidad de `useEffect`, y separar la lógica por responsabilidad es la buena práctica: cada efecto tiene sus propias dependencias y su propia limpieza, lo que da un control más fino. Concentrar todo en uno mezcla responsabilidades y dificulta el mantenimiento; no existe un tope de dos efectos. `useMemo` sirve para memorizar cálculos, no para gestionar efectos secundarios como suscripciones o llamadas a APIs."
+    },
+    {
+      "questionId": "d02a33d57ca8",
+      "stem": "Necesitas cancelar una suscripción justo cuando un componente desaparece de la pantalla. ¿Qué código dentro de `useEffect` con array de dependencias vacío consigue esto?",
+      "options": [
+        {
+          "text": "Retornar una función desde el callback de `useEffect`, por ejemplo `return () => { suscripcion.cancelar() }`, ya que esa función se ejecuta al desmontar",
+          "correct": true
+        },
+        {
+          "text": "Escribir la lógica de limpieza directamente al inicio del callback de `useEffect`, porque ese código corre cada vez que el componente sale del árbol",
+          "correct": false
+        },
+        {
+          "text": "Pasar la función de limpieza como segundo argumento de `useEffect`, ya que ese parámetro se invoca durante el desmontaje",
+          "correct": false
+        },
+        {
+          "text": "Colocar el código dentro del cuerpo del componente antes del `return` del JSX, pues se ejecuta en la fase final del ciclo de vida",
+          "correct": false
+        }
+      ],
+      "explanation": "La función que se retorna desde el callback de `useEffect` es la función de limpieza, y con un array de dependencias vacío solo se ejecuta al desmontar el componente, ideal para cancelar suscripciones o quitar listeners. El primer argumento del callback corre al montar, no al desmontar; el segundo argumento de `useEffect` es el array de dependencias, no una función; y el cuerpo del componente se ejecuta en cada render, no al desmontar."
+    },
+    {
+      "questionId": "ab25c2e2f347",
+      "stem": "En un `useEffect` que hace `fetch` a una API, ¿cómo cancelas correctamente la petición cuando el componente se desmonta?",
+      "options": [
+        {
+          "text": "Creas un `AbortController`, pasas su `signal` a `fetch` en las opciones y llamas a `controller.abort()` en la función de limpieza del `useEffect`",
+          "correct": true
+        },
+        {
+          "text": "Devuelves la promesa del `fetch` desde el `useEffect` para que React sepa cuándo debe cancelarla al desmontar el componente",
+          "correct": false
+        },
+        {
+          "text": "Envuelves el `fetch` en un `useMemo` con array de dependencias vacío para que React memorice el resultado y evite volver a lanzarlo",
+          "correct": false
+        },
+        {
+          "text": "Guardas la respuesta en el estado con `setMessage` dentro de la función de limpieza, de modo que la petición se detenga al actualizarse",
+          "correct": false
+        }
+      ],
+      "explanation": "La forma correcta es usar `AbortController`: pasas su `signal` a las opciones del `fetch` y llamas a `controller.abort()` en la función de limpieza que retorna el `useEffect`, lo que rechaza la promesa con un `AbortError` que puedes ignorar. Devolver la promesa no hace nada útil, ya que React solo espera una función de limpieza; `useMemo` sirve para memorizar valores calculados, no para gestionar efectos ni cancelar peticiones."
+    },
+    {
+      "questionId": "84cf092f3bfa",
+      "stem": "Un compañero escribe este componente y React lanza un error de orden de hooks. ¿Por qué falla?\n\n```jsx\nfunction Component({ isOpen }) {\n  if (isOpen) {\n    useEffect(() => {\n      console.log('abierto')\n    }, [])\n  }\n  return <div>Hola</div>\n}\n```",
+      "options": [
+        {
+          "text": "Porque el hook está dentro de un condicional, y React identifica cada hook por su orden de llamada, que debe ser el mismo en cada renderizado.",
+          "correct": true
+        },
+        {
+          "text": "Porque el array de dependencias está vacío, y debería incluir `isOpen` para que el efecto se vuelva a ejecutar cuando cambie.",
+          "correct": false
+        },
+        {
+          "text": "Porque `useEffect` no puede usarse en componentes funcionales, solo `useState` está permitido fuera de componentes de clase.",
+          "correct": false
+        },
+        {
+          "text": "Porque falta envolver la llamada en un `useCallback` para memorizar la función y evitar que se recree en cada render.",
+          "correct": false
+        }
+      ],
+      "explanation": "Los hooks deben llamarse siempre en el nivel superior del componente, nunca dentro de condicionales, bucles o funciones internas, porque React los identifica por su orden de ejecución; si `isOpen` cambia, el orden varía y React mezcla estados y efectos. Lo correcto es llamar siempre a `useEffect` y poner la condición dentro del efecto. El array vacío no es la causa del error de orden, y `useEffect` sí es válido en componentes funcionales."
+    },
+    {
+      "questionId": "1ce02f99534a",
+      "stem": "Necesitas leer las dimensiones de un elemento del DOM justo después de que React actualice la pantalla y reposicionarlo antes de que el usuario vea un parpadeo. ¿Qué hook usarías y por qué?",
+      "options": [
+        {
+          "text": "`useLayoutEffect`, porque se ejecuta de forma síncrona después de que React actualiza el DOM, permitiendo medir el elemento y aplicar cambios antes del repintado",
+          "correct": true
+        },
+        {
+          "text": "`useEffect`, porque se ejecuta de forma síncrona antes de que React actualice el DOM y garantiza acceso a las dimensiones actualizadas",
+          "correct": false
+        },
+        {
+          "text": "`useEffect`, porque se ejecuta de forma asíncrona tras el repintado y bloquea el renderizado hasta que las mediciones estén disponibles",
+          "correct": false
+        },
+        {
+          "text": "`useMemo`, porque memoriza el resultado del cálculo de dimensiones y evita re-ejecutarlo mientras las dependencias no cambien",
+          "correct": false
+        }
+      ],
+      "explanation": "`useLayoutEffect` se ejecuta síncronamente tras la actualización del DOM pero antes del repintado, lo que permite medir y ajustar posiciones sin que el usuario vea un parpadeo. `useEffect` corre asíncronamente tras el repintado y no garantiza el estado del DOM al momento adecuado; además no bloquea el render (esa es justamente su ventaja de rendimiento). `useMemo` sirve para memorizar valores calculados, no para leer o modificar el DOM."
+    },
+    {
+      "questionId": "91815ac8cadd",
+      "stem": "En un proyecto nuevo de React moderno, ¿qué recomendación general se sigue respecto al tipo de componente?",
+      "options": [
+        {
+          "text": "Usar componentes funcionales con hooks, por su menor boilerplate y mejor composición de lógica",
+          "correct": true
+        },
+        {
+          "text": "Usar componentes de clase, ya que son la única forma de modelar el ciclo de vida completo",
+          "correct": false
+        },
+        {
+          "text": "Usar componentes de clase porque los hooks no permiten reaccionar a cambios ni ejecutar efectos secundarios",
+          "correct": false
+        },
+        {
+          "text": "Mezclar ambos por igual, ya que los componentes funcionales no pueden mantener estado entre renders",
+          "correct": false
+        }
+      ],
+      "explanation": "Para código nuevo se recomiendan los componentes funcionales con hooks: menos boilerplate, mejor composición y patrón dominante del ecosistema actual. Es falso que solo las clases modelen el ciclo de vida, pues `useEffect` y `useLayoutEffect` cubren esos casos; y los funcionales sí mantienen estado con `useState`. Los de clase siguen siendo válidos, pero se reservan sobre todo para bases de código heredadas."
+    },
+    {
+      "questionId": "6e3ae2abb4fd",
+      "stem": "Durante el render de un componente, ¿cuál de estas prácticas rompe la pureza?",
+      "options": [
+        {
+          "text": "Modificar una variable externa o mutar directamente un objeto que llega por props mientras se calcula el JSX.",
+          "correct": true
+        },
+        {
+          "text": "Tener estado local con `useState` y actualizarlo en respuesta a un evento del usuario.",
+          "correct": false
+        },
+        {
+          "text": "Devolver el mismo JSX cada vez que se recibe el mismo valor de `text` en las props.",
+          "correct": false
+        },
+        {
+          "text": "Envolver el componente con `React.memo` para evitar renders cuando las props no cambian.",
+          "correct": false
+        }
+      ],
+      "explanation": "Un componente es puro si, para las mismas entradas (props, estado y contexto), produce la misma salida sin efectos secundarios durante el render; mutar algo externo o las props en pleno render introduce un efecto secundario y lo vuelve impredecible. Tener estado no rompe la pureza siempre que las actualizaciones ocurran en eventos o efectos, y `React.memo` solo evita renders con comparación superficial, no altera la pureza."
+    },
+    {
+      "questionId": "7438e6697690",
+      "stem": "En una app con renderizado en el servidor (SSR), el navegador ya muestra el HTML pero los botones no responden a los clics. ¿Qué proceso de React soluciona esto?",
+      "options": [
+        {
+          "text": "La hidratación: React reutiliza el HTML estático existente y le adjunta los eventos, ejecuta los efectos y concilia el estado para volverlo interactivo",
+          "correct": true
+        },
+        {
+          "text": "El reconciliation: React compara el HTML del servidor con un nuevo HTML del cliente y reemplaza por completo todos los nodos del DOM que difieren",
+          "correct": false
+        },
+        {
+          "text": "El lazy loading: React descarga el HTML estático por partes y solo activa los eventos de los componentes que aparecen en el viewport del usuario",
+          "correct": false
+        },
+        {
+          "text": "El batching: React agrupa todas las actualizaciones de estado del HTML del servidor en un único re-render para adjuntar los eventos de forma eficiente",
+          "correct": false
+        }
+      ],
+      "explanation": "La hidratación es el proceso en que React toma el HTML estático generado en el servidor y, en el cliente, lo reutiliza adjuntándole los manejadores de eventos, ejecutando los efectos y conciliando el estado, sin volver a crear el DOM desde cero. El reconciliation es el algoritmo de comparación del árbol virtual para actualizaciones, no el que da vida al HTML del servidor; el lazy loading y el batching describen otras optimizaciones ajenas a este proceso."
+    },
+    {
+      "questionId": "72a48ae8baa7",
+      "stem": "En una app con SSR, el servidor envía el HTML ya renderizado al navegador. ¿Qué ocurre a continuación en el cliente para que la página sea interactiva?",
+      "options": [
+        {
+          "text": "React hidrata el HTML recibido, adjuntando los manejadores de eventos y el estado a los nodos ya existentes",
+          "correct": true
+        },
+        {
+          "text": "React descarta el HTML del servidor y vuelve a renderizar todo el árbol desde cero en el navegador",
+          "correct": false
+        },
+        {
+          "text": "El servidor mantiene una conexión abierta y renderiza cada cambio de estado, enviando nuevo HTML en cada interacción",
+          "correct": false
+        },
+        {
+          "text": "El navegador ejecuta el HTML como una plantilla estática sin necesidad de cargar JavaScript de React",
+          "correct": false
+        }
+      ],
+      "explanation": "Tras recibir el HTML pre-renderizado, React realiza la hidratación: reutiliza el marcado existente y le asocia los event handlers y el estado, sin recrear el DOM desde cero. Descartar y volver a renderizar todo anularía la ventaja del SSR, y sin el JavaScript de React la página no tendría interactividad; el renderizado en el servidor solo produce el HTML inicial, no un flujo continuo por cada interacción."
+    },
+    {
+      "questionId": "f5e90c7fd58c",
+      "stem": "En un servidor Express, ¿qué función de React usas para convertir un componente en una cadena de HTML que puedas enviar como respuesta?",
+      "options": [
+        {
+          "text": "`renderToString`, importada de `react-dom/server`",
+          "correct": true
+        },
+        {
+          "text": "`render`, importada de `react-dom`, que monta el componente en un nodo del DOM",
+          "correct": false
+        },
+        {
+          "text": "`createRoot`, importada de `react-dom/client`, que inicializa el árbol en el navegador",
+          "correct": false
+        },
+        {
+          "text": "`hydrate`, importada de `react-dom`, que asocia listeners a un HTML ya existente",
+          "correct": false
+        }
+      ],
+      "explanation": "En el servidor no existe el DOM, así que se usa `renderToString` de `react-dom/server` para producir el marcado HTML como texto y enviarlo con `res.send`. `render` y `createRoot` sirven para montar en el navegador, e `hydrate` se usa en el cliente para reutilizar el HTML generado por el servidor, no para generarlo."
+    },
+    {
+      "questionId": "d5d2658bfbf3",
+      "stem": "Dado este componente, ¿por qué se considera que tiene un efecto colateral?\n\n```jsx\nlet count = 0\n\nfunction Counter() {\n  count = count + 1\n  return <p>Contador: {count}</p>\n}\n```",
+      "options": [
+        {
+          "text": "Lee y modifica la variable `count`, que vive fuera de su ámbito, así que su resultado no depende solo de sus entradas y no podemos predecir qué renderizará",
+          "correct": true
+        },
+        {
+          "text": "Guarda el valor en una variable de estado con `useState`, lo que provoca un re-render en cada asignación y hace impredecible el resultado",
+          "correct": false
+        },
+        {
+          "text": "Recibe `count` como prop desde el componente padre y la reasigna, algo prohibido porque las props son de solo lectura",
+          "correct": false
+        },
+        {
+          "text": "Ejecuta una petición asíncrona durante el renderizado, y ese tipo de operaciones siempre deben ir dentro de un `useEffect`",
+          "correct": false
+        }
+      ],
+      "explanation": "Un efecto colateral ocurre cuando el componente lee o modifica algo fuera de su propio ámbito; aquí `count` es una variable externa que se muta en cada render, por lo que la salida deja de ser predecible a partir de las entradas. El distractor de `useState` describe estado interno (no una variable externa) y el de props confunde el mecanismo: aquí no hay props involucradas ni una petición asíncrona, solo la mutación de una variable de módulo."
+    },
+    {
+      "questionId": "85a2a593e06e",
+      "stem": "En un formulario, tienes `<input type=\"text\" defaultValue=\"foo\" ref={inputRef} />` y lees el valor con `inputRef.current.value`. ¿Qué caracteriza a este enfoque frente a uno controlado?",
+      "options": [
+        {
+          "text": "El valor lo gestiona el DOM internamente y se lee mediante la ref, lo que evita re-renderizados en cada tecla pero obliga a trabajar de forma más imperativa",
+          "correct": true
+        },
+        {
+          "text": "El valor está sincronizado con el estado de React mediante `value` y `onChange`, lo que facilita validaciones en tiempo real",
+          "correct": false
+        },
+        {
+          "text": "Al usar una ref, React memoriza el valor entre renderizados y solo recalcula el input cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "El componente se re-renderiza cada vez que el usuario escribe, garantizando que el estado y el DOM estén siempre alineados",
+          "correct": false
+        }
+      ],
+      "explanation": "Un componente no controlado delega el valor al DOM y lo lees a través de la ref, evitando re-renderizados por cada pulsación, a costa de código más imperativo. El primer distractor describe correctamente un componente controlado (con `value` y `onChange`), y el tercero describe el re-renderizado propio del controlado; el segundo confunde `ref` con la memoización de `useMemo`."
+    },
+    {
+      "questionId": "6447a00e05ef",
+      "stem": "En una revisión de código ves esta función. ¿Qué patrón representa y qué la caracteriza?\n\n```jsx\nfunction withLayout(Component) {\n  return function (props) {\n    return <main><Component {...props} /></main>\n  }\n}\n```",
+      "options": [
+        {
+          "text": "Es un High Order Component: una función que recibe un componente y devuelve un componente nuevo, útil para reutilizar lógica y estructura.",
+          "correct": true
+        },
+        {
+          "text": "Es un custom hook: una función que empieza por `use` y encapsula lógica con estado para compartirla entre componentes.",
+          "correct": false
+        },
+        {
+          "text": "Es un render prop: un componente que recibe una función como prop y la invoca para decidir qué renderizar.",
+          "correct": false
+        },
+        {
+          "text": "Es un componente controlado: aquel cuyo valor es gobernado por el estado de React a través de props como `value` y `onChange`.",
+          "correct": false
+        }
+      ],
+      "explanation": "Un HOC es una función que toma un componente como argumento y devuelve otro componente que lo envuelve, lo que permite inyectar funcionalidad o estructura de forma reutilizable. Los custom hooks resuelven la reutilización de lógica de otra manera (funciones `use...`), y los render props usan una prop que es función; ambos son patrones distintos aunque persigan objetivos parecidos. El componente controlado no tiene relación con la composición de componentes."
+    },
+    {
+      "questionId": "dc52742cefd0",
+      "stem": "Dado el componente `function DataProvider({ render }) { const data = { target: 'world' }; return render(data) }`, ¿cómo se usa correctamente aplicando el patrón render props?",
+      "options": [
+        {
+          "text": "`<DataProvider render={data => <h1>Hello {data.target}</h1>} />`",
+          "correct": true
+        },
+        {
+          "text": "`<DataProvider data={data => <h1>Hello {data.target}</h1>} />`",
+          "correct": false
+        },
+        {
+          "text": "`<DataProvider render={<h1>Hello world</h1>} />`",
+          "correct": false
+        },
+        {
+          "text": "`<DataProvider>{<h1>Hello {data.target}</h1>}</DataProvider>`",
+          "correct": false
+        }
+      ],
+      "explanation": "El patrón render props consiste en pasar una función como prop (aquí llamada `render`) que el componente invoca con sus datos internos para decidir qué renderizar; por eso `render={data => <h1>Hello {data.target}</h1>}` es correcto. Usar el nombre `data` fallaría porque el componente espera la prop `render`. Pasar directamente JSX (no una función) rompe el patrón, ya que `render(data)` intentaría invocar algo que no es una función y `data` no estaría disponible fuera del alcance del componente."
+    },
+    {
+      "questionId": "5f28876cd9ae",
+      "stem": "Dentro de las llaves `{}` en JSX intentas escribir `{if (text) { return text } else { return 'Click' }}` y falla. ¿Por qué?",
+      "options": [
+        {
+          "text": "Porque un `if` es una sentencia (statement) que no devuelve un valor, y JSX solo admite expresiones que evalúan a un valor",
+          "correct": true
+        },
+        {
+          "text": "Porque JSX bloquea cualquier lógica condicional dentro del marcado; toda condición debe resolverse antes del `return`",
+          "correct": false
+        },
+        {
+          "text": "Porque el `if` sí es una expresión válida pero React no permite usar `return` dentro de las llaves de JSX",
+          "correct": false
+        },
+        {
+          "text": "Porque las llaves `{}` en JSX solo aceptan cadenas de texto y no evaluación de código JavaScript",
+          "correct": false
+        }
+      ],
+      "explanation": "En JavaScript un `if` es una sentencia y no produce un valor, mientras que las llaves de JSX interpolan expresiones que sí evalúan a un valor; por eso se usan ternarias o `&&`. La opción de que 'toda condición debe resolverse antes del return' es falsa: sí puedes usar ternarias inline, y las llaves aceptan cualquier expresión JS, no solo cadenas."
+    },
+    {
+      "questionId": "7cd2fdbe2cf7",
+      "stem": "Si en un componente escribes directamente `count = count + 1` en lugar de llamar a `setCount(count + 1)`, ¿qué ocurre?",
+      "options": [
+        {
+          "text": "React no se entera del cambio y el componente no se re-renderiza, por lo que la UI no refleja el nuevo valor.",
+          "correct": true
+        },
+        {
+          "text": "React detecta la mutación mediante comparación profunda y re-renderiza el componente igualmente.",
+          "correct": false
+        },
+        {
+          "text": "El componente se re-renderiza, pero solo después de que termine el ciclo de eventos actual.",
+          "correct": false
+        },
+        {
+          "text": "React lanza un error en tiempo de ejecución que detiene la ejecución del componente.",
+          "correct": false
+        }
+      ],
+      "explanation": "La función actualizadora que devuelve `useState` es lo que notifica a React de que el estado cambió y programa un re-render; mutar la variable directamente no dispara nada, así que la UI queda desincronizada. React no hace comparación profunda de tus variables ni lanza un error automático por mutar directamente: simplemente no se entera del cambio."
+    },
+    {
+      "questionId": "45f3e54a4449",
+      "stem": "En un componente de clase, ¿qué método del ciclo de vida es el lugar idóneo para cancelar suscripciones o limpiar temporizadores antes de que el componente desaparezca del DOM?",
+      "options": [
+        {
+          "text": "`componentWillUnmount`, que se ejecuta justo antes de que el componente sea eliminado del DOM",
+          "correct": true
+        },
+        {
+          "text": "`componentDidMount`, que se ejecuta una vez que el componente ya se ha añadido al DOM",
+          "correct": false
+        },
+        {
+          "text": "`componentDidUpdate`, que se ejecuta después de cada re-renderizado provocado por cambios",
+          "correct": false
+        },
+        {
+          "text": "`constructor`, que se ejecuta al crear la instancia para inicializar el estado del componente",
+          "correct": false
+        }
+      ],
+      "explanation": "`componentWillUnmount` pertenece a la fase de desmontaje y se ejecuta justo antes de retirar el componente del DOM, por lo que es el sitio correcto para limpiar suscripciones, temporizadores o listeners y evitar fugas de memoria. Los demás métodos son reales pero corresponden a otras fases: `componentDidMount` al montaje, `componentDidUpdate` a la actualización y `constructor` a la inicialización, ninguno de los cuales sirve para tareas de limpieza final."
+    },
+    {
+      "questionId": "f460e608c89c",
+      "stem": "Tienes una lista editable donde el usuario puede reordenar y eliminar elementos, y cada `<li>` mantiene estado interno (por ejemplo un input). ¿Por qué usar `key={index}` puede provocar bugs?",
+      "options": [
+        {
+          "text": "Al reordenar o eliminar elementos, los índices se reasignan y React asocia el estado y el DOM al índice equivocado en vez de seguir al elemento real",
+          "correct": true
+        },
+        {
+          "text": "El índice es un número y React exige que las keys sean strings, por lo que fuerza una conversión que rompe la reconciliación",
+          "correct": false
+        },
+        {
+          "text": "Usar el índice provoca que el componente entero se vuelva a montar en cada render, perdiendo todo el estado local en cada actualización",
+          "correct": false
+        },
+        {
+          "text": "React ignora por completo las keys numéricas y recurre a comparar el contenido de texto de cada nodo, lo que degrada el rendimiento",
+          "correct": false
+        }
+      ],
+      "explanation": "La key debe identificar de forma estable a un elemento concreto; al usar el índice, tras un reordenamiento o borrado el mismo índice apunta a otro dato, y React reutiliza el nodo (y su estado) del elemento equivocado. React acepta perfectamente keys numéricas y no vuelve a montar todo ni compara texto: el problema es puramente la falta de estabilidad de la identidad, no el tipo de la key ni el rendimiento del renderizado."
+    },
+    {
+      "questionId": "d3a8775b8813",
+      "stem": "En un componente que hace un cálculo costoso a partir de una prop, ¿qué consigues envolviéndolo con `useMemo(() => calcular(dato), [dato])`?",
+      "options": [
+        {
+          "text": "Que el resultado se recalcule solo cuando `dato` cambie, reutilizando el valor memorizado en los renders donde `dato` no varía",
+          "correct": true
+        },
+        {
+          "text": "Que se memorice la definición de una función para pasarla como prop sin que cambie su referencia entre renders",
+          "correct": false
+        },
+        {
+          "text": "Que se ejecute un efecto secundario tras cada render en el que `dato` haya cambiado, ideal para peticiones o suscripciones",
+          "correct": false
+        },
+        {
+          "text": "Que el componente completo evite volver a renderizarse mientras la prop `dato` mantenga el mismo valor",
+          "correct": false
+        }
+      ],
+      "explanation": "`useMemo` memoriza el valor devuelto por la función y solo la vuelve a ejecutar cuando alguna dependencia cambia, evitando cálculos repetidos. Memorizar la referencia de una función es tarea de `useCallback`, ejecutar efectos secundarios es de `useEffect`, y evitar que un componente entero se re-renderice corresponde a `React.memo`, no a `useMemo`."
+    },
+    {
+      "questionId": "15c78555049a",
+      "stem": "Un compañero decide envolver todos los cálculos de sus componentes con `useMemo`, incluso operaciones triviales como sumar dos números. ¿Por qué esto no es una buena práctica?",
+      "options": [
+        {
+          "text": "Porque `useMemo` tiene su propio coste: si el cálculo es muy rápido, memorizarlo puede resultar más lento que recalcularlo cada vez",
+          "correct": true
+        },
+        {
+          "text": "Porque `useMemo` solo funciona con componentes de clase y no tiene ningún efecto en componentes de función",
+          "correct": false
+        },
+        {
+          "text": "Porque `useMemo` provoca que el componente se vuelva a renderizar en cada cambio de sus props, degradando el rendimiento",
+          "correct": false
+        },
+        {
+          "text": "Porque `useMemo` ejecuta su función después de que el DOM se haya pintado, lo que retrasa todos los cálculos del componente",
+          "correct": false
+        }
+      ],
+      "explanation": "`useMemo` no es gratuito: guardar y comparar dependencias tiene un coste, así que para cálculos triviales suele salir más caro memorizar que recalcular. La opción del renderizado en cada cambio de props es falsa (justamente evita recálculos), la de componentes de clase es incorrecta (los hooks solo funcionan en componentes de función) y la de ejecutarse tras pintar el DOM describe en realidad a `useEffect`, no a `useMemo`, que se calcula durante el render."
+    },
+    {
+      "questionId": "be086b9b90ca",
+      "stem": "En un componente que pasa una función a un hijo optimizado con `React.memo`, ¿qué logra envolver esa función con `useCallback`?",
+      "options": [
+        {
+          "text": "Devuelve la misma referencia de función entre renders mientras sus dependencias no cambien, evitando recrearla en cada render",
+          "correct": true
+        },
+        {
+          "text": "Memoriza el valor calculado por una función costosa y solo lo recalcula cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "Ejecuta la función automáticamente después de cada render y limpia sus efectos cuando cambian las dependencias",
+          "correct": false
+        },
+        {
+          "text": "Convierte la función en asíncrona para que su resultado se cachee y no bloquee el renderizado del componente",
+          "correct": false
+        }
+      ],
+      "explanation": "`useCallback` memoriza la referencia de la función: mientras las dependencias no cambien, devuelve exactamente la misma función, lo que evita que un hijo envuelto en `React.memo` se re-renderice por recibir una prop \"nueva\" en cada render. Memorizar el valor calculado corresponde a `useMemo`, y ejecutar lógica tras el render con limpieza corresponde a `useEffect`; ambas son descripciones correctas de otros hooks, no de `useCallback`."
+    },
+    {
+      "questionId": "ad7c82be1a42",
+      "stem": "Un compañero envuelve todas las funciones de sus componentes en `useCallback` \"por si acaso\". ¿Por qué esta práctica no es recomendable?",
+      "options": [
+        {
+          "text": "Memorizar tiene un coste propio; para funciones triviales ese coste puede superar al de recrearlas, así que aplicarlo indiscriminadamente no garantiza mejoras y puede empeorar el rendimiento",
+          "correct": true
+        },
+        {
+          "text": "`useCallback` solo funciona dentro de componentes de clase, por lo que en componentes de función hay que usar siempre `useMemo` en su lugar",
+          "correct": false
+        },
+        {
+          "text": "Envolver funciones en `useCallback` provoca que el componente se vuelva a renderizar en cada cambio de estado, anulando cualquier optimización posible",
+          "correct": false
+        },
+        {
+          "text": "`useCallback` congela los valores del cierre y la función nunca vería los datos actualizados, por lo que romperá la lógica de todos los componentes",
+          "correct": false
+        }
+      ],
+      "explanation": "`useCallback` conserva la misma referencia de función entre renders, pero esa memorización tiene un coste de comparación y almacenamiento; en funciones baratas ese coste puede ser mayor que recrearlas, por lo que usarlo en todas partes no ofrece beneficios seguros. Es útil sobre todo cuando la función se pasa a hijos memorizados o es dependencia de otros hooks. No es exclusivo de clases ni provoca renders extra, y con dependencias correctas la función sí ve los valores actualizados."
+    },
+    {
+      "questionId": "ddd23d3b5a1e",
+      "stem": "En un componente pasas una función a un hijo envuelto en `React.memo`. ¿Qué hook usarías y por qué?",
+      "options": [
+        {
+          "text": "`useCallback`, porque memoriza la referencia de la función y evita que el hijo memoizado se vuelva a renderizar con cada render del padre",
+          "correct": true
+        },
+        {
+          "text": "`useMemo`, porque memoriza el resultado de un cálculo costoso y así reutiliza su valor entre renderizados",
+          "correct": false
+        },
+        {
+          "text": "`useRef`, porque conserva un valor mutable entre renderizados sin provocar un nuevo render al cambiar",
+          "correct": false
+        },
+        {
+          "text": "`useEffect`, porque ejecuta la lógica tras el renderizado y sincroniza el componente con sistemas externos",
+          "correct": false
+        }
+      ],
+      "explanation": "`useCallback` estabiliza la referencia de una función, algo clave cuando la pasas a un componente envuelto en `React.memo` o a dependencias de otros hooks, ya que sin él la función se recrea en cada render y rompe la memoización. `useMemo` es correcto pero para memorizar el resultado de un cálculo, no una referencia de función; `useRef` y `useEffect` describen correctamente otros hooks con propósitos distintos."
+    },
+    {
+      "questionId": "7c24fc1d1a60",
+      "stem": "Tienes un input y necesitas hacerle focus cuando el usuario pulsa un botón. ¿Por qué una ref (`useRef`) es la herramienta adecuada aquí en lugar de usar estado?",
+      "options": [
+        {
+          "text": "Porque da acceso imperativo al nodo del DOM para llamar a `.focus()` sin necesitar que la mutación provoque un nuevo render",
+          "correct": true
+        },
+        {
+          "text": "Porque al actualizar el valor de la ref el componente se vuelve a renderizar y así el input recibe el focus automáticamente",
+          "correct": false
+        },
+        {
+          "text": "Porque memoriza el resultado de un cálculo costoso y solo lo recalcula cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "Porque permite compartir datos entre componentes lejanos sin pasarlos manualmente por props en cada nivel",
+          "correct": false
+        }
+      ],
+      "explanation": "El focus es una acción imperativa sobre el DOM que no forma parte de la UI declarativa, así que una ref permite acceder al nodo y llamar a `.focus()` sin disparar un render. La opción del re-render es falsa: precisamente las refs NO provocan render al cambiar. Las otras describen correctamente a `useMemo` (memoización) y al Context (compartir datos entre niveles), no a las refs."
+    },
+    {
+      "questionId": "8dbdd6e9c5ca",
+      "stem": "En el ejemplo de `useRef` que guarda una referencia a un `<input>`, ¿cómo se accede al elemento del DOM para llamar a `.focus()`?",
+      "options": [
+        {
+          "text": "A través de `inputEl.current`, que apunta al nodo del DOM una vez montado el componente",
+          "correct": true
+        },
+        {
+          "text": "A través de `inputEl.value`, que React actualiza en cada render con el estado del elemento",
+          "correct": false
+        },
+        {
+          "text": "Directamente con `inputEl.focus()`, ya que el hook devuelve el nodo del DOM sin envoltorio",
+          "correct": false
+        },
+        {
+          "text": "Mediante `inputEl.current`, cuyo cambio dispara un nuevo render que enfoca el input",
+          "correct": false
+        }
+      ],
+      "explanation": "`useRef` devuelve un objeto mutable cuya propiedad `.current` apunta al nodo del DOM una vez que el componente se monta; por eso se llama `inputEl.current.focus()`. Modificar `.current` no provoca un nuevo render (a diferencia del estado), y el hook no devuelve el nodo directamente ni una propiedad `value`."
+    },
+    {
+      "questionId": "53c6f275a5dd",
+      "stem": "Tienes un componente que mide el ancho de un elemento del DOM y ajusta su posición antes de que el usuario lo vea, para evitar un parpadeo visible. ¿Qué hook es el más adecuado y por qué?",
+      "options": [
+        {
+          "text": "`useLayoutEffect`, porque se ejecuta de forma síncrona después de las mutaciones del DOM pero antes de que el navegador pinte en pantalla.",
+          "correct": true
+        },
+        {
+          "text": "`useEffect`, porque se ejecuta de forma síncrona después de las mutaciones del DOM pero antes de que el navegador pinte en pantalla.",
+          "correct": false
+        },
+        {
+          "text": "`useMemo`, porque memoriza el valor calculado del ancho y solo lo recalcula cuando cambian sus dependencias.",
+          "correct": false
+        },
+        {
+          "text": "`useCallback`, porque devuelve una versión memorizada de la función de medición para evitar re-renderizados innecesarios.",
+          "correct": false
+        }
+      ],
+      "explanation": "`useLayoutEffect` corre sincrónicamente tras las mutaciones del DOM y antes del pintado, lo que permite medir y ajustar el layout sin que el usuario perciba un parpadeo. `useEffect` hace algo parecido pero se dispara de forma asíncrona después del pintado, por lo que el parpadeo sería visible. `useMemo` y `useCallback` sirven para memorizar valores y funciones respectivamente, no para ejecutar efectos sobre el DOM."
+    },
+    {
+      "questionId": "078852de8d2d",
+      "stem": "Tienes un componente `<Avatar>` que solo renderiza una imagen a partir de la prop `url` que recibe, sin manejar ningún dato interno. ¿Cómo se clasifica y qué implica?",
+      "options": [
+        {
+          "text": "Es un componente stateless: su salida depende únicamente de las props, lo que facilita testearlo y reutilizarlo",
+          "correct": true
+        },
+        {
+          "text": "Es un componente stateful: mantiene su propio estado interno que se conserva entre renderizados y provoca re-renderizados al cambiar",
+          "correct": false
+        },
+        {
+          "text": "Es un componente stateless porque el estado que declara con `useState` no cambia nunca durante su ciclo de vida",
+          "correct": false
+        },
+        {
+          "text": "Es un componente contenedor: su función es coordinar la lógica de negocio y pasar datos a los componentes presentacionales hijos",
+          "correct": false
+        }
+      ],
+      "explanation": "Un componente stateless no gestiona estado interno y su salida depende exclusivamente de las props, por eso resulta más predecible, fácil de testear y de reutilizar. La descripción del componente stateful es correcta, pero se refiere a otra categoría; el segundo distractor se contradice, ya que declarar estado con `useState` haría que el componente fuese stateful; y el tercero describe un contenedor, que es donde suele vivir la lógica de estado."
+    },
+    {
+      "questionId": "d8487d922ba3",
+      "stem": "En un manejador de `onSubmit`, quieres evitar que el formulario recargue la página. ¿Qué debes hacer dentro del handler?",
+      "options": [
+        {
+          "text": "Llamar a `event.preventDefault()` sobre el objeto del evento que recibe el handler",
+          "correct": true
+        },
+        {
+          "text": "Llamar a `event.stopPropagation()` sobre el objeto del evento que recibe el handler",
+          "correct": false
+        },
+        {
+          "text": "Retornar `false` al final del handler, como se hace en el HTML tradicional",
+          "correct": false
+        },
+        {
+          "text": "Llamar a `event.stopImmediatePropagation()` para cancelar la acción del navegador",
+          "correct": false
+        }
+      ],
+      "explanation": "`preventDefault()` cancela la acción nativa por defecto del navegador, como la recarga al enviar un formulario. `stopPropagation()` y `stopImmediatePropagation()` son correctos pero para otra cosa: detienen la propagación del evento por el árbol, no la acción por defecto. Además, en React retornar `false` no cancela nada, a diferencia de los manejadores en HTML tradicional."
+    },
+    {
+      "questionId": "3d845ccbb963",
+      "stem": "Al envolver un componente con `<StrictMode>`, notas que tu `useEffect` se ejecuta dos veces en desarrollo. ¿Cómo debes interpretarlo?",
+      "options": [
+        {
+          "text": "Es un comportamiento deliberado de desarrollo para exponer efectos con limpieza incompleta o código no idempotente; en producción no ocurre.",
+          "correct": true
+        },
+        {
+          "text": "Es un bug de `StrictMode` que debes silenciar añadiendo un array de dependencias vacío al efecto.",
+          "correct": false
+        },
+        {
+          "text": "Indica que el componente se está renderizando en el DOM dos veces, duplicando su interfaz visual en pantalla.",
+          "correct": false
+        },
+        {
+          "text": "Significa que el efecto también se ejecutará dos veces en producción, por lo que debes evitar `StrictMode` en apps reales.",
+          "correct": false
+        }
+      ],
+      "explanation": "`StrictMode` es una herramienta solo de desarrollo que monta, desmonta y vuelve a montar los componentes para revelar efectos mal limpiados o lógica no idempotente; esa doble ejecución no sucede en producción y no cambia el comportamiento funcional. No añade interfaz visual ni duplica el DOM, y silenciarlo con dependencias vacías oculta el problema real en lugar de corregir la limpieza del efecto."
+    },
+    {
+      "questionId": "c0192d88df64",
+      "stem": "En un proyecto grande varios archivos importan el mismo componente. ¿Qué ventaja concreta aporta usar una exportación nombrada en lugar de una por defecto?",
+      "options": [
+        {
+          "text": "Obliga a importar el componente con su nombre real, garantizando que se use el mismo identificador en todos los archivos",
+          "correct": true
+        },
+        {
+          "text": "Permite importar el componente con cualquier nombre, dando libertad para renombrarlo en cada archivo según convenga",
+          "correct": false
+        },
+        {
+          "text": "Hace que el componente se cargue de forma diferida, reduciendo el tamaño del bundle inicial de la aplicación",
+          "correct": false
+        },
+        {
+          "text": "Evita tener que declarar un nombre en la función del componente, ya que el archivo aporta el identificador",
+          "correct": false
+        }
+      ],
+      "explanation": "La exportación nombrada obliga a usar entre llaves el mismo nombre con el que se exportó, evitando inconsistencias entre archivos. El primer distractor describe precisamente el comportamiento de la exportación por defecto, que es justo el problema que se quiere evitar. La carga diferida corresponde a `React.lazy` y no depende del tipo de exportación."
+    },
+    {
+      "questionId": "f5a0f2db0ec9",
+      "stem": "En un archivo `button.jsx` quieres exponer `Button` y `ButtonSecondary`. ¿Qué enfoque te permite exportar ambos componentes del mismo archivo e importarlos por su nombre?",
+      "options": [
+        {
+          "text": "Usar exportaciones nombradas para cada componente y luego importarlos con `import { Button, ButtonSecondary } from './button.jsx'`",
+          "correct": true
+        },
+        {
+          "text": "Usar `export default` en cada componente, ya que un archivo puede tener varios default y se importan con `import { Button, ButtonSecondary }`",
+          "correct": false
+        },
+        {
+          "text": "Definir un único `export default` con un objeto que agrupe todos los componentes y desestructurarlo con `import { Button } from './button.jsx'`",
+          "correct": false
+        },
+        {
+          "text": "No es posible: cada componente de React debe vivir en su propio archivo con su propia exportación",
+          "correct": false
+        }
+      ],
+      "explanation": "Las exportaciones nombradas permiten exponer varios componentes desde un mismo archivo y luego importarlos por su nombre con llaves. Un archivo solo puede tener un `export default`, así que declarar varios es un error; y aunque un default puede ser un objeto, no se importa con desestructuración de named imports. Tampoco existe ninguna restricción que obligue a un componente por archivo."
+    },
+    {
+      "questionId": "b733b54f13da",
+      "stem": "Al cargar un componente de forma diferida con `const Button = lazy(() => import('./button.jsx'))`, ¿cuál es la función de `Suspense` al renderizarlo?",
+      "options": [
+        {
+          "text": "Mostrar el contenido de su prop `fallback` mientras la promesa del `import()` se resuelve y el componente termina de cargarse",
+          "correct": true
+        },
+        {
+          "text": "Memorizar el resultado del componente para evitar que se vuelva a cargar en cada render mientras sus props no cambien",
+          "correct": false
+        },
+        {
+          "text": "Ejecutar un efecto secundario tras montar el componente para iniciar la descarga del módulo de forma asíncrona",
+          "correct": false
+        },
+        {
+          "text": "Capturar los errores que ocurran dentro del componente cargado y mostrar una interfaz alternativa de recuperación",
+          "correct": false
+        }
+      ],
+      "explanation": "`Suspense` recibe la prop `fallback` y muestra ese contenido mientras la promesa devuelta por `import()` (envuelta por `lazy()`) se resuelve; una vez cargado el módulo, renderiza el componente real. Memorizar el resultado corresponde a `useMemo`/`memo`, ejecutar efectos tras montar es tarea de `useEffect`, y capturar errores para mostrar una UI alternativa es lo que hacen los Error Boundaries, no `Suspense`."
+    },
+    {
+      "questionId": "45660c735946",
+      "stem": "En una app donde una modal pesada solo se muestra tras hacer click en un botón, ¿por qué conviene importarla con `lazy(() => import(...))` en lugar de un import estático?",
+      "options": [
+        {
+          "text": "Porque su código no se incluye en la carga inicial, sino que se descarga solo cuando el usuario realmente necesita la modal, acelerando el arranque de la app",
+          "correct": true
+        },
+        {
+          "text": "Porque el import dinámico memoriza el resultado del render de la modal entre renderizados, evitando recalcularlo si sus props no cambian",
+          "correct": false
+        },
+        {
+          "text": "Porque el import dinámico ejecuta un efecto secundario tras el montaje del componente, ideal para sincronizar con sistemas externos como APIs",
+          "correct": false
+        },
+        {
+          "text": "Porque garantiza que la modal siempre esté disponible en memoria desde el inicio, eliminando cualquier retraso al mostrarla",
+          "correct": false
+        }
+      ],
+      "explanation": "La importación dinámica con `lazy` divide el bundle: el código de la modal se descarga bajo demanda (por ejemplo, al hacer click), reduciendo lo que se carga al inicio y mejorando el tiempo de arranque. La memorización de un cálculo entre renders describe `useMemo`, y sincronizar con sistemas externos tras el montaje describe `useEffect`; ninguno es el objetivo del import dinámico. La última opción contradice la idea misma de carga diferida."
+    },
+    {
+      "questionId": "29ce94552a60",
+      "stem": "Quieres cargar con `lazy()` un componente que está exportado de forma nombrada (`export function Button`). ¿Cómo puedes conseguirlo?",
+      "options": [
+        {
+          "text": "Encadenando `.then()` al `import()` para devolver un objeto cuya clave `default` sea el componente nombrado, por ejemplo `.then(({ Button }) => ({ default: Button }))`.",
+          "correct": true
+        },
+        {
+          "text": "No es posible: `lazy()` sólo funciona con componentes que tengan una exportación por defecto, así que hay que reescribir el módulo.",
+          "correct": false
+        },
+        {
+          "text": "Pasando el nombre del componente como segundo argumento de `lazy()`, por ejemplo `lazy(() => import('./button.jsx'), 'Button')`.",
+          "correct": false
+        },
+        {
+          "text": "Envolviendo el componente en un `<Suspense>` sin `fallback`, ya que eso permite resolver exportaciones nombradas automáticamente.",
+          "correct": false
+        }
+      ],
+      "explanation": "`lazy()` espera una promesa que resuelva a un módulo con la exportación por defecto, pero puedes adaptar una exportación nombrada encadenando `.then()` para devolver `{ default: Button }` (o creando un fichero intermedio que la reexporte como default). Por eso sí es posible, aunque no sea lo más cómodo. `lazy()` no acepta un segundo argumento con el nombre, y `Suspense` sólo gestiona el estado de carga con su `fallback`, no cómo se resuelven las exportaciones."
+    },
+    {
+      "questionId": "0816eb9f2818",
+      "stem": "Tienes un dato que muchos componentes anidados necesitan y quieres evitar pasarlo como prop nivel por nivel. ¿Cuál es la forma correcta de resolverlo con Context?",
+      "options": [
+        {
+          "text": "Crear el contexto con `createContext()`, envolver el árbol con `<MiContext.Provider value={dato}>` y leerlo en cualquier descendiente con `useContext(MiContext)`",
+          "correct": true
+        },
+        {
+          "text": "Crear el contexto con `useState()`, envolver el árbol con `<MiContext.Consumer>` y leer el valor llamando a `createContext(MiContext)` en cada hijo",
+          "correct": false
+        },
+        {
+          "text": "Guardar el dato con `useMemo()` para memorizarlo entre renders y así compartirlo automáticamente con todos los componentes que lo importen",
+          "correct": false
+        },
+        {
+          "text": "Definir el dato con `useRef()` para que persista entre renders y exponerlo directamente a los componentes hijos sin necesidad de un Provider",
+          "correct": false
+        }
+      ],
+      "explanation": "El flujo correcto de Context es: `createContext()` para crear el objeto, un `Provider` con la prop `value` para proveer el dato al subárbol, y `useContext()` dentro de los descendientes para consumirlo. `useMemo` solo memoriza un cálculo dentro de un mismo componente y `useRef` guarda un valor mutable local; ninguno propaga datos por el árbol, y sin un Provider no hay canal de contexto que consumir."
+    },
+    {
+      "questionId": "46474886353e",
+      "stem": "Al escribir `<button onClick={handleClick}>` y recibir el parámetro `event` en `handleClick`, ¿qué recibes realmente?",
+      "options": [
+        {
+          "text": "Un `SyntheticEvent`, la envoltura de React sobre el evento nativo que ofrece una API uniforme entre navegadores",
+          "correct": true
+        },
+        {
+          "text": "El evento nativo del navegador directamente, sin ninguna capa intermedia de React",
+          "correct": false
+        },
+        {
+          "text": "Un objeto de estado gestionado por React que se actualiza y provoca un re-render al hacer clic",
+          "correct": false
+        },
+        {
+          "text": "Una referencia al nodo del DOM del botón, equivalente a lo que devuelve `useRef`",
+          "correct": false
+        }
+      ],
+      "explanation": "React envuelve los eventos nativos en un `SyntheticEvent` para garantizar una interfaz consistente entre navegadores; si necesitas el evento nativo real, lo obtienes con `event.nativeEvent`. No es el evento nativo directo, ni un valor de estado (eso lo maneja `useState`), ni una referencia al DOM (eso sería `useRef`)."
+    },
+    {
+      "questionId": "e2abf9db28b0",
+      "stem": "Necesitas leer el DOM actualizado inmediatamente después de cambiar un state, dentro de un mismo manejador de evento. ¿Qué logra envolver ese `setState` en `flushSync(() => { ... })`?",
+      "options": [
+        {
+          "text": "Fuerza a React a aplicar las actualizaciones de state de forma síncrona y a actualizar el DOM antes de continuar con el resto del manejador",
+          "correct": true
+        },
+        {
+          "text": "Memoriza el resultado del cálculo para que React no lo recompute si sus dependencias no cambian entre renders",
+          "correct": false
+        },
+        {
+          "text": "Agrupa todas las actualizaciones de state para que se procesen juntas en un único re-render diferido y más eficiente",
+          "correct": false
+        },
+        {
+          "text": "Registra una suscripción a una fuente externa que se limpia automáticamente cuando el componente se desmonta",
+          "correct": false
+        }
+      ],
+      "explanation": "`flushSync(callback)` obliga a React a procesar de manera síncrona los cambios de state dentro del callback y a actualizar el DOM de inmediato, útil cuando necesitas leer el DOM ya actualizado. El agrupamiento (batching) describe justo el comportamiento opuesto por defecto que flushSync omite; la memorización corresponde a useMemo y la suscripción con limpieza a useEffect. Conviene usarlo con moderación porque perjudica el rendimiento."
+    },
+    {
+      "questionId": "ab759b4bfd25",
+      "stem": "Envuelves parte de tu árbol con un componente que implementa `getDerivedStateFromError` y `componentDidCatch`. ¿Qué logras con esto?",
+      "options": [
+        {
+          "text": "Capturas los errores lanzados durante el renderizado de los componentes hijos y muestras una UI alternativa en lugar de dejar que la app se rompa por completo",
+          "correct": true
+        },
+        {
+          "text": "Memorizas el resultado de un cálculo costoso para que no se vuelva a ejecutar en cada render mientras sus dependencias no cambien",
+          "correct": false
+        },
+        {
+          "text": "Ejecutas efectos secundarios tras el renderizado y limpias suscripciones cuando el componente se desmonta o cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "Interceptas y reintentas automáticamente las peticiones de red fallidas dentro de los componentes hijos sin escribir lógica adicional",
+          "correct": false
+        }
+      ],
+      "explanation": "Un Error Boundary captura errores producidos durante el renderizado del subárbol que envuelve y, mediante `getDerivedStateFromError`, muestra una UI de respaldo evitando que toda la aplicación colapse. La memorización de cálculos corresponde a `useMemo` y la gestión de efectos y limpieza a `useEffect`; los Error Boundaries no manejan errores asíncronos como peticiones de red, que deben capturarse manualmente."
+    },
+    {
+      "questionId": "7ef827e297af",
+      "stem": "Tienes un componente `Input` personalizado y necesitas que el componente padre pueda llamar a `.focus()` sobre el `<input>` interno usando `useRef`. ¿Qué te permite lograr esto?",
+      "options": [
+        {
+          "text": "Envolver el componente hijo con `forwardRef` para que reenvíe la `ref` recibida al elemento `<input>` interno",
+          "correct": true
+        },
+        {
+          "text": "Pasar la `ref` como una prop normal llamada `ref` al componente hijo, ya que React la propaga automáticamente a cualquier componente de función",
+          "correct": false
+        },
+        {
+          "text": "Usar `useMemo` en el hijo para memorizar el elemento `<input>` y así exponerlo al padre entre renderizados",
+          "correct": false
+        },
+        {
+          "text": "Envolver el hijo con `React.memo` para que la referencia del `<input>` no se pierda cuando el componente se vuelve a renderizar",
+          "correct": false
+        }
+      ],
+      "explanation": "`forwardRef` permite que un componente reciba una `ref` desde su padre y la reenvíe a un nodo del DOM interno, habilitando acciones como `.focus()`. Pasar `ref` como prop normal no funciona porque React trata `ref` de forma especial y no la propaga a componentes de función sin `forwardRef`. `useMemo` sirve para memorizar valores calculados y `React.memo` para evitar renderizados innecesarios; ninguno gestiona el reenvío de referencias."
+    },
+    {
+      "questionId": "78d17fd0feaa",
+      "stem": "Tienes un componente que muestra `props.title` y quieres asegurarte de que siempre reciba una cadena obligatoria usando el paquete `prop-types`. ¿Cuál de estas configuraciones lo consigue?",
+      "options": [
+        {
+          "text": "`App.propTypes = { title: PropTypes.string.isRequired }`",
+          "correct": true
+        },
+        {
+          "text": "`App.propTypes = { title: PropTypes.string.required }`",
+          "correct": false
+        },
+        {
+          "text": "`App.defaultProps = { title: PropTypes.string.isRequired }`",
+          "correct": false
+        },
+        {
+          "text": "`App.propTypes = { title: String.isRequired }`",
+          "correct": false
+        }
+      ],
+      "explanation": "La validación de props se declara en la propiedad estática `propTypes` del componente, y el modificador correcto para marcar una prop obligatoria es `.isRequired` (no `.required`). `defaultProps` sirve para asignar valores por defecto, no para validar tipos, y `String` es un constructor de JavaScript, no un validador de `PropTypes`. Estas comprobaciones solo actúan en tiempo de ejecución y en modo desarrollo."
+    },
+    {
+      "questionId": "b64869f623f3",
+      "stem": "Necesitas validar que la prop `title` sea un objeto con los campos `text` y `color`, describiendo el tipo esperado de cada campo. ¿Qué validador de PropTypes usas?",
+      "options": [
+        {
+          "text": "`PropTypes.shape({ text: PropTypes.string, color: PropTypes.string })`, que define la estructura campo por campo",
+          "correct": true
+        },
+        {
+          "text": "`PropTypes.object`, que verifica que sea un objeto pero sin validar la estructura interna ni el tipo de cada campo",
+          "correct": false
+        },
+        {
+          "text": "`PropTypes.objectOf(PropTypes.string)`, que valida un objeto donde todos los valores son del mismo tipo pero sin fijar qué claves existen",
+          "correct": false
+        },
+        {
+          "text": "`PropTypes.arrayOf(PropTypes.shape(...))`, que valida una lista de objetos con una estructura común",
+          "correct": false
+        }
+      ],
+      "explanation": "`PropTypes.shape` permite describir la forma esperada de un objeto detallando el tipo de cada propiedad, ideal para contratos de componente. `PropTypes.object` solo confirma que es un objeto sin mirar sus campos; `objectOf` fija el tipo de los valores pero no las claves concretas; y `arrayOf` es para colecciones, no para un único objeto."
+    },
+    {
+      "questionId": "e9c846ac61b0",
+      "stem": "Necesitas validar que la prop `items` sea un array donde cada elemento es un objeto con la propiedad `text` de tipo string. ¿Qué declaración de PropTypes lo consigue?",
+      "options": [
+        {
+          "text": "`PropTypes.arrayOf(PropTypes.shape({ text: PropTypes.string }))`",
+          "correct": true
+        },
+        {
+          "text": "`PropTypes.shape({ text: PropTypes.arrayOf(PropTypes.string) })`",
+          "correct": false
+        },
+        {
+          "text": "`PropTypes.objectOf(PropTypes.shape({ text: PropTypes.string }))`",
+          "correct": false
+        },
+        {
+          "text": "`PropTypes.array(PropTypes.shape({ text: PropTypes.string }))`",
+          "correct": false
+        }
+      ],
+      "explanation": "`arrayOf` valida que la prop sea un array y aplica el validador indicado a cada elemento; combinado con `shape` describe la forma de cada objeto interno. `shape` por sí solo valida un único objeto (no un array), `objectOf` valida un objeto cuyas propiedades cumplen un tipo (no un array indexado), y `PropTypes.array` es un validador simple que no acepta argumentos para tipar los elementos."
+    },
+    {
+      "questionId": "b989acc7a6e5",
+      "stem": "Tienes `const html = '<h1>Título</h1>'` y renderizas `<div>{html}</div>`. ¿Qué verás en pantalla?",
+      "options": [
+        {
+          "text": "El texto literal `<h1>Título</h1>`, porque React escapa automáticamente el string para prevenir ataques XSS",
+          "correct": true
+        },
+        {
+          "text": "El título renderizado como encabezado, ya que React interpreta cualquier string que contenga etiquetas HTML válidas",
+          "correct": false
+        },
+        {
+          "text": "Un error en tiempo de ejecución, porque no se puede pasar un string con HTML dentro de las llaves de JSX",
+          "correct": false
+        },
+        {
+          "text": "El texto literal, pero sólo en desarrollo; en producción React sí renderiza el HTML del string",
+          "correct": false
+        }
+      ],
+      "explanation": "React escapa por defecto cualquier string interpolado en JSX, mostrando `<h1>Título</h1>` como texto plano para evitar inyecciones de código (XSS). Para renderizarlo como HTML real habría que usar `dangerouslySetInnerHTML={{ __html: html }}`, con la precaución que su nombre indica. No hay diferencia de comportamiento entre desarrollo y producción, ni se produce ningún error."
+    },
+    {
+      "questionId": "388057def963",
+      "stem": "Un componente `Layout` reenvía todas sus props a un hijo con `<App {...props} />`. ¿Cuál es el principal inconveniente de esta práctica?",
+      "options": [
+        {
+          "text": "Se pueden propagar props que el hijo no necesita, dificultando saber qué recibe y usa realmente cada componente",
+          "correct": true
+        },
+        {
+          "text": "El operador spread crea una copia profunda del objeto props que degrada el rendimiento en cada render",
+          "correct": false
+        },
+        {
+          "text": "React lanza un error en tiempo de ejecución si pasas una prop que el componente hijo no declara",
+          "correct": false
+        },
+        {
+          "text": "Las props pasadas con spread se convierten en estado interno mutable del componente hijo",
+          "correct": false
+        }
+      ],
+      "explanation": "Reenviar todas las props con spread hace que el hijo reciba propiedades que quizá no usa, oscureciendo qué datos consume cada componente y complicando el mantenimiento. Es preferible pasar solo las props necesarias de forma explícita. React no genera errores por props extra ni las copia en profundidad, y las props siempre son de solo lectura, nunca estado mutable."
+    },
+    {
+      "questionId": "a88925fd0f8e",
+      "stem": "Al renderizar una lista con `map`, ¿por qué se recomienda usar el `id` de cada elemento como `key` en lugar del índice del array cuando la lista puede reordenarse o modificarse?",
+      "options": [
+        {
+          "text": "Porque el índice cambia al insertar, eliminar o reordenar elementos, lo que puede hacer que React asocie mal el estado y el DOM de los elementos, provocando comportamientos inesperados",
+          "correct": true
+        },
+        {
+          "text": "Porque el índice del array no es un valor válido como `key` y React lanza un error en tiempo de ejecución si se utiliza",
+          "correct": false
+        },
+        {
+          "text": "Porque usar el `id` hace que React memorice los componentes automáticamente y evite volver a ejecutar sus funciones de renderizado",
+          "correct": false
+        },
+        {
+          "text": "Porque el `id` permite que React actualice los elementos de la lista de forma asíncrona sin bloquear el hilo principal",
+          "correct": false
+        }
+      ],
+      "explanation": "La `key` ayuda a React a identificar qué elementos cambiaron, se añadieron o se eliminaron. Al usar el índice, si la lista se reordena o se modifica, la misma posición apunta a un elemento distinto y React puede conservar estado o DOM equivocado. Usar el índice es válido y no lanza errores (solo advertencias si falta la key), pero no habilita memoización ni renderizado asíncrono; esas son ideas de `React.memo` y de la concurrencia, no del propósito de `key`."
+    },
+    {
+      "questionId": "fd8aae12963e",
+      "stem": "En el componente `FilterableList`, ¿qué logra envolver la actualización de `results` con `startTransition` mientras `setQuery` queda fuera?",
+      "options": [
+        {
+          "text": "Marca el filtrado como actualización no urgente, así el input responde de inmediato al escribir mientras React calcula los resultados en segundo plano",
+          "correct": true
+        },
+        {
+          "text": "Memoiza la lista filtrada para que solo se recalcule cuando cambian las dependencias, evitando trabajo repetido en cada render",
+          "correct": false
+        },
+        {
+          "text": "Retrasa la ejecución del filtrado un número fijo de milisegundos tras la última pulsación, cancelando los cálculos intermedios",
+          "correct": false
+        },
+        {
+          "text": "Ejecuta el filtrado fuera del ciclo de renderizado tras pintar el DOM, sincronizándolo con efectos secundarios como peticiones de red",
+          "correct": false
+        }
+      ],
+      "explanation": "`startTransition` etiqueta la actualización de `results` como no urgente, de modo que `setQuery` (urgente) mantiene el input fluido mientras React procesa el render pesado. El primer distractor describe `useMemo`; el segundo confunde transiciones con un debounce, que no existe aquí; el tercero describe el comportamiento de `useEffect`, no de una transición."
+    },
+    {
+      "questionId": "603c7f0492f8",
+      "stem": "Al usar `const [state, action, isPending] = useActionState(createTodo, { ok: false })` en un formulario, ¿qué representa cada valor devuelto?",
+      "options": [
+        {
+          "text": "`state` es la respuesta más reciente de la acción, `action` se pasa al `<form action={...}>` y `isPending` indica si hay una petición en curso",
+          "correct": true
+        },
+        {
+          "text": "`state` es un valor memoizado que solo se recalcula cuando cambian sus dependencias, `action` es la función de recálculo e `isPending` marca si la memoización caducó",
+          "correct": false
+        },
+        {
+          "text": "`state` es una referencia mutable que persiste entre renders sin provocar re-render, `action` la actualiza directamente e `isPending` la sincroniza con el DOM",
+          "correct": false
+        },
+        {
+          "text": "`state` es el valor actual del contexto más cercano, `action` es el Provider que lo distribuye e `isPending` indica si el contexto cambió",
+          "correct": false
+        }
+      ],
+      "explanation": "`useActionState` gestiona el ciclo de vida de un formulario ligado a una Server Action: devuelve el último resultado (`state`), la acción que se conecta al `<form action={...}>` y una bandera `isPending` para el estado de carga. Las otras opciones describen en realidad `useMemo` (valor memoizado con dependencias), `useRef` (referencia mutable sin re-render) y `useContext` (valor de contexto), no este hook."
+    },
+    {
+      "questionId": "bf2f593d0a19",
+      "stem": "En un formulario que envía comentarios a un servidor, ¿qué comportamiento aporta `useOptimistic` a la experiencia del usuario?",
+      "options": [
+        {
+          "text": "Muestra de inmediato el comentario como estado temporal mientras la petición al servidor sigue pendiente, y lo reconcilia cuando llega la confirmación",
+          "correct": true
+        },
+        {
+          "text": "Memoriza el resultado de un cálculo costoso para no recalcularlo en cada render mientras sus dependencias no cambien",
+          "correct": false
+        },
+        {
+          "text": "Cachea la respuesta del servidor para que peticiones idénticas posteriores se resuelvan sin volver a llamar a la red",
+          "correct": false
+        },
+        {
+          "text": "Sincroniza el estado local con un almacenamiento persistente del navegador para conservar el comentario tras recargar la página",
+          "correct": false
+        }
+      ],
+      "explanation": "`useOptimistic` sirve para reflejar de inmediato una actualización \"optimista\" en la UI antes de la respuesta del servidor, reconciliándose cuando esta llega; si la acción falla debes revertir manualmente. El primer distractor describe `useMemo` (memorización de cálculos), y los otros dos hablan de cacheo de red y persistencia, tareas que `useOptimistic` no realiza."
+    },
+    {
+      "questionId": "6baf061c53ec",
+      "stem": "En el ejemplo, `SubmitButton` llama a `useFormStatus()` y usa `pending` para deshabilitar el botón. ¿Por qué funciona esto si `SubmitButton` no recibe ninguna prop del `<form>`?",
+      "options": [
+        {
+          "text": "`useFormStatus` lee el estado del `<form>` ancestro más cercano, así que cualquier componente hijo dentro del formulario accede a `pending` sin prop drilling",
+          "correct": true
+        },
+        {
+          "text": "`useFormStatus` crea su propio estado local en `SubmitButton` que se actualiza cada vez que el input cambia de valor",
+          "correct": false
+        },
+        {
+          "text": "`useFormStatus` memoriza el resultado de la Server Action y solo lo recalcula cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "`useFormStatus` devuelve el estado del formulario solo si `SubmitButton` es el componente que define la prop `action`",
+          "correct": false
+        }
+      ],
+      "explanation": "`useFormStatus` obtiene el estado de envío del `<form>` ancestro que lo contiene, por eso `SubmitButton` accede a `pending`, `action`, `method` y `formData` sin que el padre le pase props. La opción del estado local describe algo parecido a `useState`, la de memorización describe `useMemo`, y el botón no necesita definir `action`: basta con estar dentro del formulario."
+    },
+    {
+      "questionId": "0113a0a3dbac",
+      "stem": "En un formulario que usa una Server Action, quieres mostrar un mensaje de error o éxito devuelto por esa acción tras el envío. ¿Qué hace `useFormState` por ti?",
+      "options": [
+        {
+          "text": "Enlaza el resultado más reciente devuelto por la Server Action con la UI: recibe la acción y un estado inicial, y devuelve `[state, formAction]` que pasas al `action` del `<form>`.",
+          "correct": true
+        },
+        {
+          "text": "Devuelve un booleano `pending` que indica si el envío del formulario está en curso, para deshabilitar el botón mientras se procesa la acción.",
+          "correct": false
+        },
+        {
+          "text": "Memoriza el resultado de la Server Action entre renders para evitar recalcularlo cuando las dependencias no cambian.",
+          "correct": false
+        },
+        {
+          "text": "Registra manejadores en cada campo del formulario y sincroniza sus valores en un objeto de estado local del cliente.",
+          "correct": false
+        }
+      ],
+      "explanation": "`useFormState` recibe `(action, estadoInicial)` y devuelve `[state, formAction]`, donde `state` es lo último que la acción retornó (por ejemplo `{ error }` o `{ success }`), ideal para feedback tras el envío. El booleano `pending` es lo que ofrece `useFormStatus`, no `useFormState`; la memoización describe `useMemo`; y sincronizar valores campo a campo es tarea de un formulario controlado con `useState`, no de este hook."
+    },
+    {
+      "questionId": "c6d23b5ef45a",
+      "stem": "Al enviar un `<form action={createPost}>` donde `createPost` es una Server Action, ¿qué ocurre realmente?",
+      "options": [
+        {
+          "text": "React serializa el `FormData` del formulario y ejecuta la función en el servidor, retornando el resultado al cliente sin que definas un endpoint manual",
+          "correct": true
+        },
+        {
+          "text": "React ejecuta la función `createPost` en el navegador del cliente y luego envía el resultado al servidor mediante una petición `fetch` que tú configuras",
+          "correct": false
+        },
+        {
+          "text": "React memoriza el valor de retorno de `createPost` y solo la vuelve a ejecutar cuando cambian las dependencias del formulario",
+          "correct": false
+        },
+        {
+          "text": "React re-renderiza el formulario en cada pulsación de tecla y ejecuta `createPost` como validación sincrónica de cada campo",
+          "correct": false
+        }
+      ],
+      "explanation": "Una Server Action marcada con `'use server'` corre en el backend: React serializa el `FormData`, invoca la función en el servidor y devuelve la respuesta, evitando que crees rutas de API manuales. La opción del navegador es falsa porque el punto de las Server Actions es NO ejecutar ese código en el cliente; la memorización describe el comportamiento de `useMemo`, no de una acción de servidor."
+    },
+    {
+      "questionId": "bf32d7f6f459",
+      "stem": "En un `<form action={publishPost}>` con dos botones de envío, uno de ellos lleva `formAction={saveDraft}`. ¿Qué ocurre al hacer clic en ese botón?",
+      "options": [
+        {
+          "text": "Se ejecuta `saveDraft` porque `formAction` sobrescribe la acción del formulario solo para ese botón",
+          "correct": true
+        },
+        {
+          "text": "Se ejecutan ambas, primero `publishPost` (la del formulario) y luego `saveDraft` (la del botón)",
+          "correct": false
+        },
+        {
+          "text": "Se ejecuta `publishPost`, porque la prop `action` del `<form>` siempre tiene prioridad sobre `formAction`",
+          "correct": false
+        },
+        {
+          "text": "React lanza un error porque no se puede definir `action` y `formAction` al mismo tiempo en el mismo formulario",
+          "correct": false
+        }
+      ],
+      "explanation": "`formAction` en un botón o `input type='submit'` sobrescribe la acción del formulario únicamente para ese control, así que al pulsarlo se ejecuta `saveDraft` en lugar de `publishPost`. Esto permite tener un mismo formulario con opciones como \"Publicar\" y \"Guardar borrador\" sin duplicar markup. No se ejecutan ambas ni prevalece siempre la del `<form>`, y combinar ambas props es un patrón válido y esperado."
+    },
+    {
+      "questionId": "365aa07d16d1",
+      "stem": "Tienes un componente que necesita usar `useState` y responder a clics del usuario. ¿Qué debes hacer para que funcione correctamente en Next.js?",
+      "options": [
+        {
+          "text": "Añadir `'use client'` en la primera línea del archivo, porque los hooks como `useState` y los manejadores de eventos solo funcionan en componentes de cliente",
+          "correct": true
+        },
+        {
+          "text": "Añadir `'use server'` en la primera línea del archivo, ya que esa directiva habilita el uso de hooks del navegador dentro del componente",
+          "correct": false
+        },
+        {
+          "text": "Dejarlo como componente de servidor, porque estos pueden acceder a datos protegidos y devolver HTML serializado sin enviar JavaScript al cliente",
+          "correct": false
+        },
+        {
+          "text": "No hacer nada especial, ya que en Next.js todos los componentes pueden usar `useState` y escuchar eventos de forma predeterminada",
+          "correct": false
+        }
+      ],
+      "explanation": "Los hooks de estado y los manejadores de eventos requieren ejecución en el navegador, algo exclusivo de los componentes de cliente, que se marcan con `'use client'` en la primera línea. La directiva `'use server'` corresponde a las Server Actions, no a habilitar hooks. Por defecto los componentes en Next.js son de servidor y no pueden usar `useState` ni `useEffect`."
+    },
+    {
+      "questionId": "c83b0dd116b5",
+      "stem": "Necesitas suscribir un componente a `window.matchMedia` para reflejar cambios de tema y evitar discrepancias durante la hidratación en SSR. ¿Qué hook resuelve esto de forma segura en renderizados concurrentes?",
+      "options": [
+        {
+          "text": "`useSyncExternalStore`, que se suscribe a una fuente externa y admite un tercer argumento `getServerSnapshot` para dar un valor consistente durante la hidratación",
+          "correct": true
+        },
+        {
+          "text": "`useEffect`, que ejecuta la suscripción tras el renderizado y sincroniza el DOM con efectos secundarios cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "`useMemo`, que memoriza el resultado de un cálculo costoso y solo lo recalcula cuando cambian los valores de su arreglo de dependencias",
+          "correct": false
+        },
+        {
+          "text": "`useReducer`, que centraliza actualizaciones de estado complejas mediante una función reductora que recibe el estado actual y una acción",
+          "correct": false
+        }
+      ],
+      "explanation": "`useSyncExternalStore` está diseñado precisamente para leer de fuentes externas (APIs del navegador, Redux, Zustand) garantizando lecturas consistentes en modo concurrente, y su tercer parámetro `getServerSnapshot` evita el desajuste entre el HTML del servidor y la hidratación. `useEffect` podría suscribirse, pero no garantiza consistencia durante renders concurrentes ni la hidratación; `useMemo` y `useReducer` describen correctamente otros hooks (memorización y manejo de estado) que no resuelven la suscripción a un store externo."
+    },
+    {
+      "questionId": "3d83ab173c81",
+      "stem": "Envuelves un componente con `React.memo` pero sigue renderizándose en cada actualización del padre aunque sus datos visibles no cambian. ¿Cuál es la causa más probable?",
+      "options": [
+        {
+          "text": "Le pasas como prop una función u objeto que se recrea en cada render del padre, por lo que la comparación superficial siempre las ve como distintas",
+          "correct": true
+        },
+        {
+          "text": "`React.memo` solo compara props primitivas y siempre ignora las props de tipo objeto, así que nunca puede evitar renders con ese tipo de datos",
+          "correct": false
+        },
+        {
+          "text": "`React.memo` reejecuta el componente cuando cambia cualquier estado interno o contexto que consume, y eso es lo que memoriza para evitar recálculos",
+          "correct": false
+        },
+        {
+          "text": "`React.memo` compara las props en profundidad, así que un cambio en cualquier propiedad anidada del objeto siempre fuerza un nuevo render",
+          "correct": false
+        }
+      ],
+      "explanation": "`React.memo` hace una comparación superficial de props; si el padre pasa una función u objeto creado en línea, cada render genera una nueva referencia y la comparación falla, provocando el re-render. Por eso se combina con `useCallback` y `useMemo` para estabilizar esas referencias. No ignora los objetos ni compara en profundidad: compara referencias superficialmente."
+    },
+    {
+      "questionId": "2d76f7b855df",
+      "stem": "En una app nueva de React 18 que se renderiza en el cliente (sin SSR), quieres aprovechar el batching automático y `useTransition`. ¿Qué API debes usar para montar la aplicación?",
+      "options": [
+        {
+          "text": "`createRoot`, que crea un root concurrente en el cliente y habilita características como el batching automático, `useTransition` y `Suspense`.",
+          "correct": true
+        },
+        {
+          "text": "`hydrateRoot`, que reutiliza el HTML existente en el contenedor en lugar de recrearlo desde cero al montar la aplicación.",
+          "correct": false
+        },
+        {
+          "text": "`ReactDOM.render`, que es la API recomendada en React 18 para activar las capacidades concurrentes en el cliente.",
+          "correct": false
+        },
+        {
+          "text": "`createRoot`, pero solo funciona cuando el HTML inicial fue generado en el servidor mediante SSR o streaming.",
+          "correct": false
+        }
+      ],
+      "explanation": "`createRoot` es la API correcta para montar en el cliente en React 18 y es la que habilita el modo concurrente (batching automático, `useTransition`, `Suspense`). `hydrateRoot` describe correctamente la hidratación, pero solo aplica cuando hay HTML del servidor que reutilizar. `ReactDOM.render` es la API legacy en desuso y no activa las capacidades concurrentes."
+    },
+    {
+      "questionId": "d6f34b9ff28e",
+      "stem": "En un componente que solo lee un valor con `useRef`, actualizas ese ref dentro de un manejador de eventos y esperas ver la interfaz reflejar el nuevo valor, pero no cambia nada en pantalla. ¿Por qué?",
+      "options": [
+        {
+          "text": "Modificar el valor de un ref no dispara un re-render, así que el componente no vuelve a ejecutarse ni actualiza su salida.",
+          "correct": true
+        },
+        {
+          "text": "Cambiar el valor de un ref actualiza el estado interno y programa un re-render en el siguiente ciclo, pero React lo agrupa y lo descarta si el valor es igual.",
+          "correct": false
+        },
+        {
+          "text": "Los refs solo provocan re-render cuando se leen dentro del cuerpo del componente; al leerlo en un manejador de eventos React no detecta la dependencia.",
+          "correct": false
+        },
+        {
+          "text": "Actualizar un ref re-renderiza el componente pero no toca el DOM, porque la reconciliación decide que no hay nodos que mutar.",
+          "correct": false
+        }
+      ],
+      "explanation": "Los refs (`useRef`) están pensados para guardar valores mutables que persisten entre renders sin provocar re-render; por eso cambiar `ref.current` nunca reejecuta el componente. Para reflejar un cambio en la UI necesitas estado (`useState`/`useReducer`). Los distractores confunden el comportamiento de los refs con el del estado o con el proceso de reconciliación, que es una etapa distinta al re-render."
+    },
+    {
+      "questionId": "59a9a1b120e6",
+      "stem": "Dentro de un manejador de eventos ejecutas `setCount(c => c + 1)` seguido de `setFlag(f => !f)`. ¿Cuántas veces se re-renderiza el componente y por qué?",
+      "options": [
+        {
+          "text": "Una sola vez, porque React agrupa ambas actualizaciones en un único re-render (batching)",
+          "correct": true
+        },
+        {
+          "text": "Dos veces, porque cada llamada a una función setter provoca su propio re-render inmediato",
+          "correct": false
+        },
+        {
+          "text": "Una sola vez, porque `useMemo` cachea el resultado del cálculo entre renders y evita repetirlo",
+          "correct": false
+        },
+        {
+          "text": "Ninguna, porque las actualizaciones de estado son asíncronas y no se aplican hasta el siguiente montaje",
+          "correct": false
+        }
+      ],
+      "explanation": "El batching agrupa varias actualizaciones de estado disparadas juntas en un único re-render, evitando renders intermedios innecesarios; desde React 18 esto ocurre también dentro de promesas, timeouts y manejadores nativos. La opción de 'dos veces' describe el comportamiento erróneo que muchos suponen sin batching, y la de `useMemo` describe otra herramienta (memoización de cálculos), no el agrupamiento de renders."
+    },
+    {
+      "questionId": "fc628e0eedd2",
+      "stem": "En un componente cargado con `React.lazy` y envuelto en `<Suspense fallback={<Spinner />}>`, ¿qué ocurre mientras se descarga el código del hijo?",
+      "options": [
+        {
+          "text": "Se muestra el `fallback` indicado hasta que el árbol hijo está listo para renderizarse",
+          "correct": true
+        },
+        {
+          "text": "Se captura el error de carga y se muestra el `fallback` en lugar de propagarlo al Error Boundary más cercano",
+          "correct": false
+        },
+        {
+          "text": "Se memoriza el resultado del render del hijo para evitar recalcularlo en renders posteriores",
+          "correct": false
+        },
+        {
+          "text": "Se re-ejecuta un efecto de limpieza y luego el efecto principal cada vez que cambian las dependencias",
+          "correct": false
+        }
+      ],
+      "explanation": "`Suspense` muestra el `fallback` mientras el hijo \"espera\" (código con `lazy` o datos), y lo reemplaza cuando el árbol puede renderizarse. No maneja errores: eso corresponde a un Error Boundary. La memoización describe a `useMemo`, y la limpieza/reejecución por dependencias describe a `useEffect`."
+    },
+    {
+      "questionId": "99fc823039ba",
+      "stem": "En una lista de tareas reordenable, usas el índice del array como `key`. Al reordenar los elementos, algunos componentes muestran datos incorrectos. ¿Por qué ocurre esto durante la reconciliación?",
+      "options": [
+        {
+          "text": "React usa la `key` para emparejar cada hijo entre renders; como el índice sigue igual aunque los datos cambien de posición, reutiliza el nodo equivocado en vez de moverlo",
+          "correct": true
+        },
+        {
+          "text": "React solo re-renderiza cuando el estado o las props cambian, y el índice no está en el estado, así que la comparación nunca se dispara al reordenar",
+          "correct": false
+        },
+        {
+          "text": "React memoriza el resultado del render con el índice como caché y devuelve el valor previo mientras las dependencias no cambien",
+          "correct": false
+        },
+        {
+          "text": "React necesita las keys para calcular los estilos CSS de cada elemento, y los índices repetidos provocan colisiones de clase",
+          "correct": false
+        }
+      ],
+      "explanation": "En listas, la `key` identifica a cada hijo entre renders. Con el índice como key, tras reordenar el índice 0 sigue siendo 0, así que React cree que es el mismo elemento y reutiliza el nodo con datos que ya no corresponden; por eso conviene usar un id estable. La opción sobre memorización describe el comportamiento de `useMemo`, no de la reconciliación, y las keys no intervienen en el cálculo de estilos."
+    },
+    {
+      "questionId": "3b0e2aa0155d",
+      "stem": "Tienes `const [items, setItems] = useState([])` y necesitas mostrar el número de elementos. ¿Cuál es la forma recomendada de obtenerlo?",
+      "options": [
+        {
+          "text": "Calcular `const count = items.length` directamente en el render, sin guardarlo en un estado aparte",
+          "correct": true
+        },
+        {
+          "text": "Crear un `const [count, setCount] = useState(0)` y llamar a `setCount` cada vez que cambie `items`",
+          "correct": false
+        },
+        {
+          "text": "Guardar `count` en un `useState` y sincronizarlo con un `useEffect` que dependa de `items`",
+          "correct": false
+        },
+        {
+          "text": "Envolver siempre `items.length` en un `useMemo` para evitar recálculos en cada render",
+          "correct": false
+        }
+      ],
+      "explanation": "`count` es estado derivado: se obtiene directamente de `items`, así que calcularlo en el render mantiene una única fuente de verdad y evita bugs de desincronización. Guardarlo en su propio `useState` (con o sin `useEffect`) es redundante y propenso a quedar desactualizado. El `useMemo` solo se justifica cuando el cálculo es realmente costoso; para un `.length` es innecesario."
+    },
+    {
+      "questionId": "6399f2949e8b",
+      "stem": "En este componente, el `setInterval` con dependencias vacías incrementa `count` pero la UI se queda atascada en 1. ¿Por qué ocurre y qué lo soluciona?\n\n```jsx\nuseEffect(() => {\n  const id = setInterval(() => setCount(count + 1), 1000)\n  return () => clearInterval(id)\n}, [])\n```",
+      "options": [
+        {
+          "text": "La función del intervalo captura `count=0` del primer render (stale closure); usar la forma funcional `setCount(c => c + 1)` parte siempre del valor actual.",
+          "correct": true
+        },
+        {
+          "text": "El intervalo se recrea en cada render y pisa el valor previo; agregar `count` a las dependencias evita que se vuelva a montar el efecto.",
+          "correct": false
+        },
+        {
+          "text": "`setCount` es asíncrono y agrupa las actualizaciones, así que solo se aplica la última; envolverlo en `useCallback` fuerza a que se ejecuten todas.",
+          "correct": false
+        },
+        {
+          "text": "El `clearInterval` del cleanup se ejecuta en cada tick y reinicia el contador; quitar la función de retorno permite que `count` siga subiendo.",
+          "correct": false
+        }
+      ],
+      "explanation": "Con deps vacías el efecto corre una sola vez y la callback del intervalo queda fijada al `count=0` de ese render, por eso siempre calcula 0+1. La forma funcional `setCount(c => c + 1)` recibe el valor más reciente de React y no depende de la clausura. Agregar `count` a las dependencias también funciona, pero recrearía el intervalo en cada cambio; el cleanup solo se ejecuta al desmontar o re-ejecutar el efecto, no en cada tick, y `setCount` no descarta actualizaciones intermedias."
+    },
+    {
+      "questionId": "36eb419724e1",
+      "stem": "Un `Provider` renderiza `<AuthContext.Provider value={{ user, login, logout }}>`. Aunque `user` no cambie, todos los consumidores se re-renderizan en cada render del padre. ¿Qué lo soluciona?",
+      "options": [
+        {
+          "text": "Envolver el objeto pasado a `value` en `useMemo`, con `login` y `logout` estabilizados con `useCallback`, para no crear un objeto nuevo en cada render",
+          "correct": true
+        },
+        {
+          "text": "Envolver cada componente consumidor en `React.memo`, ya que así ignorarán los cambios del `value` del contexto",
+          "correct": false
+        },
+        {
+          "text": "Añadir un array de dependencias vacío `[]` al `useContext` para que solo lea el valor una vez al montar",
+          "correct": false
+        },
+        {
+          "text": "Mover el objeto `value` fuera del componente, declarándolo como constante a nivel de módulo para que sea el mismo siempre",
+          "correct": false
+        }
+      ],
+      "explanation": "El problema es que el literal de objeto en `value` se crea nuevo en cada render, así que su identidad cambia y todos los consumidores se actualizan; memoizarlo con `useMemo` mantiene la misma referencia mientras las dependencias no cambien. `React.memo` no ayuda porque un consumidor siempre se re-renderiza cuando cambia el contexto que consume; `useContext` no acepta array de dependencias; y sacar el objeto al módulo lo congela, impidiendo reflejar cambios reales de `user`."
+    },
+    {
+      "questionId": "e4a7052eb415",
+      "stem": "Al usar `const Panel = lazy(() => import('./Panel'))` en tu app, ¿qué necesitas para que funcione correctamente al renderizar `<Panel />`?",
+      "options": [
+        {
+          "text": "Envolverlo en un límite de `Suspense` con un `fallback` que se muestra mientras se descarga el chunk del componente",
+          "correct": true
+        },
+        {
+          "text": "Envolverlo en un `ErrorBoundary` que capture el error y muestre la UI alternativa mientras React reintenta el render",
+          "correct": false
+        },
+        {
+          "text": "Memorizar el import con `useMemo` para evitar que el componente se vuelva a descargar en cada render",
+          "correct": false
+        },
+        {
+          "text": "Que el módulo importado exporte el componente como export con nombre coincidente, ya que `lazy` no admite exports default",
+          "correct": false
+        }
+      ],
+      "explanation": "`React.lazy` hace code splitting con un import dinámico y suspende el render hasta que llega el chunk, por lo que debe existir un `Suspense` con `fallback` por encima que muestre algo (como un spinner) durante la carga. El `ErrorBoundary` sirve para capturar errores, no para el estado de carga; `useMemo` no es necesario porque `lazy` cachea el módulo; y por defecto `lazy` espera un export default, no uno con nombre."
+    },
+    {
+      "questionId": "f3e3dde139f4",
+      "stem": "En un buscador, el input se siente lento al escribir porque cada tecla dispara un filtrado costoso de miles de elementos. ¿Cómo ayuda envolver `setFiltered` en `startTransition`?",
+      "options": [
+        {
+          "text": "Marca esa actualización como no urgente, así React puede posponerla o interrumpirla para que el `setQuery` del input siga respondiendo de inmediato",
+          "correct": true
+        },
+        {
+          "text": "Memoriza el resultado del filtrado entre renders para no recalcularlo cuando las dependencias no cambian",
+          "correct": false
+        },
+        {
+          "text": "Cachea la función `onChange` para que mantenga la misma identidad entre renders y no se recree en cada teclazo",
+          "correct": false
+        },
+        {
+          "text": "Retrasa la ejecución del filtrado un número fijo de milisegundos tras el último teclazo antes de volver a renderizar",
+          "correct": false
+        }
+      ],
+      "explanation": "`startTransition` clasifica una actualización de estado como no urgente, permitiendo que React priorice interacciones como escribir en el input; puede interrumpir o posponer el render de la transición. Memorizar resultados es tarea de `useMemo` y cachear funciones es de `useCallback`, que atacan el recálculo, no la prioridad del render. Y no introduce un retardo fijo como un debounce: React decide cuándo procesarla según la prioridad, no según un temporizador."
+    },
+    {
+      "questionId": "d6381dfe4215",
+      "stem": "En un proyecto nuevo con React 19, ¿cuál es la forma recomendada de que un componente de función reciba una `ref` desde su padre?",
+      "options": [
+        {
+          "text": "Declarar `ref` como una prop normal (por ejemplo `function Input({ ref, ...props })`) y asignarla directamente al elemento",
+          "correct": true
+        },
+        {
+          "text": "Envolver el componente en `forwardRef` obligatoriamente, ya que sin él la `ref` sigue siendo inaccesible en React 19",
+          "correct": false
+        },
+        {
+          "text": "Recibir la `ref` a través de `useContext`, que es el mecanismo por el que React propaga referencias hacia los hijos",
+          "correct": false
+        },
+        {
+          "text": "Leer la `ref` desde `props.children`, porque las referencias se pasan como parte del árbol de hijos",
+          "correct": false
+        }
+      ],
+      "explanation": "Desde React 19, `ref` es una prop normal en componentes de función, por lo que puedes desestructurarla y asignarla al elemento sin `forwardRef`; este último se mantiene solo por compatibilidad. `useContext` sirve para compartir valores por el árbol, no para pasar refs, y `children` representa el contenido anidado, nada relacionado con referencias."
+    }
+  ]
+}

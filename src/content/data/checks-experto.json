@@ -1,0 +1,582 @@
+{
+  "generatedAt": "2026-08-25T20:42:15.880Z",
+  "model": "claude-opus-4-8",
+  "sourceSection": "Experto",
+  "checks": [
+    {
+      "questionId": "b9e10069f489",
+      "stem": "Según su propia definición oficial, ¿por qué React se considera una biblioteca y no un framework?",
+      "options": [
+        {
+          "text": "Porque no impone soluciones completas ni opinionadas: para tareas como el enrutado o elegir empaquetador necesitas añadir otras bibliotecas o usar un framework como Next.js",
+          "correct": true
+        },
+        {
+          "text": "Porque incluye de serie enrutado, renderizado del lado del servidor y un empaquetador configurado, cubriendo toda la aplicación sin dependencias externas",
+          "correct": false
+        },
+        {
+          "text": "Porque obliga a usar una CLI oficial para crear el proyecto y define de forma opinionada la estructura de carpetas y el empaquetador",
+          "correct": false
+        },
+        {
+          "text": "Porque solo funciona integrado dentro de otro framework como Angular y no puede ejecutarse de manera independiente",
+          "correct": false
+        }
+      ],
+      "explanation": "React se autodenomina biblioteca porque se centra en construir interfaces y deja fuera decisiones como el enrutado o el empaquetador, que resuelves con otras bibliotecas (React Router) o un framework (Next.js). Las otras opciones describen precisamente las características de un framework opinionado como Next.js o Angular, que sí incluyen esas soluciones de forma integrada, o afirman falsamente que React depende de otro framework para funcionar."
+    },
+    {
+      "questionId": "07d8484ace9b",
+      "stem": "Un componente hijo usa una `ref` reenviada desde el padre. ¿Qué logra envolver su lógica con `useImperativeHandle(ref, () => ({ focus: () => inputEl.current.focus() }))`?",
+      "options": [
+        {
+          "text": "Expone al padre un objeto personalizado (con el método `focus`) en lugar de dar acceso directo al nodo del DOM",
+          "correct": true
+        },
+        {
+          "text": "Memoriza el valor devuelto por la función para evitar recalcularlo en cada render mientras no cambien sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "Registra un efecto secundario que se ejecuta tras cada render y limpia el foco cuando el componente se desmonta",
+          "correct": false
+        },
+        {
+          "text": "Crea un valor de estado local que provoca un nuevo render del hijo cada vez que se llama a `focus`",
+          "correct": false
+        }
+      ],
+      "explanation": "`useImperativeHandle` personaliza lo que la `ref` del padre recibe: en vez del nodo completo, expone solo los métodos y propiedades definidos en el objeto devuelto (aquí, `focus`). El distractor de memorización describe `useMemo`, el de efecto secundario describe `useEffect`, y el de estado describe `useState`; ninguno controla qué se expone a través de una ref."
+    },
+    {
+      "questionId": "b2f4ba268006",
+      "stem": "Dado `const el = <Hello name='midu' />`, ¿qué renderiza `cloneElement(el, { name: 'ana' })`?",
+      "options": [
+        {
+          "text": "El componente `Hello` con la prop `name` valiendo `'ana'`, reemplazando el valor original",
+          "correct": true
+        },
+        {
+          "text": "El componente `Hello` con la prop `name` valiendo `'midu'`, ya que las props originales no pueden sobrescribirse",
+          "correct": false
+        },
+        {
+          "text": "Dos instancias de `Hello`, una con `'midu'` y otra con `'ana'`, porque clona conservando el elemento fuente",
+          "correct": false
+        },
+        {
+          "text": "Un nuevo componente independiente cuyo estado interno se inicializa con `name: 'ana'`",
+          "correct": false
+        }
+      ],
+      "explanation": "`cloneElement` crea una copia del elemento fusionando las props nuevas sobre las originales, de modo que `name` pasa a valer `'ana'` sin rastro del valor anterior. No genera dos renders ni conserva la prop previa, y `name` es una prop, no estado interno del componente."
+    },
+    {
+      "questionId": "e630905286d9",
+      "stem": "Necesitas mostrar un modal que aparezca por encima de todo el layout, renderizándolo en un nodo `#modal` situado fuera del árbol del componente actual. ¿Qué API de React resuelve este caso?",
+      "options": [
+        {
+          "text": "`createPortal`, que renderiza el contenido en un nodo del DOM que no es hijo del componente que lo invoca",
+          "correct": true
+        },
+        {
+          "text": "`useMemo`, que memoriza el resultado de un cálculo costoso y solo lo recalcula cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "`useContext`, que permite consumir valores compartidos sin pasar props manualmente a través del árbol de componentes",
+          "correct": false
+        },
+        {
+          "text": "`forwardRef`, que reenvía una ref recibida hacia un elemento hijo interno del componente",
+          "correct": false
+        }
+      ],
+      "explanation": "`createPortal` acepta el contenido a renderizar y el nodo del DOM destino, permitiendo colocarlo fuera de la jerarquía del componente padre, ideal para modales, tooltips y overlays. Las demás opciones describen correctamente otras APIs (memorización, consumo de contexto y reenvío de refs), pero ninguna cambia el nodo del DOM donde se monta el contenido."
+    },
+    {
+      "questionId": "fde7c9ed7956",
+      "stem": "Tu aplicación empieza a mostrar dos veces cada log dentro de un componente al envolverla en `StrictMode`. ¿Cuál es la explicación correcta de este comportamiento?",
+      "options": [
+        {
+          "text": "En desarrollo, `StrictMode` invoca dos veces render y efectos para ayudarte a detectar efectos secundarios no idempotentes o limpiezas mal hechas; en producción no ocurre.",
+          "correct": true
+        },
+        {
+          "text": "Es un bug conocido de las versiones recientes de React que se corrige colocando el componente fuera de `StrictMode`.",
+          "correct": false
+        },
+        {
+          "text": "`StrictMode` renderiza dos veces tanto en desarrollo como en producción para memorizar cálculos costosos y evitar recalcularlos en cada render.",
+          "correct": false
+        },
+        {
+          "text": "El doble render ocurre porque `StrictMode` obliga a que todos los componentes hijos se re-registren con el árbol de contexto en cada actualización de estado.",
+          "correct": false
+        }
+      ],
+      "explanation": "`StrictMode` es una herramienta de diagnóstico que, solo en desarrollo, ejecuta render y efectos por partida doble para destapar lógica no idempotente, side effects en render o limpiezas ausentes; en producción no hay ejecución extra. No es un bug ni una técnica de memorización (eso lo hace `useMemo`), y no tiene relación con re-registrar hijos en el contexto."
+    },
+    {
+      "questionId": "7b72931af067",
+      "stem": "Al intentar mostrar una lista con millones de registros en una aplicación React, ¿cuál es el principal motivo por el que la interfaz se vuelve inestable o inusable?",
+      "options": [
+        {
+          "text": "Insertar millones de nodos en el DOM sobrecarga al navegador, que no puede gestionar semejante cantidad de elementos, degradando el rendimiento hasta hacer la app inservible",
+          "correct": true
+        },
+        {
+          "text": "El modelo declarativo de React impide por completo controlar el renderizado, por lo que nunca se pueden optimizar listas grandes",
+          "correct": false
+        },
+        {
+          "text": "JSX solo admite un número máximo fijo de elementos hijos, y superarlo lanza un error en tiempo de compilación",
+          "correct": false
+        },
+        {
+          "text": "React vuelve a montar todo el árbol de componentes en cada render, algo que solo se evita usando class components en lugar de funciones",
+          "correct": false
+        }
+      ],
+      "explanation": "Aunque React reconcilia de forma eficiente, no es viable pintar millones de nodos: el navegador no puede gestionar tantos elementos en el DOM y la aplicación deja de responder. La solución pasa por limitar los datos añadidos al DOM (por ejemplo, con virtualización o paginación), ya que el viewport es limitado. El modelo declarativo no impide optimizar, JSX no tiene un tope fijo de hijos, y React no remonta todo el árbol en cada render."
+    },
+    {
+      "questionId": "41ecb7a9a4ee",
+      "stem": "Quieres cancelar una petición `fetch` dentro de un `useEffect` cuando el componente se desmonta. ¿Cuál es la forma correcta de conseguirlo?",
+      "options": [
+        {
+          "text": "Crear un `AbortController` dentro del efecto, pasar su `signal` al `fetch` y llamar a `abortController.abort()` en la función de limpieza que retorna el efecto",
+          "correct": true
+        },
+        {
+          "text": "Envolver la lógica en un `useMemo` que recalcule la petición y devuelva un valor cacheado para evitar peticiones repetidas al servidor",
+          "correct": false
+        },
+        {
+          "text": "Definir una variable booleana con `useState` y ponerla a `false` en la función de limpieza para ignorar la respuesta cuando llegue",
+          "correct": false
+        },
+        {
+          "text": "Llamar a `fetch(...).cancel()` sobre la promesa devuelta dentro de la función de limpieza del `useEffect`",
+          "correct": false
+        }
+      ],
+      "explanation": "La API estándar para cancelar un `fetch` es `AbortController`: se pasa su `signal` a la petición y se invoca `abort()` en la función de limpieza del efecto, que React ejecuta al desmontar. `useMemo` sirve para memorizar cálculos costosos, no para gestionar peticiones ni limpieza. Una promesa de `fetch` no tiene método `.cancel()`, y aunque una bandera puede evitar el `setState` tras desmontar, no aborta realmente la petición en curso al servidor."
+    },
+    {
+      "questionId": "8d3854c24245",
+      "stem": "Al mostrar una lista de decenas de miles de filas ya cargadas en memoria, ¿en qué consiste aplicar virtualización (windowing) para mantener el rendimiento?",
+      "options": [
+        {
+          "text": "Montar en el DOM solo los elementos visibles en el viewport más un buffer, y desmontar los que quedan fuera de la vista mientras el usuario hace scroll",
+          "correct": true
+        },
+        {
+          "text": "Pedir a la API un offset o rango concreto de datos y renderizar solo esa página, mostrando controles de navegación entre páginas",
+          "correct": false
+        },
+        {
+          "text": "Envolver cada fila en `React.memo` para que ningún elemento de la lista se vuelva a renderizar cuando cambia el estado del padre",
+          "correct": false
+        },
+        {
+          "text": "Guardar la lista completa en un `useMemo` para evitar recalcularla en cada render y así reducir la carga del DOM",
+          "correct": false
+        }
+      ],
+      "explanation": "La virtualización mantiene 'vivos' en el DOM únicamente los elementos dentro del viewport (más un buffer), montando y desmontando conforme se hace scroll; así el DOM permanece liviano aunque haya millones de datos. La paginación es otra solución válida pero distinta: limita los datos pidiendo rangos a la API. `React.memo` evita re-renders innecesarios y `useMemo` cachea cálculos, pero ninguno reduce la cantidad de nodos montados en el DOM, que es el verdadero cuello de botella con listas enormes."
+    },
+    {
+      "questionId": "5cd544842c89",
+      "stem": "Estás construyendo un custom hook reutilizable para gestionar el estado de un socket y quieres facilitar su inspección. ¿Para qué te serviría `useDebugValue` en este caso?",
+      "options": [
+        {
+          "text": "Para mostrar una etiqueta descriptiva del estado interno del hook en React DevTools durante el desarrollo",
+          "correct": true
+        },
+        {
+          "text": "Para memorizar el resultado de un cálculo costoso y evitar recalcularlo en cada render",
+          "correct": false
+        },
+        {
+          "text": "Para ejecutar efectos secundarios como la suscripción y desuscripción del socket tras cada render",
+          "correct": false
+        },
+        {
+          "text": "Para registrar mensajes en la consola del navegador cada vez que cambia el estado del socket",
+          "correct": false
+        }
+      ],
+      "explanation": "`useDebugValue` solo sirve para mostrar información diagnóstica de un custom hook en React DevTools, sin afectar la lógica de la aplicación. Memorizar cálculos costosos corresponde a `useMemo`, y gestionar suscripciones o efectos secundarios corresponde a `useEffect`; además, `useDebugValue` no escribe en la consola del navegador."
+    },
+    {
+      "questionId": "b4f84dc75b8b",
+      "stem": "Envuelves un subárbol con `<Profiler id='Lista' onRender={callback}>`. ¿Qué propósito cumple esta herramienta?",
+      "options": [
+        {
+          "text": "Medir el coste de renderizado del subárbol, ejecutando `onRender` en cada render para detectar cuellos de botella de rendimiento",
+          "correct": true
+        },
+        {
+          "text": "Memorizar el resultado de un cálculo costoso para que solo se recalcule cuando cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "Capturar errores de renderizado de los componentes hijos y mostrar una interfaz de reserva",
+          "correct": false
+        },
+        {
+          "text": "Evitar que el subárbol se vuelva a renderizar cuando sus props no han cambiado",
+          "correct": false
+        }
+      ],
+      "explanation": "`Profiler` es una herramienta de medición: recibe un `id` y un `onRender` que se dispara en cada render con datos como `actualDuration`, útiles para auditar el rendimiento. Memorizar un cálculo describe `useMemo`; capturar errores con UI de reserva describe un error boundary; y evitar re-renders por props iguales describe `React.memo`. Todas son verdaderas sobre otros mecanismos, pero no sobre `Profiler`."
+    },
+    {
+      "questionId": "a402a2777a25",
+      "stem": "En un manejador de eventos de React que recibe el argumento `e`, ¿cómo obtienes el evento nativo del navegador subyacente?",
+      "options": [
+        {
+          "text": "Accediendo a `e.nativeEvent`, ya que `e` es un `SyntheticEvent` que envuelve el evento nativo",
+          "correct": true
+        },
+        {
+          "text": "Accediendo a `e.target`, que devuelve el objeto de evento nativo completo del navegador",
+          "correct": false
+        },
+        {
+          "text": "Llamando a `e.persist()`, que reemplaza el `SyntheticEvent` por el evento nativo del DOM",
+          "correct": false
+        },
+        {
+          "text": "El argumento `e` ya es directamente el evento nativo del navegador, sin ninguna envoltura",
+          "correct": false
+        }
+      ],
+      "explanation": "React entrega un `SyntheticEvent`, una envoltura multiplataforma sobre el evento del navegador; su propiedad `nativeEvent` expone el evento nativo real. `e.target` es el elemento del DOM que originó el evento, no el evento nativo; `e.persist()` solo evitaba la reutilización del pool de eventos en versiones antiguas y no devuelve el nativo; y `e` nunca es el evento nativo directamente, siempre está envuelto."
+    },
+    {
+      "questionId": "64787a38bbe1",
+      "stem": "Tienes un `<div>` que envuelve varios botones y quieres interceptar los clics en el contenedor ANTES de que se ejecuten los handlers de los botones hijos. ¿Qué prop debes usar en el `<div>`?",
+      "options": [
+        {
+          "text": "`onClickCapture`, porque ejecuta el handler durante la fase de captura, antes de que el evento alcance a los hijos",
+          "correct": true
+        },
+        {
+          "text": "`onClick`, porque en React todos los handlers se ejecutan durante la fase de captura de forma predeterminada",
+          "correct": false
+        },
+        {
+          "text": "`onClick` junto con `e.stopPropagation()`, que fuerza al evento a viajar en fase de captura",
+          "correct": false
+        },
+        {
+          "text": "`onCapture`, la prop genérica de React que activa la fase de captura para cualquier tipo de evento",
+          "correct": false
+        }
+      ],
+      "explanation": "React sigue la convención de añadir el sufijo `Capture` (por ejemplo `onClickCapture`) para registrar un handler en la fase de captura, que se ejecuta de arriba hacia abajo antes de llegar al objetivo. Los handlers normales como `onClick` se ejecutan en la fase de burbuja, y `stopPropagation` solo detiene la propagación pero no cambia la fase. No existe una prop genérica llamada `onCapture`: cada evento tiene su propia versión con sufijo `Capture`."
+    },
+    {
+      "questionId": "453012f2a102",
+      "stem": "En un servidor Node, estás usando `renderToString` para el SSR de tu app y notas que las peticiones con árboles grandes bloquean el hilo principal. ¿Qué cambio soluciona este problema?",
+      "options": [
+        {
+          "text": "Reemplazar `renderToString` por `renderToPipeableStream`, que renderiza de forma asíncrona mediante streaming y no bloquea el hilo principal",
+          "correct": true
+        },
+        {
+          "text": "Envolver la llamada a `renderToString` en un `useMemo` para memorizar el HTML y evitar recalcularlo en cada petición",
+          "correct": false
+        },
+        {
+          "text": "Mover el `renderToString` al cliente dentro de un `useEffect` para que el renderizado ocurra tras el montaje",
+          "correct": false
+        },
+        {
+          "text": "Reemplazar `renderToString` por `hydrateRoot`, que reutiliza el HTML del servidor sin volver a renderizarlo",
+          "correct": false
+        }
+      ],
+      "explanation": "`renderToString` es síncrono y bloquea el hilo principal; `renderToPipeableStream` genera el HTML por streaming de forma asíncrona, permitiendo enviar el shell en cuanto está listo (`onShellReady`) sin bloquear. `useMemo` es un hook que solo funciona dentro de componentes durante el render, no en el código del servidor que orquesta la respuesta. `useEffect` solo se ejecuta en el cliente y no interviene en el SSR. `hydrateRoot` se usa en el cliente para hidratar el HTML ya generado, no para producirlo en el servidor."
+    },
+    {
+      "questionId": "3263b41dc9ef",
+      "stem": "Tienes una página que necesita volverse interactiva en el cliente mediante hidratación. ¿Por qué `renderToStaticNodeStream()` no es la opción adecuada para este caso?",
+      "options": [
+        {
+          "text": "Genera HTML sin los atributos extra que React necesita para hidratar, por lo que el marcado no se puede volver interactivo en el cliente",
+          "correct": true
+        },
+        {
+          "text": "Genera HTML con atributos extra de React, lo que impide que el cliente pueda hidratar el marcado correctamente",
+          "correct": false
+        },
+        {
+          "text": "No devuelve un stream sino una cadena completa, y la hidratación solo funciona a partir de streams",
+          "correct": false
+        },
+        {
+          "text": "Solo funciona en el cliente y no en el servidor, por lo que no produce HTML apto para hidratar",
+          "correct": false
+        }
+      ],
+      "explanation": "`renderToStaticNodeStream()` produce nodos estáticos sin los atributos internos que React usa para asociar el HTML con su árbol de componentes, así que sirve para páginas totalmente estáticas pero no para hidratar. Para lograr interactividad hay que usar `renderToPipeableStream()`, que sí incluye esos atributos aunque resulte algo más lento. El primer distractor invierte los papeles: precisamente la falta de atributos extra es lo que impide la hidratación."
+    },
+    {
+      "questionId": "fa286b78496b",
+      "stem": "En un buscador donde el input debe responder al instante pero la lista de resultados es costosa de renderizar, ¿qué aporta usar `useDeferredValue` con el valor del texto?",
+      "options": [
+        {
+          "text": "Permite que la lista se renderice con baja prioridad usando una versión diferida del texto, sin bloquear la actualización inmediata del input",
+          "correct": true
+        },
+        {
+          "text": "Memoriza el resultado de la lista para no recalcularlo mientras las dependencias no cambien entre renders",
+          "correct": false
+        },
+        {
+          "text": "Evita que el componente de la lista se vuelva a renderizar comparando sus props de forma superficial",
+          "correct": false
+        },
+        {
+          "text": "Ejecuta un efecto secundario tras el renderizado cada vez que el texto cambia, sincronizando la lista con el estado",
+          "correct": false
+        }
+      ],
+      "explanation": "`useDeferredValue` devuelve una copia \"diferida\" del valor que React puede actualizar con prioridad baja, de modo que el input responde de inmediato mientras la lista costosa se actualiza después. La opción de memorizar un cálculo describe `useMemo`; comparar props superficialmente para evitar renders describe `React.memo`; y ejecutar efectos tras el render corresponde a `useEffect`."
+    },
+    {
+      "questionId": "bad188688738",
+      "stem": "En un servidor basado en Deno que soporta Web Streams, ¿qué te aporta usar `renderToReadableStream()`?",
+      "options": [
+        {
+          "text": "Renderiza el componente React en el servidor devolviendo un Web Stream (ReadableStream) que puedes pasar directamente a una `Response`.",
+          "correct": true
+        },
+        {
+          "text": "Renderiza el componente en el servidor devolviendo un stream de Node.js compatible con `pipe()` sobre objetos de tipo `Readable`.",
+          "correct": false
+        },
+        {
+          "text": "Renderiza el componente a una cadena de HTML completa de forma síncrona, lista para incrustar en la respuesta.",
+          "correct": false
+        },
+        {
+          "text": "Hidrata en el cliente el HTML generado en el servidor, adjuntando los manejadores de eventos al marcado existente.",
+          "correct": false
+        }
+      ],
+      "explanation": "`renderToReadableStream()` es la variante pensada para entornos con Web Streams (como Deno o el navegador/edge), y produce un `ReadableStream` que se entrega tal cual a un objeto `Response`. El stream de tipo Node con `pipe()` corresponde a `renderToNodeStream`/`renderToPipeableStream`; el render síncrono a string es `renderToString`; y adjuntar eventos al HTML existente en el cliente es la tarea de `hydrateRoot`."
+    },
+    {
+      "questionId": "a3b9e1d021e8",
+      "stem": "¿Qué ocurre cuando llamas a `use(promesa)` dentro de un componente y la promesa aún no se ha resuelto?",
+      "options": [
+        {
+          "text": "React suspende el componente y reanuda el render con el valor resuelto una vez que la promesa se completa",
+          "correct": true
+        },
+        {
+          "text": "React memoriza el resultado de la promesa entre renders y solo lo recalcula si cambian sus dependencias",
+          "correct": false
+        },
+        {
+          "text": "React programa un efecto secundario que se ejecuta tras el render y actualiza el estado con el valor resuelto",
+          "correct": false
+        },
+        {
+          "text": "React devuelve `undefined` en el primer render y vuelve a renderizar automáticamente cuando la promesa termina",
+          "correct": false
+        }
+      ],
+      "explanation": "`use` integra la lectura de recursos asíncronos con Suspense: suspende el componente hasta que la promesa se resuelve (o lanza si se rechaza) y reanuda el render con el valor. La opción de memorización describe `useMemo`, y la de efecto posterior al render describe `useEffect`; ninguna refleja el comportamiento de suspensión de `use`."
+    },
+    {
+      "questionId": "3f532507c59f",
+      "stem": "En una librería de CSS-in-JS, ¿qué ventaja aporta usar `useInsertionEffect` para inyectar las etiquetas `<style>` en lugar de otro hook de efecto?",
+      "options": [
+        {
+          "text": "Se ejecuta sincrónicamente antes de que React aplique las mutaciones en el DOM, permitiendo insertar los estilos a tiempo y evitar el parpadeo (`FOUC`)",
+          "correct": true
+        },
+        {
+          "text": "Se ejecuta sincrónicamente después de las mutaciones del DOM pero antes de que el navegador pinte, ideal para medir el layout y reposicionar elementos",
+          "correct": false
+        },
+        {
+          "text": "Se ejecuta de forma asíncrona tras el renderizado y el pintado, apropiado para peticiones de red o suscripciones sin bloquear la interfaz",
+          "correct": false
+        },
+        {
+          "text": "Memoriza el resultado de un cálculo costoso entre renders y solo lo recalcula cuando cambian sus dependencias",
+          "correct": false
+        }
+      ],
+      "explanation": "`useInsertionEffect` corre de forma sincrónica justo antes de que React inserte las mutaciones en el DOM, momento perfecto para que una librería de estilos inyecte reglas y evite el FOUC. La opción del layout describe `useLayoutEffect` (corre después de las mutaciones, antes del pintado), la asíncrona describe `useEffect`, y la última describe `useMemo`: todas son ciertas, pero de otros hooks."
+    },
+    {
+      "questionId": "733fa86de9f2",
+      "stem": "En un componente de búsqueda que filtra una lista grande, ¿cuál es el propósito correcto de cada Hook combinado para mantener la UI fluida?",
+      "options": [
+        {
+          "text": "`useMemo` memoriza el resultado del filtrado, `useCallback` estabiliza el handler para componentes memoizados, `useTransition` baja la prioridad de la actualización de estado, y `useDeferredValue` retrasa el valor usado en el cálculo caro",
+          "correct": true
+        },
+        {
+          "text": "`useMemo` retrasa la lectura de un valor mientras `useDeferredValue` memoriza cálculos costosos, y `useCallback` baja la prioridad de actualizaciones no urgentes mientras `useTransition` estabiliza funciones",
+          "correct": false
+        },
+        {
+          "text": "`useMemo` y `useCallback` sincronizan efectos con el ciclo de vida, mientras `useTransition` y `useDeferredValue` guardan valores entre renders sin recalcularlos",
+          "correct": false
+        },
+        {
+          "text": "Los cuatro Hooks fuerzan un nuevo render inmediato cada vez que cambia el input para que el resultado del filtrado esté siempre actualizado al instante",
+          "correct": false
+        }
+      ],
+      "explanation": "Cada Hook ataca un cuello de botella distinto: `useMemo` memoriza valores derivados costosos, `useCallback` memoriza funciones para no romper la memoización de hijos, `useTransition` marca actualizaciones como no urgentes y `useDeferredValue` retrasa la lectura de un valor concreto. El primer distractor es tentador porque intercambia los roles: describe correctamente los Hooks pero los asigna al Hook equivocado. Combinarlos permite que el input se sienta inmediato mientras el cálculo pesado llega con un pequeño retraso."
+    },
+    {
+      "questionId": "721f4b1beac4",
+      "stem": "Al filtrar una lista muy grande, la escritura en el input se siente lenta porque cada tecla dispara un renderizado costoso. ¿Cómo ayuda Concurrent React a resolver esto?",
+      "options": [
+        {
+          "text": "Permite marcar el renderizado de la lista como una actualización interrumpible de baja prioridad, de modo que React pueda pausarlo para atender la escritura urgente",
+          "correct": true
+        },
+        {
+          "text": "Cachea el resultado del renderizado de la lista para que no se recalcule mientras las props de entrada no cambien",
+          "correct": false
+        },
+        {
+          "text": "Ejecuta el renderizado de la lista en un Web Worker separado para que no bloquee el hilo principal del navegador",
+          "correct": false
+        },
+        {
+          "text": "Elimina automáticamente los re-renderizados de los componentes hijos que reciben las mismas props que en el render anterior",
+          "correct": false
+        }
+      ],
+      "explanation": "Concurrent React (con `createRoot`) hace el renderizado interrumpible y priorizable: con `useTransition` o `useDeferredValue` marcas el filtrado como baja prioridad y React pausa ese trabajo para responder a la escritura. Cachear por props describe `useMemo`; evitar re-renders con las mismas props describe `React.memo`; y React no mueve el renderizado a un Web Worker, sigue en el hilo principal pero troceando el trabajo."
+    },
+    {
+      "questionId": "5ea5cd701591",
+      "stem": "¿Cuál de estas afirmaciones sobre React Fiber es correcta?",
+      "options": [
+        {
+          "text": "Es la arquitectura de reconciliación (desde React 16) que representa el trabajo como una estructura de datos procesable de forma incremental, permitiendo pausar y priorizar el render.",
+          "correct": true
+        },
+        {
+          "text": "Es una librería de gestión de estado global que reemplaza a Redux al centralizar los datos de la aplicación en un único store.",
+          "correct": false
+        },
+        {
+          "text": "Es un compilador que convierte JSX en llamadas a `React.createElement` antes de que el navegador ejecute el código.",
+          "correct": false
+        },
+        {
+          "text": "Es una API que usas directamente en tus componentes para dividir manualmente el render en trozos mediante un hook.",
+          "correct": false
+        }
+      ],
+      "explanation": "Fiber es la arquitectura interna de reconciliación introducida en React 16: modela cada unidad de trabajo como un 'fiber' que puede procesarse de forma incremental, lo que permite pausar, reanudar y priorizar el trabajo de render. No es un store de estado (eso describe algo como Redux) ni el compilador de JSX (eso lo hace Babel), y como desarrollador de aplicación no lo invocas directamente mediante un hook."
+    },
+    {
+      "questionId": "c5fa8764f66e",
+      "stem": "Un equipo quiere adoptar el React Compiler para simplificar sus optimizaciones. ¿Qué beneficio principal obtendrán y qué deben seguir garantizando en su código?",
+      "options": [
+        {
+          "text": "Memoiza automáticamente componentes y valores cuando es seguro, reduciendo `useMemo`/`useCallback` manuales, pero los componentes deben seguir siendo puros en el render",
+          "correct": true
+        },
+        {
+          "text": "Elimina por completo los re-renders innecesarios sin importar cómo esté estructurado el estado, por lo que ya no hace falta pensar en el diseño de componentes",
+          "correct": false
+        },
+        {
+          "text": "Convierte cualquier componente de clase en función y gestiona automáticamente los efectos colaterales que se ejecuten durante el render",
+          "correct": false
+        },
+        {
+          "text": "Reemplaza el sistema de reconciliación por comparaciones profundas, así que las `keys` en las listas dejan de ser necesarias",
+          "correct": false
+        }
+      ],
+      "explanation": "El React Compiler analiza el código y memoiza automáticamente cuando puede demostrar que es seguro, ahorrando `useMemo`, `useCallback` y `React.memo` manuales; a cambio, exige componentes puros sin efectos colaterales en el render. Los distractores son atractivos porque suenan a optimización, pero el compilador no sustituye un buen diseño de estado, no gestiona efectos en el render ni elimina la necesidad de `keys` o de entender los re-renders."
+    },
+    {
+      "questionId": "6647bce15e8d",
+      "stem": "Al escribir tests con React Testing Library, ¿cuál es el enfoque que recomienda esta biblioteca?",
+      "options": [
+        {
+          "text": "Probar lo que el usuario ve y hace, consultando por rol o texto y verificando comportamientos observables",
+          "correct": true
+        },
+        {
+          "text": "Verificar el estado interno del componente y los valores exactos de sus hooks tras cada render",
+          "correct": false
+        },
+        {
+          "text": "Comprobar que cada componente vuelve a renderizarse el mínimo número de veces posible para optimizar rendimiento",
+          "correct": false
+        },
+        {
+          "text": "Acoplar las consultas a los classNames y a la estructura del árbol de nodos para detectar cambios de maquetado",
+          "correct": false
+        }
+      ],
+      "explanation": "React Testing Library promueve probar el comportamiento desde la perspectiva del usuario, usando consultas como `getByRole` o `getByText` en lugar de inspeccionar detalles internos. Acoplarse al estado, al número de renders o a classNames hace los tests frágiles ante refactors que no cambian lo que percibe el usuario."
+    },
+    {
+      "questionId": "5460d17e4801",
+      "stem": "Al probar un hook personalizado con `renderHook` de `@testing-library/react`, ¿por qué debes envolver la llamada a `result.current.increment()` dentro de `act()`?",
+      "options": [
+        {
+          "text": "Porque `increment` actualiza el estado del hook, y `act()` asegura que React aplique esa actualización antes de que hagas las siguientes aserciones sobre `result.current`",
+          "correct": true
+        },
+        {
+          "text": "Porque `act()` memoriza el valor de retorno del hook para que no se recalcule en cada render y así optimizar el rendimiento del test",
+          "correct": false
+        },
+        {
+          "text": "Porque `renderHook` no renderiza realmente el hook hasta que `act()` fuerza el primer render del componente de prueba interno",
+          "correct": false
+        },
+        {
+          "text": "Porque sin `act()` no se puede acceder a `result.current`, ya que esa propiedad solo se expone dentro del callback de `act()`",
+          "correct": false
+        }
+      ],
+      "explanation": "`act()` agrupa las actualizaciones de estado y garantiza que React procese los re-renders resultantes antes de continuar, de modo que `result.current` refleje el estado actualizado al hacer las aserciones. El distractor sobre memoización describe la idea de `useMemo`, no de `act()`; y `result.current` está disponible desde que `renderHook` monta el hook, con o sin `act()`."
+    },
+    {
+      "questionId": "9e833ebb0d99",
+      "stem": "En una aplicación construida con el patrón Flux, ¿cuál es la secuencia correcta que sigue el flujo de datos?",
+      "options": [
+        {
+          "text": "Las acciones pasan por el dispatcher, actualizan los stores y estos notifican a las vistas",
+          "correct": true
+        },
+        {
+          "text": "Las vistas modifican directamente los stores y luego emiten acciones al dispatcher",
+          "correct": false
+        },
+        {
+          "text": "Los componentes reciben datos de los padres vía props y los envían de vuelta con callbacks",
+          "correct": false
+        },
+        {
+          "text": "El dispatcher lee el estado de las vistas y lo distribuye entre múltiples stores en paralelo",
+          "correct": false
+        }
+      ],
+      "explanation": "Flux define un flujo de datos unidireccional: acciones → dispatcher → stores → vistas. El primer distractor invierte el sentido permitiendo que las vistas escriban en los stores, lo que rompe la unidireccionalidad. El segundo describe el paso de props padre-hijo de React, que es un mecanismo distinto y no es Flux."
+    }
+  ]
+}
