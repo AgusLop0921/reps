@@ -31,6 +31,19 @@ function countBy(questions: Question[], key: (q: Question) => string): Map<strin
   return counts
 }
 
+function median(xs: number[]): number {
+  if (xs.length === 0) return 0
+  const s = [...xs].sort((a, b) => a - b)
+  const mid = Math.floor(s.length / 2)
+  return s.length % 2 ? s[mid] : Math.round((s[mid - 1] + s[mid]) / 2)
+}
+
+function p90(xs: number[]): number {
+  if (xs.length === 0) return 0
+  const s = [...xs].sort((a, b) => a - b)
+  return s[Math.min(s.length - 1, Math.max(0, Math.ceil(0.9 * s.length) - 1))]
+}
+
 function report(id: string, questions: Question[]): void {
   console.log(`\n=== ${id}: ${questions.length} questions ===`)
 
@@ -65,6 +78,41 @@ function reportCurriculum(sections: Section[]): void {
   }
 }
 
+/**
+ * The real question when choosing LESSON_SIZE is how much text a lesson is, not how many
+ * cards. Report per section: median/p90 answer length per question, and median/max total
+ * characters per lesson; plus the longest questions that land on the path.
+ */
+function reportLessonText(sections: Section[], questions: Question[]): void {
+  const lenById = new Map(questions.map((q) => [q.id, q.answerMd.length]))
+  const len = (id: string): number => lenById.get(id) ?? 0
+
+  console.log('\nlesson text size (answerMd chars):')
+  console.log(
+    `  ${'section'.padEnd(26)}${'q-med'.padStart(8)}${'q-p90'.padStart(8)}` +
+      `${'lesson-med'.padStart(12)}${'lesson-max'.padStart(12)}`,
+  )
+  for (const s of sections) {
+    const qLens = s.lessons.flatMap((l) => l.questionIds.map(len))
+    const lessonTotals = s.lessons.map((l) => l.questionIds.reduce((n, id) => n + len(id), 0))
+    console.log(
+      `  ${s.title.padEnd(26)}${String(median(qLens)).padStart(8)}` +
+        `${String(p90(qLens)).padStart(8)}${String(median(lessonTotals)).padStart(12)}` +
+        `${String(Math.max(...lessonTotals)).padStart(12)}`,
+    )
+  }
+
+  const pathIds = new Set(sections.flatMap((s) => s.lessons.flatMap((l) => l.questionIds)))
+  const longest = questions
+    .filter((q) => pathIds.has(q.id))
+    .sort((a, b) => b.answerMd.length - a.answerMd.length)
+    .slice(0, 5)
+  console.log('\nfive longest questions on the path (answerMd chars):')
+  for (const q of longest) {
+    console.log(`  ${String(q.answerMd.length).padStart(6)}  "${q.question}"`)
+  }
+}
+
 async function main(): Promise<void> {
   for (const source of SOURCES) {
     const { id, rawUrl } = source.SOURCE_META
@@ -78,6 +126,7 @@ async function main(): Promise<void> {
       pinnedFirst: PINNED_FIRST,
     })
     reportCurriculum(sections)
+    reportLessonText(sections, questions)
   }
 }
 
