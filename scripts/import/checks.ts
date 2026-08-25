@@ -32,15 +32,18 @@ export type Check = z.infer<typeof checkSchema>
 /** Referring to the source breaks the exercise — a flag, not a defect. */
 const META_REF = /respuesta de referencia|reference answer|seg[úu]n (la|el) (respuesta|texto|documento)/i
 
-/** Strip what the exercise teaches (inline code, JSX/HTML tags, JSX expressions). */
+/** Strip what the exercise teaches (fenced + inline code, JSX/HTML tags, JSX expressions). */
 function proseResidue(text: string): string {
   return text
+    .replace(/```[\s\S]*?```/g, ' ')
     .replace(/`[^`]*`/g, ' ')
     .replace(/<\/?[A-Za-z][^>]*>/g, ' ')
     .replace(/\{[^{}]*\}/g, ' ')
 }
 
-const PROSE_ALLOWED = /^[A-Za-z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,;:()¿?¡!"'«»“”‘’…–—-]*$/u
+// `/`, arrows (→ ← ↔), and `+` are ordinary prose here (X/Y, data-flow diagrams, "0+1"),
+// not markup. None can mask a real leak — control tokens (<|…) and foreign scripts still fail.
+const PROSE_ALLOWED = /^[A-Za-z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,;:()¿?¡!\/→←↔+"'«»“”‘’…–—-]*$/u
 
 export function strayMarkup(text: string): boolean {
   return !PROSE_ALLOWED.test(proseResidue(text))
