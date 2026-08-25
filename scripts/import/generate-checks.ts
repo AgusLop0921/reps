@@ -1,17 +1,21 @@
 /**
  * SPIKE (build-time, one-off): generate one multiple-choice comprehension check per
- * question using the Anthropic API. The corpus has no MCQ content, so these are generated
- * — they are OURS, not the source's: each check links to its question by `questionId` but
- * carries no `sourceId` attribution and never touches the imported `answerMd`.
+ * question using the Anthropic API, then critique each with an independent second pass.
+ * The corpus has no MCQ content, so these are generated — they are OURS, not the source's:
+ * each check links to its question by `questionId` but carries no `sourceId` attribution
+ * and never touches the imported `answerMd`.
  *
  * BYOK: reads ANTHROPIC_API_KEY from the environment (the maintainer's key). The key is
  * never written to disk, logged, or committed. Runs on the Principiante path only.
  *
  * Usage: ANTHROPIC_API_KEY=sk-ant-... pnpm tsx scripts/import/generate-checks.ts
  *
- * This departs from CLAUDE.md's "never invent content" rule. It is deliberately isolated
- * and un-wired (no UI, no import into answerMd) pending an ADR that sets the boundaries —
- * to be written once we judge whether the output is any good.
+ * Two passes per question: one to write the check, a second (independent, not told it
+ * wrote the check) to judge whether exactly one option is defensible and the distractors
+ * are real misconceptions — that critique is the suitability signal, not model self-report.
+ *
+ * Departs from CLAUDE.md's "never invent content" rule. Deliberately isolated and un-wired
+ * (no UI, no import into answerMd) pending an ADR to be written once the output is judged.
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -22,6 +26,7 @@ import { questionsFileSchema, type Question } from '../../src/content/schema'
 const MODEL = 'claude-opus-4-8'
 const SECTION = 'Principiante'
 const CONCURRENCY = 4
+const LETTERS = ['A', 'B', 'C', 'D']
 
 const DATA_DIR = fileURLToPath(new URL('../../src/content/data/', import.meta.url))
 
@@ -56,23 +61,18 @@ const checksFileSchema = z.object({
 
 type Check = z.infer<typeof checkSchema>
 
-/** What the model returns per question. */
-const modelOutputSchema = z.object({
-  suitable: z.boolean(),
-  reason: z.string(), // may be '' when suitable; the "which questions can't sustain a check" signal
+const genOutputSchema = z.object({
   stem: z.string().min(1),
   correct: z.string().min(1),
-  distractors: z.array(z.string()), // 0–3 genuine misconceptions; fewer is fine, never padded
+  distractors: z.array(z.string()), // 1–3 genuine misconceptions; fewer is fine, never padded
   explanation: z.string().min(1),
 })
 
-const OUTPUT_JSON_SCHEMA = {
+const GEN_JSON_SCHEMA = {
   type: 'object',
   additionalProperties: false,
-  required: ['suitable', 'reason', 'stem', 'correct', 'distractors', 'explanation'],
+  required: ['stem', 'correct', 'distractors', 'explanation'],
   properties: {
-    suitable: { type: 'boolean' },
-    reason: { type: 'string' },
     stem: { type: 'string' },
     correct: { type: 'string' },
     distractors: { type: 'array', items: { type: 'string' } },
@@ -80,7 +80,26 @@ const OUTPUT_JSON_SCHEMA = {
   },
 } as const
 
-const SYSTEM = [
+const critiqueOutputSchema = z.object({
+  correct: z.string(), // the letter the critic thinks is the single best-supported option
+  multipleDefensible: z.boolean(),
+  implausible: z.array(z.string()), // letters of options no real developer would pick
+  notes: z.string(),
+})
+
+const CRITIQUE_JSON_SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['correct', 'multipleDefensible', 'implausible', 'notes'],
+  properties: {
+    correct: { type: 'string' },
+    multipleDefensible: { type: 'boolean' },
+    implausible: { type: 'array', items: { type: 'string' } },
+    notes: { type: 'string' },
+  },
+} as const
+
+const GEN_SYSTEM = [
   'You write ONE multiple-choice comprehension check for a React interview question.',
   'Everything learner-facing (stem, correct, distractors, explanation) must be in Spanish.',
   'You are given a QUESTION and its REFERENCE ANSWER.',
@@ -92,8 +111,8 @@ const SYSTEM = [
   'Distractors — this is what makes the check hard or worthless:',
   '- Every distractor must be a mistake a real React developer could actually make: a',
   '  genuine misconception or a partial truth. NEVER invent an option that anyone who has',
-  '  written React would dismiss instantly (e.g. "un archivo de configuración de rutas" as',
-  '  an answer to "what is a component").',
+  '  written React would dismiss instantly, and NEVER use invalid or nonsensical syntax',
+  '  (no "un archivo de configuración de rutas" for "what is a component"; no "<key={id}>").',
   '- Strongly prefer distractors that are TRUE statements about a DIFFERENT thing — a',
   '  correct description of useMemo offered as the answer about useEffect; a correct',
   '  description of state offered as the answer about props. These are hard because nothing',
@@ -101,27 +120,35 @@ const SYSTEM = [
   '- Exactly ONE option may be defensibly correct. If two options could be argued correct,',
   '  the item is broken (ambiguity, not difficulty) — fix it until only one is defensible.',
   '- All options must match in length (within ~20%) and in specificity. The correct one',
-  '  must not be identifiable by being longer, more detailed, or more hedged.',
+  '  must NOT be the longest, most detailed, or most hedged.',
   '',
   'No padding. If the reference answer supports fewer than three genuine misconceptions,',
-  'return fewer distractors (two, or one). If it cannot support even one — or the concept',
-  'cannot be tested this way — set suitable=false and say what is missing in `reason`; do',
-  'not fabricate a check. When suitable=true, use `reason` to note how many genuine',
-  'misconceptions the answer sustains.',
+  'return one or two distractors rather than padding with weak or invented options.',
+  '',
+  'explanation: 2–4 sentences that teach — why the correct option is right, and where it',
+  'helps, why a tempting distractor is wrong.',
   '',
   'Only assert what the reference answer supports. Write a standalone exercise: never refer',
-  'to "the reference answer", the source, or these instructions in a learner-facing field.',
-  'Never emit control tokens, role markers, apologies, or meta-commentary about formatting.',
+  'to "the reference answer", the source, or these instructions. Never emit control tokens,',
+  'role markers, apologies, HTML tags, or meta-commentary about formatting.',
+].join('\n')
+
+const CRITIQUE_SYSTEM = [
+  'You are reviewing a multiple-choice question for a React course. You did NOT write it —',
+  'review it critically. Treat the REFERENCE ANSWER as ground truth. Report, as JSON:',
+  '- correct: the letter of the single best-supported option.',
+  '- multipleDefensible: true if more than one option could be defended as correct given',
+  '  the reference answer (that is a flaw, not difficulty).',
+  '- implausible: letters of any options no real React developer would pick because they',
+  '  are obviously wrong, nonsensical, or invalid syntax. A good distractor is a real',
+  '  misconception, not something instantly dismissable.',
+  '- notes: one short line on any problem (English is fine).',
+  'Be strict; this gates whether the question ships.',
 ].join('\n')
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
-/**
- * Signs of a malformed generation: leaked chat control tokens, apologetic meta-text, a
- * meta-reference to the source, or unbalanced braces (a real leak passed Zod once —
- * `}}<|im_start|>assistant Sorry, I made a formatting error...`). Any hit fails the item.
- * Run on learner-facing fields only — `reason` legitimately mentions the reference answer.
- */
+/** Denylist of known-bad shapes (kept on top of positive validation below). */
 const MALFORMED: Array<[RegExp, string]> = [
   [/<\||\|>/, 'control-token marker'],
   [/im_start|im_end|<\/?s>/i, 'chat control token'],
@@ -130,9 +157,26 @@ const MALFORMED: Array<[RegExp, string]> = [
   [/respuesta de referencia|reference answer|seg[úu]n (la|el) (respuesta|texto|documento)/i, 'meta-reference to the source'],
 ]
 
-function malformedReason(text: string): string | null {
+/** An HTML/XML tag, e.g. `<br/>`, `</br>`, `<div>`, or the invalid `<key={id}>`. */
+const HTML_TAG = /<\/?[a-zA-Z][^>]*>/
+
+/**
+ * Positive validation: learner-facing text must be Spanish prose plus inline code. Anything
+ * outside this set (foreign scripts, control chars, box-drawing, replacement chars, stray
+ * markup) is rejected — a denylist of known-bad patterns keeps losing to novel shapes.
+ */
+const ALLOWED_CHARS =
+  /^[A-Za-z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,;:()\[\]{}¿?¡!"'«»“”‘’…/\\=+*_$&|%#@<>`~^°ªº–—-]+$/u
+
+/** Returns a reason string if learner-facing `text` is bad, else null. */
+function fieldIssue(text: string): string | null {
   for (const [re, reason] of MALFORMED) if (re.test(text)) return reason
   if ((text.match(/{/g)?.length ?? 0) !== (text.match(/}/g)?.length ?? 0)) return 'unbalanced braces'
+  if (HTML_TAG.test(text)) return 'HTML tag'
+  if (!ALLOWED_CHARS.test(text)) {
+    const bad = [...text].find((ch) => !ALLOWED_CHARS.test(ch))
+    return `unexpected character ${JSON.stringify(bad)}`
+  }
   return null
 }
 
@@ -162,28 +206,36 @@ const responseSchema = z.object({
   content: z.array(z.object({ type: z.string(), text: z.string().optional() })),
 })
 
-function extractJson(raw: unknown): z.infer<typeof modelOutputSchema> {
+function extractText(raw: unknown): string {
   const res = responseSchema.parse(raw)
   if (res.stop_reason === 'refusal') throw new Error('model refused')
-  const text = res.content
+  return res.content
     .filter((b) => b.type === 'text')
     .map((b) => b.text ?? '')
     .join('')
     .trim()
-  return modelOutputSchema.parse(JSON.parse(text))
+}
+
+const wordCount = (s: string): number => s.trim().split(/\s+/).length
+
+/** True if `correct` is the single longest option (the pickable-by-length tell). */
+function correctIsLongest(correct: string, distractors: string[]): boolean {
+  const lens = [correct, ...distractors].map(wordCount)
+  const max = Math.max(...lens)
+  return wordCount(correct) === max && lens.filter((l) => l === max).length === 1
 }
 
 type GenResult =
   | { ok: true; check: Check; misconceptions: number }
-  | { ok: false; questionId: string; reason: string }
+  | { ok: false; questionId: string; kind: 'length' | 'malformed'; reason: string }
 
 async function generateOne(question: Question): Promise<GenResult> {
   const body = {
     model: MODEL,
     max_tokens: 8000,
     thinking: { type: 'adaptive' },
-    output_config: { effort: 'medium', format: { type: 'json_schema', schema: OUTPUT_JSON_SCHEMA } },
-    system: SYSTEM,
+    output_config: { effort: 'medium', format: { type: 'json_schema', schema: GEN_JSON_SCHEMA } },
+    system: GEN_SYSTEM,
     messages: [
       {
         role: 'user',
@@ -192,18 +244,15 @@ async function generateOne(question: Question): Promise<GenResult> {
     ],
   }
 
-  let lastError = ''
+  let malformed = ''
+  let sawValidButLong = false
   for (let attempt = 0; attempt < 3; attempt++) {
-    let out: z.infer<typeof modelOutputSchema>
+    let out: z.infer<typeof genOutputSchema>
     try {
-      out = extractJson(await callApi(body))
+      out = genOutputSchema.parse(JSON.parse(extractText(await callApi(body))))
     } catch (err) {
-      lastError = `bad response: ${String(err)}`
+      malformed = `bad response: ${String(err)}`
       continue
-    }
-
-    if (!out.suitable) {
-      return { ok: false, questionId: question.id, reason: out.reason.trim() || 'marked unsuitable' }
     }
 
     const correct = out.correct.trim()
@@ -211,16 +260,21 @@ async function generateOne(question: Question): Promise<GenResult> {
       .filter((d) => d && d !== correct)
       .slice(0, 3)
     if (distractors.length < 1) {
-      lastError = 'suitable but no usable distractors'
+      malformed = 'no usable distractors'
       continue
     }
 
     const stem = out.stem.trim()
     const explanation = out.explanation.trim()
-    const bad = [stem, explanation, correct, ...distractors].map(malformedReason).find(Boolean)
-    if (bad) {
-      lastError = `malformed content (${bad})`
+    const issue = [stem, explanation, correct, ...distractors].map(fieldIssue).find(Boolean)
+    if (issue) {
+      malformed = `malformed content (${issue})`
       continue
+    }
+
+    if (correctIsLongest(correct, distractors)) {
+      sawValidButLong = true
+      continue // retry for a length-balanced set
     }
 
     const options = [
@@ -233,8 +287,70 @@ async function generateOne(question: Question): Promise<GenResult> {
       misconceptions: distractors.length,
     }
   }
-  // Fail loudly rather than write a malformed check (same rule as the adapters).
-  throw new Error(`generate-checks: "${question.question}" failed after 3 attempts — ${lastError}`)
+
+  // Length imbalance is a quality miss — report, don't write (per instruction). A genuine
+  // malformed/leak that survived 3 retries is a hard defect (nonzero exit in main).
+  return sawValidButLong
+    ? { ok: false, questionId: question.id, kind: 'length', reason: 'correct option is the single longest' }
+    : { ok: false, questionId: question.id, kind: 'malformed', reason: malformed || 'unknown' }
+}
+
+/** FNV-1a, for a stable per-question option shuffle so the critic never sees correct-first. */
+function hashString(s: string): number {
+  let h = 2166136261
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return h >>> 0
+}
+
+type Verdict =
+  | { ran: true; sound: boolean; agreedOnCorrect: boolean; multipleDefensible: boolean; implausibleTexts: string[]; notes: string }
+  | { ran: false }
+
+async function critiqueOne(question: Question, check: Check): Promise<Verdict> {
+  const order = check.options
+    .map((_, i) => i)
+    .sort((a, b) => hashString(question.id + check.options[a].text) - hashString(question.id + check.options[b].text))
+  const shown = order.map((idx, pos) => ({ letter: LETTERS[pos], option: check.options[idx] }))
+  const expected = shown.find((s) => s.option.correct)?.letter ?? '?'
+  const optionsText = shown.map((s) => `${s.letter}) ${s.option.text}`).join('\n')
+
+  const body = {
+    model: MODEL,
+    max_tokens: 2000,
+    thinking: { type: 'adaptive' },
+    output_config: { effort: 'low', format: { type: 'json_schema', schema: CRITIQUE_JSON_SCHEMA } },
+    system: CRITIQUE_SYSTEM,
+    messages: [
+      {
+        role: 'user',
+        content: `QUESTION: ${question.question}\n\nREFERENCE ANSWER:\n${question.answerMd}\n\nCANDIDATE ITEM\nStem: ${check.stem}\nOptions:\n${optionsText}`,
+      },
+    ],
+  }
+
+  try {
+    const out = critiqueOutputSchema.parse(JSON.parse(extractText(await callApi(body))))
+    const byLetter = new Map(shown.map((s) => [s.letter, s.option.text]))
+    const picked = out.correct.trim().toUpperCase()
+    const implausibleTexts = out.implausible
+      .map((s) => byLetter.get(s.trim().toUpperCase()))
+      .filter((t): t is string => Boolean(t))
+    const agreedOnCorrect = picked === expected
+    const sound = agreedOnCorrect && !out.multipleDefensible && implausibleTexts.length === 0
+    return {
+      ran: true,
+      sound,
+      agreedOnCorrect,
+      multipleDefensible: out.multipleDefensible,
+      implausibleTexts,
+      notes: out.notes.trim(),
+    }
+  } catch {
+    return { ran: false }
+  }
 }
 
 async function mapPool<T, R>(items: T[], size: number, fn: (item: T) => Promise<R>): Promise<R[]> {
@@ -250,16 +366,14 @@ async function mapPool<T, R>(items: T[], size: number, fn: (item: T) => Promise<
   return results
 }
 
-const wordCount = (s: string): number => s.trim().split(/\s+/).length
-
 const STOPWORDS = new Set([
   'que', 'cual', 'cuales', 'como', 'cuando', 'donde', 'por', 'para', 'con', 'los', 'las',
   'una', 'uno', 'del', 'sus', 'este', 'esta', 'estos', 'estas', 'entre', 'sobre', 'segun',
   'the', 'and', 'for',
 ])
 
-function stemTokens(stem: string): Set<string> {
-  const words = stem
+function tokens(text: string): Set<string> {
+  const words = text
     .toLowerCase()
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
@@ -275,71 +389,93 @@ function jaccard(a: Set<string>, b: Set<string>): number {
   return union === 0 ? 0 : inter / union
 }
 
-function printResults(results: GenResult[], questionById: Map<string, Question>): void {
-  const letter = ['A', 'B', 'C', 'D']
+function correctText(check: Check): string {
+  return check.options.find((o) => o.correct)?.text ?? ''
+}
+
+function verdictLabel(v: Verdict): string {
+  if (!v.ran) return 'critique n/a'
+  if (v.sound) return 'sound'
+  const issues: string[] = []
+  if (!v.agreedOnCorrect) issues.push('critic disagreed on the correct answer')
+  if (v.multipleDefensible) issues.push('multiple defensible')
+  if (v.implausibleTexts.length) {
+    issues.push(`implausible: ${v.implausibleTexts.map((t) => `"${t}"`).join('; ')}`)
+  }
+  if (v.notes) issues.push(v.notes)
+  return `UNSOUND — ${issues.join('; ')}`
+}
+
+function printResults(
+  results: GenResult[],
+  verdicts: Map<string, Verdict>,
+  questionById: Map<string, Question>,
+): void {
   results.forEach((r, i) => {
-    const q = questionById.get(r.ok ? r.check.questionId : r.questionId)
+    const qid = r.ok ? r.check.questionId : r.questionId
+    const q = questionById.get(qid)
     const ref = (q?.answerMd ?? '').replace(/\s+/g, ' ').trim()
     console.log(`\n=== ${i + 1}/${results.length} — ${q?.question} ===`)
     console.log(`Ref: ${ref.slice(0, 400)}${ref.length > 400 ? '…' : ''}`)
     if (!r.ok) {
-      console.log(`UNSUITABLE — ${r.reason}`)
+      console.log(`SKIPPED (${r.kind}) — ${r.reason}`)
       return
     }
     console.log(`P: ${r.check.stem}   (misconceptions: ${r.misconceptions})`)
-    r.check.options.forEach((o, j) => console.log(`  ${letter[j]}) ${o.text}${o.correct ? '  [✓]' : ''}`))
+    r.check.options.forEach((o, j) => console.log(`  ${LETTERS[j]}) ${o.text}${o.correct ? '  [✓]' : ''}`))
     console.log(`  → ${r.check.explanation}`)
+    console.log(`  [${verdictLabel(verdicts.get(qid) ?? { ran: false })}]`)
   })
 }
 
-function reportStats(results: GenResult[]): void {
-  const suitable = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok)
-  const unsuitable = results.filter((r): r is Extract<GenResult, { ok: false }> => !r.ok)
+function reportStats(results: GenResult[], verdicts: Map<string, Verdict>): void {
+  const ok = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok)
+  const lengthSkips = results.filter((r) => !r.ok && r.kind === 'length')
+  const malformedSkips = results.filter((r) => !r.ok && r.kind === 'malformed')
 
-  // Which questions the corpus can sustain a good check for.
-  const withThree = suitable.filter((r) => r.misconceptions === 3).length
-  console.log(
-    `\nsuitability: ${suitable.length}/${results.length} suitable; ` +
-      `${withThree} sustain 3 misconceptions, ` +
-      `${suitable.filter((r) => r.misconceptions === 2).length} sustain 2, ` +
-      `${suitable.filter((r) => r.misconceptions === 1).length} sustain 1; ` +
-      `${unsuitable.length} unsuitable`,
-  )
-  results.forEach((r, i) => {
-    if (!r.ok) console.log(`  #${i + 1} UNSUITABLE — ${r.reason}`)
-    else if (r.misconceptions < 3) console.log(`  #${i + 1} only ${r.misconceptions} misconception(s)`)
-  })
-
-  // Length tell: how often the correct option is the single longest (pickable by length).
-  let correctLongest = 0
-  for (const { check } of suitable) {
-    const lens = check.options.map((o) => wordCount(o.text))
-    const max = Math.max(...lens)
-    const correctLen = wordCount(check.options.find((o) => o.correct)?.text ?? '')
-    if (correctLen === max && lens.filter((l) => l === max).length === 1) correctLongest++
+  // Independent critique — the real suitability signal.
+  const reviewed = ok.map((r) => ({ r, v: verdicts.get(r.check.questionId) ?? ({ ran: false } as Verdict) }))
+  const sound = reviewed.filter(({ v }) => v.ran && v.sound).length
+  console.log(`\ncritique: ${sound}/${ok.length} sound`)
+  for (const { r, v } of reviewed) {
+    if (!v.ran || !v.sound) console.log(`  "${r.check.stem}" — ${verdictLabel(v)}`)
   }
-  const pct = suitable.length ? Math.round((100 * correctLongest) / suitable.length) : 0
-  console.log(
-    `\ncorrect option is the single longest: ${correctLongest}/${suitable.length} (${pct}%) — target ~25%`,
-  )
 
-  // Near-duplicate stems across the suitable checks.
-  const tokens = suitable.map((r) => stemTokens(r.check.stem))
-  const pairs: Array<{ i: number; j: number; sim: number }> = []
-  for (let i = 0; i < suitable.length; i++) {
-    for (let j = i + 1; j < suitable.length; j++) {
-      const sim = jaccard(tokens[i], tokens[j])
-      if (sim >= 0.45) pairs.push({ i, j, sim })
+  // Coverage: how many misconceptions each question sustains.
+  console.log(
+    `\nmisconceptions: ${ok.filter((r) => r.misconceptions === 3).length} sustain 3, ` +
+      `${ok.filter((r) => r.misconceptions === 2).length} sustain 2, ` +
+      `${ok.filter((r) => r.misconceptions === 1).length} sustain 1`,
+  )
+  if (lengthSkips.length) console.log(`length-skipped (correct was longest): ${lengthSkips.length}`)
+  if (malformedSkips.length) {
+    console.log(`MALFORMED (hard failures): ${malformedSkips.length}`)
+    for (const r of malformedSkips) if (!r.ok) console.log(`  ${r.questionId}: ${r.reason}`)
+  }
+
+  // Length tell across what we kept (should now be ~0 since it's enforced pre-write).
+  const longest = ok.filter((r) => correctIsLongest(correctText(r.check), r.check.options.filter((o) => !o.correct).map((o) => o.text))).length
+  const pct = ok.length ? Math.round((100 * longest) / ok.length) : 0
+  console.log(`\ncorrect option is the single longest: ${longest}/${ok.length} (${pct}%) — target ~25%`)
+
+  // Near-duplicates: max of stem similarity and correct-option similarity.
+  const pairs: Array<{ i: number; j: number; sim: number; via: string }> = []
+  for (let i = 0; i < ok.length; i++) {
+    for (let j = i + 1; j < ok.length; j++) {
+      const stemSim = jaccard(tokens(ok[i].check.stem), tokens(ok[j].check.stem))
+      const ansSim = jaccard(tokens(correctText(ok[i].check)), tokens(correctText(ok[j].check)))
+      const sim = Math.max(stemSim, ansSim)
+      if (sim >= 0.45) pairs.push({ i, j, sim, via: stemSim >= ansSim ? 'stem' : 'answer' })
     }
   }
   pairs.sort((a, b) => b.sim - a.sim)
   if (pairs.length === 0) {
-    console.log('near-duplicate stems: none above 0.45 Jaccard')
+    console.log('near-duplicate stems/answers: none above 0.45 Jaccard')
   } else {
-    console.log(`near-duplicate stems (Jaccard ≥ 0.45): ${pairs.length}`)
-    for (const { i, j, sim } of pairs) {
-      console.log(`  [${sim.toFixed(2)}] "${suitable[i].check.stem}"`)
-      console.log(`         "${suitable[j].check.stem}"`)
+    console.log(`near-duplicates (Jaccard ≥ 0.45, max of stem/answer): ${pairs.length}`)
+    for (const { i, j, sim, via } of pairs) {
+      console.log(`  [${sim.toFixed(2)} via ${via}] "${ok[i].check.stem}"`)
+      console.log(`         "${ok[j].check.stem}"`)
     }
   }
 }
@@ -348,30 +484,39 @@ async function main(): Promise<void> {
   const questionsFile = questionsFileSchema.parse(
     JSON.parse(readFileSync(`${DATA_DIR}questions.json`, 'utf8')),
   )
-  // Off-path questions (EXCLUDED_SLUGS, ADR-0011) are not lesson cards — skip them.
   const excluded = new Set(EXCLUDED_SLUGS)
   const questions = questionsFile.questions.filter(
     (q) => q.sourceSection === SECTION && !excluded.has(q.slug),
   )
-  console.error(`Generating checks for ${questions.length} "${SECTION}" cards with ${MODEL}...`)
+  const questionById = new Map(questions.map((q) => [q.id, q]))
 
+  console.error(`Generating checks for ${questions.length} "${SECTION}" cards with ${MODEL}...`)
   const results = await mapPool(questions, CONCURRENCY, generateOne)
-  const checks = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok).map((r) => r.check)
+
+  const ok = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok)
+  console.error(`Critiquing ${ok.length} checks (independent second pass)...`)
+  const verdicts = new Map<string, Verdict>()
+  await mapPool(ok, CONCURRENCY, async (r) => {
+    verdicts.set(r.check.questionId, await critiqueOne(questionById.get(r.check.questionId) as Question, r.check))
+  })
 
   const file = checksFileSchema.parse({
     generatedAt: new Date().toISOString(),
     model: MODEL,
     sourceSection: SECTION,
-    checks,
+    checks: ok.map((r) => r.check),
   })
   writeFileSync(`${DATA_DIR}checks-principiante.json`, `${JSON.stringify(file, null, 2)}\n`)
 
-  const questionById = new Map(questions.map((q) => [q.id, q]))
-  printResults(results, questionById)
-  reportStats(results)
-  console.error(
-    `\nWrote ${checks.length} checks (of ${results.length} questions) -> src/content/data/checks-principiante.json`,
-  )
+  printResults(results, verdicts, questionById)
+  reportStats(results, verdicts)
+  console.error(`\nWrote ${ok.length} checks (of ${results.length} questions) -> src/content/data/checks-principiante.json`)
+
+  const hardFailures = results.filter((r) => !r.ok && r.kind === 'malformed').length
+  if (hardFailures > 0) {
+    console.error(`\n${hardFailures} malformed item(s) survived retries — failing loudly.`)
+    process.exit(1)
+  }
 }
 
 main().catch((err: unknown) => {
