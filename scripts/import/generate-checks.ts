@@ -23,6 +23,7 @@ import { fileURLToPath } from 'node:url'
 import { z } from 'zod'
 import { EXCLUDED_SLUGS } from '../../src/content/order'
 import { questionsFileSchema, type Question } from '../../src/content/schema'
+import { checksFileSchema, flagsForCheck, reportMechanical, type Check } from './checks'
 
 const MODEL = 'claude-opus-4-8'
 const CONCURRENCY = 4
@@ -39,26 +40,6 @@ if (!apiKey) {
   console.error('ANTHROPIC_API_KEY is not set. Export your key (BYOK) and re-run.')
   process.exit(1)
 }
-
-const checkSchema = z.object({
-  questionId: z.string().length(12),
-  stem: z.string().min(1),
-  options: z
-    .array(z.object({ text: z.string().min(1), correct: z.boolean() }))
-    .min(2)
-    .max(4)
-    .refine((opts) => opts.filter((o) => o.correct).length === 1, 'exactly one correct option'),
-  explanation: z.string().min(1),
-})
-
-const checksFileSchema = z.object({
-  generatedAt: z.string(),
-  model: z.string(),
-  sourceSection: z.string(),
-  checks: z.array(checkSchema).min(1),
-})
-
-type Check = z.infer<typeof checkSchema>
 
 const genOutputSchema = z.object({
   stem: z.string().min(1),
@@ -156,30 +137,9 @@ const LEAK: Array<[RegExp, string]> = [
   [/\bsorry\b|i made a|formatting error|lo siento|me disculp|error de formato/i, 'apologetic meta-text'],
 ]
 
-/** Referring to the source breaks the exercise, but the check still works — a flag, not a drop. */
-const META_REF = /respuesta de referencia|reference answer|seg[úu]n (la|el) (respuesta|texto|documento)/i
-
 function leakIssue(text: string): string | null {
   for (const [re, reason] of LEAK) if (re.test(text)) return reason
   return null
-}
-
-/**
- * Strip what the exercise legitimately teaches — inline code, JSX/HTML tags, and JSX
- * expressions — then the residue should be plain Spanish prose. Anything left outside that
- * set is stray markup (e.g. a `<br/>` rendered into non-markup prose), not taught code.
- */
-function proseResidue(text: string): string {
-  return text
-    .replace(/`[^`]*`/g, ' ')
-    .replace(/<\/?[A-Za-z][^>]*>/g, ' ')
-    .replace(/\{[^{}]*\}/g, ' ')
-}
-
-const PROSE_ALLOWED = /^[A-Za-z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,;:()¿?¡!"'«»“”‘’…–—-]*$/u
-
-function strayMarkup(text: string): boolean {
-  return !PROSE_ALLOWED.test(proseResidue(text))
 }
 
 async function callApi(body: unknown): Promise<unknown> {
@@ -218,27 +178,9 @@ function extractText(raw: unknown): string {
     .trim()
 }
 
-const wordCount = (s: string): number => s.trim().split(/\s+/).length
-
-function correctIsLongest(correct: string, distractors: string[]): boolean {
-  const lens = [correct, ...distractors].map(wordCount)
-  const max = Math.max(...lens)
-  return wordCount(correct) === max && lens.filter((l) => l === max).length === 1
-}
-
 type GenResult =
   | { ok: true; check: Check; misconceptions: number; flags: string[] }
   | { ok: false; questionId: string; reason: string }
-
-/** Quality flags on an otherwise-usable check. Written and reported, never dropped. */
-function softFlags(stem: string, correct: string, distractors: string[], explanation: string): string[] {
-  const fields = [stem, explanation, correct, ...distractors]
-  const flags: string[] = []
-  if (correctIsLongest(correct, distractors)) flags.push('length: correct is longest')
-  if (fields.some((f) => META_REF.test(f))) flags.push('meta-reference to source')
-  if (fields.some(strayMarkup)) flags.push('stray markup in prose')
-  return flags
-}
 
 async function generateOne(question: Question): Promise<GenResult> {
   const body = {
@@ -283,13 +225,13 @@ async function generateOne(question: Question): Promise<GenResult> {
       continue
     }
 
-    const flags = softFlags(stem, correct, distractors, explanation)
     const check: Check = {
       questionId: question.id,
       stem,
       options: [{ text: correct, correct: true }, ...distractors.map((text) => ({ text, correct: false }))],
       explanation,
     }
+    const flags = flagsForCheck(check)
     if (flags.length === 0) return { ok: true, check, misconceptions: distractors.length, flags }
     // Usable but flagged — keep the least-flagged candidate and retry for a clean one.
     if (!best || flags.length < best.flags.length) best = { check, misconceptions: distractors.length, flags }
@@ -363,31 +305,6 @@ async function mapPool<T, R>(items: T[], size: number, fn: (item: T) => Promise<
   return results
 }
 
-const STOPWORDS = new Set([
-  'que', 'cual', 'cuales', 'como', 'cuando', 'donde', 'por', 'para', 'con', 'los', 'las',
-  'una', 'uno', 'del', 'sus', 'este', 'esta', 'estos', 'estas', 'entre', 'sobre', 'segun',
-  'the', 'and', 'for',
-])
-
-function tokens(text: string): Set<string> {
-  const words = text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .split(/\s+/)
-    .filter((w) => w.length >= 3 && !STOPWORDS.has(w))
-  return new Set(words)
-}
-
-function jaccard(a: Set<string>, b: Set<string>): number {
-  const inter = [...a].filter((x) => b.has(x)).length
-  const union = new Set([...a, ...b]).size
-  return union === 0 ? 0 : inter / union
-}
-
-const correctText = (check: Check): string => check.options.find((o) => o.correct)?.text ?? ''
-
 /** Advisory notes from the critic for a human reviewer. Empty string when it has nothing. */
 function criticNotes(v: Verdict): string {
   if (!v.ran) return 'critique n/a'
@@ -425,7 +342,7 @@ function printResults(
   })
 }
 
-function reportStats(results: GenResult[], verdicts: Map<string, Verdict>): void {
+function reportStats(results: GenResult[], verdicts: Map<string, Verdict>, sourceSection: string): void {
   const ok = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok)
   const dropped = results.filter((r): r is Extract<GenResult, { ok: false }> => !r.ok)
 
@@ -433,45 +350,14 @@ function reportStats(results: GenResult[], verdicts: Map<string, Verdict>): void
   for (const r of dropped) console.log(`  DROPPED ${r.questionId}: ${r.reason}`)
 
   // Critique is advisory, not a gate — list only the items it left a note on.
-  const reviewed = ok.map((r) => ({ r, notes: criticNotes(verdicts.get(r.check.questionId) ?? { ran: false }) }))
-  const noted = reviewed.filter(({ notes }) => notes)
+  const noted = ok
+    .map((r) => ({ r, notes: criticNotes(verdicts.get(r.check.questionId) ?? { ran: false }) }))
+    .filter(({ notes }) => notes)
   console.log(`\ncritic advisory notes on ${noted.length} item(s) (advisory, not a gate):`)
   for (const { r, notes } of noted) console.log(`  "${r.check.stem}" — ${notes}`)
 
-  const flagCount = (needle: string): number => ok.filter((r) => r.flags.some((f) => f.startsWith(needle))).length
-  console.log(
-    `\nflags: ${flagCount('length')} length, ${flagCount('meta-reference')} meta-reference, ` +
-      `${flagCount('stray markup')} stray-markup`,
-  )
-  console.log(
-    `\nmisconceptions: ${ok.filter((r) => r.misconceptions === 3).length} sustain 3, ` +
-      `${ok.filter((r) => r.misconceptions === 2).length} sustain 2, ` +
-      `${ok.filter((r) => r.misconceptions === 1).length} sustain 1`,
-  )
-
-  const longest = ok.filter((r) => correctIsLongest(correctText(r.check), r.check.options.filter((o) => !o.correct).map((o) => o.text))).length
-  const pct = ok.length ? Math.round((100 * longest) / ok.length) : 0
-  console.log(`\ncorrect option is the single longest: ${longest}/${ok.length} (${pct}%) — target ~25%`)
-
-  const pairs: Array<{ i: number; j: number; sim: number; via: string }> = []
-  for (let i = 0; i < ok.length; i++) {
-    for (let j = i + 1; j < ok.length; j++) {
-      const stemSim = jaccard(tokens(ok[i].check.stem), tokens(ok[j].check.stem))
-      const ansSim = jaccard(tokens(correctText(ok[i].check)), tokens(correctText(ok[j].check)))
-      const sim = Math.max(stemSim, ansSim)
-      if (sim >= 0.45) pairs.push({ i, j, sim, via: stemSim >= ansSim ? 'stem' : 'answer' })
-    }
-  }
-  pairs.sort((a, b) => b.sim - a.sim)
-  if (pairs.length === 0) {
-    console.log('near-duplicate stems/answers: none above 0.45 Jaccard')
-  } else {
-    console.log(`near-duplicates (Jaccard ≥ 0.45, max of stem/answer): ${pairs.length}`)
-    for (const { i, j, sim, via } of pairs) {
-      console.log(`  [${sim.toFixed(2)} via ${via}] "${ok[i].check.stem}"`)
-      console.log(`         "${ok[j].check.stem}"`)
-    }
-  }
+  // Mechanical stats, computed from the check data (identical to check-report.ts).
+  reportMechanical(sourceSection, ok.map((r) => r.check))
 }
 
 async function main(): Promise<void> {
@@ -516,7 +402,7 @@ async function main(): Promise<void> {
   writeFileSync(`${DATA_DIR}${outName}`, `${JSON.stringify(file, null, 2)}\n`)
 
   printResults(results, verdicts, questionById)
-  reportStats(results, verdicts)
+  reportStats(results, verdicts, section)
   console.error(`\nWrote ${ok.length} checks (of ${results.length} questions) -> src/content/data/${outName}`)
 
   const dropped = results.filter((r) => !r.ok).length
