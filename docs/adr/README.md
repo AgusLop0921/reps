@@ -41,3 +41,4 @@ change contracts.
 | [0014](0014-sections-are-not-levels.md) | Sections are structural, not difficulty levels | Accepted |
 | [0015](0015-strip-transport-artifacts.md) | Strip transport artifacts, not content | Accepted |
 | [0016](0016-lesson-titles-composed-in-ui.md) | Lesson titles are composed in the UI | Accepted |
+| [0017](0017-generated-checks-build-time.md) | Multiple-choice checks are generated at build time | Accepted |
