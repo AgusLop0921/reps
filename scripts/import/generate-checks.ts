@@ -10,9 +10,10 @@
  *
  * Usage: ANTHROPIC_API_KEY=sk-ant-... pnpm tsx scripts/import/generate-checks.ts
  *
- * Two passes per question: one to write the check, a second (independent, not told it
- * wrote the check) to judge whether exactly one option is defensible and the distractors
- * are real misconceptions — that critique is the suitability signal, not model self-report.
+ * Philosophy: flag, don't drop. Everything usable is written with flags for review; the
+ * only hard drop is a generation that never produced a usable, leak-free check after
+ * retries. Legitimate JSX in an option (the exercise is about markup) is content, not a
+ * defect.
  *
  * Departs from CLAUDE.md's "never invent content" rule. Deliberately isolated and un-wired
  * (no UI, no import into answerMd) pending an ADR to be written once the output is judged.
@@ -36,11 +37,6 @@ if (!apiKey) {
   process.exit(1)
 }
 
-/**
- * A generated check. Options range 2–4: a question that supports fewer than three genuine
- * misconceptions gets fewer distractors rather than padded ones. Stored order is arbitrary
- * — the UI shuffles options with a seed at display time. No `sourceId`: these are ours.
- */
 const checkSchema = z.object({
   questionId: z.string().length(12),
   stem: z.string().min(1),
@@ -64,7 +60,7 @@ type Check = z.infer<typeof checkSchema>
 const genOutputSchema = z.object({
   stem: z.string().min(1),
   correct: z.string().min(1),
-  distractors: z.array(z.string()), // 1–3 genuine misconceptions; fewer is fine, never padded
+  distractors: z.array(z.string()),
   explanation: z.string().min(1),
 })
 
@@ -81,9 +77,9 @@ const GEN_JSON_SCHEMA = {
 } as const
 
 const critiqueOutputSchema = z.object({
-  correct: z.string(), // the letter the critic thinks is the single best-supported option
+  correct: z.string(),
   multipleDefensible: z.boolean(),
-  implausible: z.array(z.string()), // letters of options no real developer would pick
+  implausible: z.array(z.string()),
   notes: z.string(),
 })
 
@@ -111,8 +107,7 @@ const GEN_SYSTEM = [
   'Distractors — this is what makes the check hard or worthless:',
   '- Every distractor must be a mistake a real React developer could actually make: a',
   '  genuine misconception or a partial truth. NEVER invent an option that anyone who has',
-  '  written React would dismiss instantly, and NEVER use invalid or nonsensical syntax',
-  '  (no "un archivo de configuración de rutas" for "what is a component"; no "<key={id}>").',
+  '  written React would dismiss instantly, and NEVER use invalid or nonsensical syntax.',
   '- Strongly prefer distractors that are TRUE statements about a DIFFERENT thing — a',
   '  correct description of useMemo offered as the answer about useEffect; a correct',
   '  description of state offered as the answer about props. These are hard because nothing',
@@ -128,9 +123,10 @@ const GEN_SYSTEM = [
   'explanation: 2–4 sentences that teach — why the correct option is right, and where it',
   'helps, why a tempting distractor is wrong.',
   '',
-  'Only assert what the reference answer supports. Write a standalone exercise: never refer',
-  'to "the reference answer", the source, or these instructions. Never emit control tokens,',
-  'role markers, apologies, HTML tags, or meta-commentary about formatting.',
+  'JSX/HTML in an option is fine when the question is about markup — wrap code in backticks',
+  'when practical. Only assert what the reference answer supports. Write a standalone',
+  'exercise: never refer to "the reference answer", the source, or these instructions.',
+  'Never emit control tokens, role markers, apologies, or meta-commentary about formatting.',
 ].join('\n')
 
 const CRITIQUE_SYSTEM = [
@@ -139,45 +135,46 @@ const CRITIQUE_SYSTEM = [
   '- correct: the letter of the single best-supported option.',
   '- multipleDefensible: true if more than one option could be defended as correct given',
   '  the reference answer (that is a flaw, not difficulty).',
-  '- implausible: letters of any options no real React developer would pick because they',
-  '  are obviously wrong, nonsensical, or invalid syntax. A good distractor is a real',
-  '  misconception, not something instantly dismissable.',
-  '- notes: one short line on any problem (English is fine).',
-  'Be strict; this gates whether the question ships.',
+  '- implausible: letters of any options that are obviously wrong, nonsensical, or invalid',
+  '  syntax (advisory — a good distractor is a real misconception, not instantly dismissable).',
+  '- notes: one short line on any problem. When you mention an option, QUOTE ITS TEXT, not',
+  '  its letter. English is fine.',
 ].join('\n')
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
-/** Denylist of known-bad shapes (kept on top of positive validation below). */
-const MALFORMED: Array<[RegExp, string]> = [
+/** Genuine machinery leaks — a check containing any of these is broken, not just flawed. */
+const LEAK: Array<[RegExp, string]> = [
   [/<\||\|>/, 'control-token marker'],
   [/im_start|im_end|<\/?s>/i, 'chat control token'],
   [/\bassistant\b/i, 'literal role marker "assistant"'],
   [/\bsorry\b|i made a|formatting error|lo siento|me disculp|error de formato/i, 'apologetic meta-text'],
-  [/respuesta de referencia|reference answer|seg[úu]n (la|el) (respuesta|texto|documento)/i, 'meta-reference to the source'],
 ]
 
-/** An HTML/XML tag, e.g. `<br/>`, `</br>`, `<div>`, or the invalid `<key={id}>`. */
-const HTML_TAG = /<\/?[a-zA-Z][^>]*>/
+/** Referring to the source breaks the exercise, but the check still works — a flag, not a drop. */
+const META_REF = /respuesta de referencia|reference answer|seg[úu]n (la|el) (respuesta|texto|documento)/i
+
+function leakIssue(text: string): string | null {
+  for (const [re, reason] of LEAK) if (re.test(text)) return reason
+  return null
+}
 
 /**
- * Positive validation: learner-facing text must be Spanish prose plus inline code. Anything
- * outside this set (foreign scripts, control chars, box-drawing, replacement chars, stray
- * markup) is rejected — a denylist of known-bad patterns keeps losing to novel shapes.
+ * Strip what the exercise legitimately teaches — inline code, JSX/HTML tags, and JSX
+ * expressions — then the residue should be plain Spanish prose. Anything left outside that
+ * set is stray markup (e.g. a `<br/>` rendered into non-markup prose), not taught code.
  */
-const ALLOWED_CHARS =
-  /^[A-Za-z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,;:()\[\]{}¿?¡!"'«»“”‘’…/\\=+*_$&|%#@<>`~^°ªº–—-]+$/u
+function proseResidue(text: string): string {
+  return text
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/<\/?[A-Za-z][^>]*>/g, ' ')
+    .replace(/\{[^{}]*\}/g, ' ')
+}
 
-/** Returns a reason string if learner-facing `text` is bad, else null. */
-function fieldIssue(text: string): string | null {
-  for (const [re, reason] of MALFORMED) if (re.test(text)) return reason
-  if ((text.match(/{/g)?.length ?? 0) !== (text.match(/}/g)?.length ?? 0)) return 'unbalanced braces'
-  if (HTML_TAG.test(text)) return 'HTML tag'
-  if (!ALLOWED_CHARS.test(text)) {
-    const bad = [...text].find((ch) => !ALLOWED_CHARS.test(ch))
-    return `unexpected character ${JSON.stringify(bad)}`
-  }
-  return null
+const PROSE_ALLOWED = /^[A-Za-z0-9áéíóúüñÁÉÍÓÚÜÑ\s.,;:()¿?¡!"'«»“”‘’…–—-]*$/u
+
+function strayMarkup(text: string): boolean {
+  return !PROSE_ALLOWED.test(proseResidue(text))
 }
 
 async function callApi(body: unknown): Promise<unknown> {
@@ -218,7 +215,6 @@ function extractText(raw: unknown): string {
 
 const wordCount = (s: string): number => s.trim().split(/\s+/).length
 
-/** True if `correct` is the single longest option (the pickable-by-length tell). */
 function correctIsLongest(correct: string, distractors: string[]): boolean {
   const lens = [correct, ...distractors].map(wordCount)
   const max = Math.max(...lens)
@@ -226,8 +222,18 @@ function correctIsLongest(correct: string, distractors: string[]): boolean {
 }
 
 type GenResult =
-  | { ok: true; check: Check; misconceptions: number }
-  | { ok: false; questionId: string; kind: 'length' | 'malformed'; reason: string }
+  | { ok: true; check: Check; misconceptions: number; flags: string[] }
+  | { ok: false; questionId: string; reason: string }
+
+/** Quality flags on an otherwise-usable check. Written and reported, never dropped. */
+function softFlags(stem: string, correct: string, distractors: string[], explanation: string): string[] {
+  const fields = [stem, explanation, correct, ...distractors]
+  const flags: string[] = []
+  if (correctIsLongest(correct, distractors)) flags.push('length: correct is longest')
+  if (fields.some((f) => META_REF.test(f))) flags.push('meta-reference to source')
+  if (fields.some(strayMarkup)) flags.push('stray markup in prose')
+  return flags
+}
 
 async function generateOne(question: Question): Promise<GenResult> {
   const body = {
@@ -244,14 +250,14 @@ async function generateOne(question: Question): Promise<GenResult> {
     ],
   }
 
-  let malformed = ''
-  let sawValidButLong = false
+  let hardReason = ''
+  let best: { check: Check; misconceptions: number; flags: string[] } | null = null
   for (let attempt = 0; attempt < 3; attempt++) {
     let out: z.infer<typeof genOutputSchema>
     try {
       out = genOutputSchema.parse(JSON.parse(extractText(await callApi(body))))
     } catch (err) {
-      malformed = `bad response: ${String(err)}`
+      hardReason = `bad response: ${String(err)}`
       continue
     }
 
@@ -260,39 +266,32 @@ async function generateOne(question: Question): Promise<GenResult> {
       .filter((d) => d && d !== correct)
       .slice(0, 3)
     if (distractors.length < 1) {
-      malformed = 'no usable distractors'
+      hardReason = 'no usable distractors'
       continue
     }
 
     const stem = out.stem.trim()
     const explanation = out.explanation.trim()
-    const issue = [stem, explanation, correct, ...distractors].map(fieldIssue).find(Boolean)
-    if (issue) {
-      malformed = `malformed content (${issue})`
+    const leak = [stem, explanation, correct, ...distractors].map(leakIssue).find(Boolean)
+    if (leak) {
+      hardReason = `leak (${leak})`
       continue
     }
 
-    if (correctIsLongest(correct, distractors)) {
-      sawValidButLong = true
-      continue // retry for a length-balanced set
+    const flags = softFlags(stem, correct, distractors, explanation)
+    const check: Check = {
+      questionId: question.id,
+      stem,
+      options: [{ text: correct, correct: true }, ...distractors.map((text) => ({ text, correct: false }))],
+      explanation,
     }
-
-    const options = [
-      { text: correct, correct: true },
-      ...distractors.map((text) => ({ text, correct: false })),
-    ]
-    return {
-      ok: true,
-      check: { questionId: question.id, stem, options, explanation },
-      misconceptions: distractors.length,
-    }
+    if (flags.length === 0) return { ok: true, check, misconceptions: distractors.length, flags }
+    // Usable but flagged — keep the least-flagged candidate and retry for a clean one.
+    if (!best || flags.length < best.flags.length) best = { check, misconceptions: distractors.length, flags }
   }
 
-  // Length imbalance is a quality miss — report, don't write (per instruction). A genuine
-  // malformed/leak that survived 3 retries is a hard defect (nonzero exit in main).
-  return sawValidButLong
-    ? { ok: false, questionId: question.id, kind: 'length', reason: 'correct option is the single longest' }
-    : { ok: false, questionId: question.id, kind: 'malformed', reason: malformed || 'unknown' }
+  if (best) return { ok: true, ...best } // flag, don't drop
+  return { ok: false, questionId: question.id, reason: hardReason || 'unknown' }
 }
 
 /** FNV-1a, for a stable per-question option shuffle so the critic never sees correct-first. */
@@ -334,20 +333,13 @@ async function critiqueOne(question: Question, check: Check): Promise<Verdict> {
   try {
     const out = critiqueOutputSchema.parse(JSON.parse(extractText(await callApi(body))))
     const byLetter = new Map(shown.map((s) => [s.letter, s.option.text]))
-    const picked = out.correct.trim().toUpperCase()
     const implausibleTexts = out.implausible
       .map((s) => byLetter.get(s.trim().toUpperCase()))
       .filter((t): t is string => Boolean(t))
-    const agreedOnCorrect = picked === expected
-    const sound = agreedOnCorrect && !out.multipleDefensible && implausibleTexts.length === 0
-    return {
-      ran: true,
-      sound,
-      agreedOnCorrect,
-      multipleDefensible: out.multipleDefensible,
-      implausibleTexts,
-      notes: out.notes.trim(),
-    }
+    const agreedOnCorrect = out.correct.trim().toUpperCase() === expected
+    // Gate only on wrong-answer or ambiguity. Implausible distractors are advisory.
+    const sound = agreedOnCorrect && !out.multipleDefensible
+    return { ran: true, sound, agreedOnCorrect, multipleDefensible: out.multipleDefensible, implausibleTexts, notes: out.notes.trim() }
   } catch {
     return { ran: false }
   }
@@ -389,21 +381,20 @@ function jaccard(a: Set<string>, b: Set<string>): number {
   return union === 0 ? 0 : inter / union
 }
 
-function correctText(check: Check): string {
-  return check.options.find((o) => o.correct)?.text ?? ''
-}
+const correctText = (check: Check): string => check.options.find((o) => o.correct)?.text ?? ''
 
 function verdictLabel(v: Verdict): string {
   if (!v.ran) return 'critique n/a'
-  if (v.sound) return 'sound'
-  const issues: string[] = []
-  if (!v.agreedOnCorrect) issues.push('critic disagreed on the correct answer')
-  if (v.multipleDefensible) issues.push('multiple defensible')
+  const gate: string[] = []
+  if (!v.agreedOnCorrect) gate.push('critic chose a different answer')
+  if (v.multipleDefensible) gate.push('multiple defensible')
+  const advisory: string[] = []
   if (v.implausibleTexts.length) {
-    issues.push(`implausible: ${v.implausibleTexts.map((t) => `"${t}"`).join('; ')}`)
+    advisory.push(`weak distractor(s): ${v.implausibleTexts.map((t) => `"${t}"`).join('; ')}`)
   }
-  if (v.notes) issues.push(v.notes)
-  return `UNSOUND — ${issues.join('; ')}`
+  if (v.notes) advisory.push(v.notes)
+  const head = gate.length ? `UNSOUND — ${gate.join('; ')}` : 'sound'
+  return advisory.length ? `${head}; note: ${advisory.join('; ')}` : head
 }
 
 function printResults(
@@ -418,47 +409,46 @@ function printResults(
     console.log(`\n=== ${i + 1}/${results.length} — ${q?.question} ===`)
     console.log(`Ref: ${ref.slice(0, 400)}${ref.length > 400 ? '…' : ''}`)
     if (!r.ok) {
-      console.log(`SKIPPED (${r.kind}) — ${r.reason}`)
+      console.log(`DROPPED (broken) — ${r.reason}`)
       return
     }
     console.log(`P: ${r.check.stem}   (misconceptions: ${r.misconceptions})`)
     r.check.options.forEach((o, j) => console.log(`  ${LETTERS[j]}) ${o.text}${o.correct ? '  [✓]' : ''}`))
     console.log(`  → ${r.check.explanation}`)
+    if (r.flags.length) console.log(`  ⚑ ${r.flags.join('; ')}`)
     console.log(`  [${verdictLabel(verdicts.get(qid) ?? { ran: false })}]`)
   })
 }
 
 function reportStats(results: GenResult[], verdicts: Map<string, Verdict>): void {
   const ok = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok)
-  const lengthSkips = results.filter((r) => !r.ok && r.kind === 'length')
-  const malformedSkips = results.filter((r) => !r.ok && r.kind === 'malformed')
+  const dropped = results.filter((r): r is Extract<GenResult, { ok: false }> => !r.ok)
 
-  // Independent critique — the real suitability signal.
+  console.log(`\nwritten: ${ok.length}/${results.length}; dropped (broken): ${dropped.length}`)
+  for (const r of dropped) console.log(`  DROPPED ${r.questionId}: ${r.reason}`)
+
   const reviewed = ok.map((r) => ({ r, v: verdicts.get(r.check.questionId) ?? ({ ran: false } as Verdict) }))
   const sound = reviewed.filter(({ v }) => v.ran && v.sound).length
-  console.log(`\ncritique: ${sound}/${ok.length} sound`)
+  console.log(`\ncritique: ${sound}/${ok.length} sound (gate: wrong-answer or ambiguity only)`)
   for (const { r, v } of reviewed) {
     if (!v.ran || !v.sound) console.log(`  "${r.check.stem}" — ${verdictLabel(v)}`)
   }
 
-  // Coverage: how many misconceptions each question sustains.
+  const flagCount = (needle: string): number => ok.filter((r) => r.flags.some((f) => f.startsWith(needle))).length
+  console.log(
+    `\nflags: ${flagCount('length')} length, ${flagCount('meta-reference')} meta-reference, ` +
+      `${flagCount('stray markup')} stray-markup`,
+  )
   console.log(
     `\nmisconceptions: ${ok.filter((r) => r.misconceptions === 3).length} sustain 3, ` +
       `${ok.filter((r) => r.misconceptions === 2).length} sustain 2, ` +
       `${ok.filter((r) => r.misconceptions === 1).length} sustain 1`,
   )
-  if (lengthSkips.length) console.log(`length-skipped (correct was longest): ${lengthSkips.length}`)
-  if (malformedSkips.length) {
-    console.log(`MALFORMED (hard failures): ${malformedSkips.length}`)
-    for (const r of malformedSkips) if (!r.ok) console.log(`  ${r.questionId}: ${r.reason}`)
-  }
 
-  // Length tell across what we kept (should now be ~0 since it's enforced pre-write).
   const longest = ok.filter((r) => correctIsLongest(correctText(r.check), r.check.options.filter((o) => !o.correct).map((o) => o.text))).length
   const pct = ok.length ? Math.round((100 * longest) / ok.length) : 0
   console.log(`\ncorrect option is the single longest: ${longest}/${ok.length} (${pct}%) — target ~25%`)
 
-  // Near-duplicates: max of stem similarity and correct-option similarity.
   const pairs: Array<{ i: number; j: number; sim: number; via: string }> = []
   for (let i = 0; i < ok.length; i++) {
     for (let j = i + 1; j < ok.length; j++) {
@@ -512,9 +502,9 @@ async function main(): Promise<void> {
   reportStats(results, verdicts)
   console.error(`\nWrote ${ok.length} checks (of ${results.length} questions) -> src/content/data/checks-principiante.json`)
 
-  const hardFailures = results.filter((r) => !r.ok && r.kind === 'malformed').length
-  if (hardFailures > 0) {
-    console.error(`\n${hardFailures} malformed item(s) survived retries — failing loudly.`)
+  const dropped = results.filter((r) => !r.ok).length
+  if (dropped > 0) {
+    console.error(`\n${dropped} generation(s) genuinely broken after retries — failing loudly.`)
     process.exit(1)
   }
 }
