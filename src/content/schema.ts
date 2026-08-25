@@ -111,6 +111,30 @@ export const lessonProgressSchema = z.object({
   completedAt: z.number().int().nullable(),
 })
 
+/**
+ * A generated multiple-choice check for a question (ADR-0017). Options range 2–4; the UI
+ * shuffles them from a seed at display time, so stored order is arbitrary. No `sourceId`:
+ * generated checks are ours, not the source's — they carry no attribution.
+ */
+export const checkSchema = z.object({
+  questionId: z.string().length(12),
+  stem: z.string().min(1),
+  options: z
+    .array(z.object({ text: z.string().min(1), correct: z.boolean() }))
+    .min(2)
+    .max(4)
+    .refine((opts) => opts.filter((o) => o.correct).length === 1, 'exactly one correct option'),
+  explanation: z.string().min(1),
+})
+
+/** One generated file, per section. Best-effort at load: a bad file degrades, never crashes. */
+export const checksFileSchema = z.object({
+  generatedAt: z.string(),
+  model: z.string(),
+  sourceSection: z.string(),
+  checks: z.array(checkSchema).min(1),
+})
+
 export type Tech = z.infer<typeof techSchema>
 export type Level = z.infer<typeof levelSchema>
 export type Format = z.infer<typeof formatSchema>
@@ -121,5 +145,7 @@ export type Curriculum = z.infer<typeof curriculumSchema>
 export type QuestionsFile = z.infer<typeof questionsFileSchema>
 export type Progress = z.infer<typeof progressSchema>
 export type LessonProgress = z.infer<typeof lessonProgressSchema>
+export type Check = z.infer<typeof checkSchema>
+export type ChecksFile = z.infer<typeof checksFileSchema>
 export type Box = Progress['box']
 export type Score = Progress['history'][number]['score']

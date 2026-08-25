@@ -3,31 +3,11 @@
  * purely from that data — no API calls. Shared by the generator (generate-checks.ts) and
  * the report-only command (check-report.ts) so the numbers can never drift between them.
  */
-import { z } from 'zod'
+// The check data contract lives in the app's schema source of truth (src/content/schema.ts,
+// ADR-0017); re-export it here so the generator and report keep importing from one place.
+import { checkSchema, checksFileSchema, type Check } from '../../src/content/schema'
 
-/**
- * A generated check. Options range 2–4. Stored order is arbitrary — the UI shuffles with a
- * seed at display time. No `sourceId`: generated checks are ours (ADR-0017).
- */
-export const checkSchema = z.object({
-  questionId: z.string().length(12),
-  stem: z.string().min(1),
-  options: z
-    .array(z.object({ text: z.string().min(1), correct: z.boolean() }))
-    .min(2)
-    .max(4)
-    .refine((opts) => opts.filter((o) => o.correct).length === 1, 'exactly one correct option'),
-  explanation: z.string().min(1),
-})
-
-export const checksFileSchema = z.object({
-  generatedAt: z.string(),
-  model: z.string(),
-  sourceSection: z.string(),
-  checks: z.array(checkSchema).min(1),
-})
-
-export type Check = z.infer<typeof checkSchema>
+export { checkSchema, checksFileSchema, type Check }
 
 /** Referring to the source breaks the exercise — a flag, not a defect. */
 const META_REF = /respuesta de referencia|reference answer|seg[úu]n (la|el) (respuesta|texto|documento)/i
