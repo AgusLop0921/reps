@@ -25,9 +25,12 @@ import { EXCLUDED_SLUGS } from '../../src/content/order'
 import { questionsFileSchema, type Question } from '../../src/content/schema'
 
 const MODEL = 'claude-opus-4-8'
-const SECTION = 'Principiante'
 const CONCURRENCY = 4
 const LETTERS = ['A', 'B', 'C', 'D']
+
+/** Section slug for the output filename — same rules as the curriculum section id. */
+const sectionSlug = (s: string): string =>
+  s.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s+/g, '-')
 
 const DATA_DIR = fileURLToPath(new URL('../../src/content/data/', import.meta.url))
 
@@ -103,6 +106,8 @@ const GEN_SYSTEM = [
   'Stem — prefer application over definition. When the reference answer supports it, ask',
   'what happens, which option breaks something, or why a snippet fails ("¿qué pasa si…?",',
   '"¿cuál de estos rompe…?", "¿por qué este código no…?") rather than "¿qué es X?".',
+  'Vary the opening — do NOT default to "¿cuál de estas afirmaciones describe',
+  'correctamente…?"; reach for a different construction each time.',
   '',
   'Distractors — this is what makes the check hard or worthless:',
   '- Every distractor must be a mistake a real React developer could actually make: a',
@@ -305,7 +310,7 @@ function hashString(s: string): number {
 }
 
 type Verdict =
-  | { ran: true; sound: boolean; agreedOnCorrect: boolean; multipleDefensible: boolean; implausibleTexts: string[]; notes: string }
+  | { ran: true; agreedOnCorrect: boolean; multipleDefensible: boolean; implausibleTexts: string[]; notes: string }
   | { ran: false }
 
 async function critiqueOne(question: Question, check: Check): Promise<Verdict> {
@@ -337,9 +342,9 @@ async function critiqueOne(question: Question, check: Check): Promise<Verdict> {
       .map((s) => byLetter.get(s.trim().toUpperCase()))
       .filter((t): t is string => Boolean(t))
     const agreedOnCorrect = out.correct.trim().toUpperCase() === expected
-    // Gate only on wrong-answer or ambiguity. Implausible distractors are advisory.
-    const sound = agreedOnCorrect && !out.multipleDefensible
-    return { ran: true, sound, agreedOnCorrect, multipleDefensible: out.multipleDefensible, implausibleTexts, notes: out.notes.trim() }
+    // Advisory only: the softened critic approves everything, so its output is notes for a
+    // human reviewer, not a pass/fail gate.
+    return { ran: true, agreedOnCorrect, multipleDefensible: out.multipleDefensible, implausibleTexts, notes: out.notes.trim() }
   } catch {
     return { ran: false }
   }
@@ -383,18 +388,17 @@ function jaccard(a: Set<string>, b: Set<string>): number {
 
 const correctText = (check: Check): string => check.options.find((o) => o.correct)?.text ?? ''
 
-function verdictLabel(v: Verdict): string {
+/** Advisory notes from the critic for a human reviewer. Empty string when it has nothing. */
+function criticNotes(v: Verdict): string {
   if (!v.ran) return 'critique n/a'
-  const gate: string[] = []
-  if (!v.agreedOnCorrect) gate.push('critic chose a different answer')
-  if (v.multipleDefensible) gate.push('multiple defensible')
-  const advisory: string[] = []
+  const notes: string[] = []
+  if (!v.agreedOnCorrect) notes.push('critic chose a different answer')
+  if (v.multipleDefensible) notes.push('critic: more than one defensible')
   if (v.implausibleTexts.length) {
-    advisory.push(`weak distractor(s): ${v.implausibleTexts.map((t) => `"${t}"`).join('; ')}`)
+    notes.push(`weak distractor(s): ${v.implausibleTexts.map((t) => `"${t}"`).join('; ')}`)
   }
-  if (v.notes) advisory.push(v.notes)
-  const head = gate.length ? `UNSOUND — ${gate.join('; ')}` : 'sound'
-  return advisory.length ? `${head}; note: ${advisory.join('; ')}` : head
+  if (v.notes) notes.push(v.notes)
+  return notes.join('; ')
 }
 
 function printResults(
@@ -416,7 +420,8 @@ function printResults(
     r.check.options.forEach((o, j) => console.log(`  ${LETTERS[j]}) ${o.text}${o.correct ? '  [✓]' : ''}`))
     console.log(`  → ${r.check.explanation}`)
     if (r.flags.length) console.log(`  ⚑ ${r.flags.join('; ')}`)
-    console.log(`  [${verdictLabel(verdicts.get(qid) ?? { ran: false })}]`)
+    const notes = criticNotes(verdicts.get(qid) ?? { ran: false })
+    if (notes) console.log(`  ⚐ critic: ${notes}`)
   })
 }
 
@@ -427,12 +432,11 @@ function reportStats(results: GenResult[], verdicts: Map<string, Verdict>): void
   console.log(`\nwritten: ${ok.length}/${results.length}; dropped (broken): ${dropped.length}`)
   for (const r of dropped) console.log(`  DROPPED ${r.questionId}: ${r.reason}`)
 
-  const reviewed = ok.map((r) => ({ r, v: verdicts.get(r.check.questionId) ?? ({ ran: false } as Verdict) }))
-  const sound = reviewed.filter(({ v }) => v.ran && v.sound).length
-  console.log(`\ncritique: ${sound}/${ok.length} sound (gate: wrong-answer or ambiguity only)`)
-  for (const { r, v } of reviewed) {
-    if (!v.ran || !v.sound) console.log(`  "${r.check.stem}" — ${verdictLabel(v)}`)
-  }
+  // Critique is advisory, not a gate — list only the items it left a note on.
+  const reviewed = ok.map((r) => ({ r, notes: criticNotes(verdicts.get(r.check.questionId) ?? { ran: false }) }))
+  const noted = reviewed.filter(({ notes }) => notes)
+  console.log(`\ncritic advisory notes on ${noted.length} item(s) (advisory, not a gate):`)
+  for (const { r, notes } of noted) console.log(`  "${r.check.stem}" — ${notes}`)
 
   const flagCount = (needle: string): number => ok.filter((r) => r.flags.some((f) => f.startsWith(needle))).length
   console.log(
@@ -474,13 +478,25 @@ async function main(): Promise<void> {
   const questionsFile = questionsFileSchema.parse(
     JSON.parse(readFileSync(`${DATA_DIR}questions.json`, 'utf8')),
   )
+  const sections = [...new Set(questionsFile.questions.map((q) => q.sourceSection))]
+
+  const section = process.argv[2]
+  if (!section) {
+    console.error(`usage: pnpm tsx scripts/import/generate-checks.ts <section>\nsections: ${sections.join(' | ')}`)
+    process.exit(1)
+  }
+
   const excluded = new Set(EXCLUDED_SLUGS)
   const questions = questionsFile.questions.filter(
-    (q) => q.sourceSection === SECTION && !excluded.has(q.slug),
+    (q) => q.sourceSection === section && !excluded.has(q.slug),
   )
+  if (questions.length === 0) {
+    console.error(`no path questions for section "${section}". sections: ${sections.join(' | ')}`)
+    process.exit(1)
+  }
   const questionById = new Map(questions.map((q) => [q.id, q]))
 
-  console.error(`Generating checks for ${questions.length} "${SECTION}" cards with ${MODEL}...`)
+  console.error(`Generating checks for ${questions.length} "${section}" cards with ${MODEL}...`)
   const results = await mapPool(questions, CONCURRENCY, generateOne)
 
   const ok = results.filter((r): r is Extract<GenResult, { ok: true }> => r.ok)
@@ -493,14 +509,15 @@ async function main(): Promise<void> {
   const file = checksFileSchema.parse({
     generatedAt: new Date().toISOString(),
     model: MODEL,
-    sourceSection: SECTION,
+    sourceSection: section,
     checks: ok.map((r) => r.check),
   })
-  writeFileSync(`${DATA_DIR}checks-principiante.json`, `${JSON.stringify(file, null, 2)}\n`)
+  const outName = `checks-${sectionSlug(section)}.json`
+  writeFileSync(`${DATA_DIR}${outName}`, `${JSON.stringify(file, null, 2)}\n`)
 
   printResults(results, verdicts, questionById)
   reportStats(results, verdicts)
-  console.error(`\nWrote ${ok.length} checks (of ${results.length} questions) -> src/content/data/checks-principiante.json`)
+  console.error(`\nWrote ${ok.length} checks (of ${results.length} questions) -> src/content/data/${outName}`)
 
   const dropped = results.filter((r) => !r.ok).length
   if (dropped > 0) {
