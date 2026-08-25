@@ -1,40 +1,77 @@
 import { useMemo, useState } from 'react'
 import { checksByQuestionId, curriculum, questionsById } from '../content/load'
+import type { Lesson, Section } from '../content/schema'
 import { buildLessonDeck, nextLesson } from '../core/curriculum'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
+import { Path } from './Path'
+
+/** The section a lesson belongs to, plus the lesson itself, looked up by id. */
+function locate(lessonId: string | null): { lesson: Lesson; section: Section } | null {
+  for (const section of curriculum.sections) {
+    const lesson = section.lessons.find((l) => l.id === lessonId)
+    if (lesson) return { lesson, section }
+  }
+  return null
+}
 
 /**
- * The one screen (ADR-0010): boot straight into the current lesson and run its deck in
- * memory. No stored progress yet (Stage 3 grading is in memory; persistence is next), so a
- * reload restarts the lesson. Business logic lives in core/ and the shuffle in core/checks.
+ * The screens (ADR-0010): the app opens straight into the current lesson's card and runs its
+ * deck in memory. The path screen is reachable but read-only; onboarding and persistence are
+ * the next stage. Business logic lives in core/; this only renders and tracks position.
  */
 export function App() {
-  const lesson = useMemo(() => nextLesson(curriculum, []), [])
-  const section = useMemo(
-    () => curriculum.sections.find((s) => s.lessons.some((l) => l.id === lesson?.id)) ?? null,
-    [lesson],
-  )
-  const deck = useMemo(
-    () =>
-      lesson ? buildLessonDeck({ lesson, progress: [], lessonProgress: null, now: Date.now() }) : [],
-    [lesson],
-  )
+  const firstLessonId = useMemo(() => nextLesson(curriculum, [])?.id ?? null, [])
 
+  const [screen, setScreen] = useState<'card' | 'path'>('card')
+  const [lessonId, setLessonId] = useState<string | null>(firstLessonId)
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
 
-  if (!lesson || !section) {
+  const located = useMemo(() => locate(lessonId), [lessonId])
+  const deck = useMemo(
+    () =>
+      located
+        ? buildLessonDeck({ lesson: located.lesson, progress: [], lessonProgress: null, now: Date.now() })
+        : [],
+    [located],
+  )
+
+  const openLesson = (id: string): void => {
+    setLessonId(id)
+    setIndex(0)
+    setPicked(null)
+    setScreen('card')
+  }
+
+  if (screen === 'path') {
+    return (
+      <main className="app">
+        <Path
+          curriculum={curriculum}
+          currentLessonId={lessonId}
+          onOpenLesson={openLesson}
+          onBack={() => setScreen('card')}
+        />
+      </main>
+    )
+  }
+
+  if (!located) {
     return (
       <main className="app">
         <p className="empty">{copy.noLesson}</p>
       </main>
     )
   }
+  const { lesson, section } = located
 
   const header = (
     <header className="lesson-head">
+      <button type="button" className="back" aria-label={copy.pathBack} onClick={() => setScreen('path')}>
+        ‹
+      </button>
       <div className="segments">
         {deck.map((_, k) => {
           const done = k < index || (k === index && picked !== null)
@@ -58,6 +95,7 @@ export function App() {
             setIndex(0)
             setPicked(null)
           }}
+          onPath={() => setScreen('path')}
         />
       </main>
     )
@@ -66,7 +104,6 @@ export function App() {
   const card = deck[index]
   const question = questionsById.get(card.questionId)
   if (!question) {
-    // A deck id with no question should never happen post-validation; skip rather than crash.
     return (
       <main className="app">
         {header}

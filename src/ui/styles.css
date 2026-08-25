@@ -321,9 +321,139 @@ button {
   line-height: 1.55;
 }
 
-.end .primary {
-  width: auto;
-  padding-inline: 1.5rem;
+.end-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 260px;
+}
+
+.secondary {
+  width: 100%;
+  min-height: 48px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+/* ---- Path ------------------------------------------------------------------- */
+
+.back {
+  flex: none;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 6px 0 0;
+}
+
+.back:hover {
+  color: var(--text);
+}
+
+.path {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.path-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--space);
+}
+
+.path-title {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.path-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--space) * 1.5);
+}
+
+.path-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 6px;
+}
+
+.path-section-title {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.path-enter {
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 4px;
+}
+
+.path-lessons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.path-lesson {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  padding: 12px 4px;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.path-lesson-current {
+  background: var(--surface);
+}
+
+.path-lesson-locked {
+  color: var(--muted);
+  opacity: 0.55;
+  cursor: default;
+}
+
+.path-lesson-num {
+  flex: none;
+  width: 20px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.path-lesson-name {
+  flex: 1;
+}
+
+.path-lesson-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent);
 }
 
 /* ---- Markdown answers ------------------------------------------------------- */

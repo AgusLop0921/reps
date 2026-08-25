@@ -3,9 +3,11 @@ import { copy } from './copy'
 export function EndOfLesson({
   lessonOrder,
   onRestart,
+  onPath,
 }: {
   lessonOrder: number
   onRestart: () => void
+  onPath: () => void
 }) {
   return (
     <section className="end">
@@ -14,9 +16,14 @@ export function EndOfLesson({
       </div>
       <h2 className="end-title">{copy.endTitle}</h2>
       <p className="end-subtitle">{copy.endSubtitle}</p>
-      <button type="button" className="primary" onClick={onRestart}>
-        {copy.restart}
-      </button>
+      <div className="end-actions">
+        <button type="button" className="primary" onClick={onRestart}>
+          {copy.restart}
+        </button>
+        <button type="button" className="secondary" onClick={onPath}>
+          {copy.pathBack}
+        </button>
+      </div>
     </section>
   )
 }

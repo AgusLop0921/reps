@@ -27,5 +27,11 @@ export const copy = {
   endSubtitle: 'Mañana sigue la próxima. No hay nada más que hacer acá.',
   restart: 'Empezar de nuevo',
 
+  pathBack: 'Ver el camino',
+  pathTitle: 'El camino',
+  sectionProgress: (done: number, total: number): string => `${done} de ${total}`,
+  sectionEnter: 'Empezar acá',
+  pathCurrent: 'acá',
+
   noLesson: 'No hay ninguna lección para mostrar.',
 } as const
