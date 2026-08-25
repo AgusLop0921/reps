@@ -84,7 +84,36 @@ const SYSTEM = [
   '  above", no joke answers, no near-duplicates of the correct option.',
   '- explanation: one sentence saying why the correct option is right.',
   'Only assert what the reference answer supports. Do not invent facts beyond it.',
+  '',
+  'Hard requirements:',
+  '- All four options must be within ~20% of each other in length and match in level of',
+  '  detail and specificity. The correct option must NOT be the longest, most detailed, or',
+  '  most hedged — it must not be identifiable by length or wording alone.',
+  '- Write a standalone exercise. Never refer to "the reference answer", the source, the',
+  '  question author, or these instructions (no "según la respuesta de referencia" etc.).',
+  '- Output only the requested fields. Never emit control tokens, role markers, apologies,',
+  '  or meta-commentary about your own formatting.',
 ].join('\n')
+
+/**
+ * Signs of a malformed generation: leaked chat control tokens, apologetic meta-text, a
+ * meta-reference to the source, or unbalanced braces (a real leak passed Zod once —
+ * `}}<|im_start|>assistant Sorry, I made a formatting error...`). Any hit fails the item.
+ */
+const MALFORMED: Array<[RegExp, string]> = [
+  [/<\||\|>/, 'control-token marker'],
+  [/im_start|im_end|<\/?s>/i, 'chat control token'],
+  [/\bassistant\b/i, 'literal role marker "assistant"'],
+  [/\bsorry\b|i made a|formatting error|lo siento|me disculp|error de formato/i, 'apologetic meta-text'],
+  [/respuesta de referencia|reference answer|seg[úu]n (la|el) (respuesta|texto|documento)/i, 'meta-reference to the source'],
+]
+
+/** Returns a reason string if `text` looks malformed, else null. */
+function malformedReason(text: string): string | null {
+  for (const [re, reason] of MALFORMED) if (re.test(text)) return reason
+  if ((text.match(/{/g)?.length ?? 0) !== (text.match(/}/g)?.length ?? 0)) return 'unbalanced braces'
+  return null
+}
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
@@ -148,25 +177,42 @@ async function generateOne(question: Question): Promise<Check> {
   }
 
   let lastError = ''
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const out = extractJson(await callApi(body))
-    const distractors = [...new Set(out.distractors.map((d) => d.trim()))].filter(
-      (d) => d && d !== out.correct.trim(),
-    )
-    if (distractors.length < 3) {
-      lastError = `got ${distractors.length} usable distractors`
+  for (let attempt = 0; attempt < 3; attempt++) {
+    let out: z.infer<typeof modelOutputSchema>
+    try {
+      out = extractJson(await callApi(body))
+    } catch (err) {
+      lastError = `bad response: ${String(err)}`
       continue
     }
+
+    const correct = out.correct.trim()
+    const distractors = [...new Set(out.distractors.map((d) => d.trim()))].filter(
+      (d) => d && d !== correct,
+    )
+    if (distractors.length < 3) {
+      lastError = `only ${distractors.length} usable distractors`
+      continue
+    }
+
+    const stem = out.stem.trim()
+    const explanation = out.explanation.trim()
+    const fields = [stem, explanation, correct, ...distractors.slice(0, 3)]
+    const bad = fields.map(malformedReason).find(Boolean)
+    if (bad) {
+      lastError = `malformed content (${bad})`
+      continue
+    }
+
     const idx = correctIndex(question.id)
     let d = 0
     const options = Array.from({ length: 4 }, (_, pos) =>
-      pos === idx
-        ? { text: out.correct.trim(), correct: true }
-        : { text: distractors[d++], correct: false },
+      pos === idx ? { text: correct, correct: true } : { text: distractors[d++], correct: false },
     )
-    return { questionId: question.id, stem: out.stem.trim(), options, explanation: out.explanation.trim() }
+    return { questionId: question.id, stem, options, explanation }
   }
-  throw new Error(`"${question.question}": ${lastError}`)
+  // Fail loudly rather than write a malformed check (same rule as the adapters).
+  throw new Error(`generate-checks: "${question.question}" failed after 3 attempts — ${lastError}`)
 }
 
 async function mapPool<T, R>(items: T[], size: number, fn: (item: T) => Promise<R>): Promise<R[]> {
@@ -195,6 +241,68 @@ function printChecks(checks: Check[], questionById: Map<string, Question>): void
   })
 }
 
+const wordCount = (s: string): number => s.trim().split(/\s+/).length
+
+const STOPWORDS = new Set([
+  'que', 'cual', 'cuales', 'como', 'cuando', 'donde', 'por', 'para', 'con', 'los', 'las',
+  'una', 'uno', 'del', 'sus', 'este', 'esta', 'estos', 'estas', 'entre', 'sobre', 'segun',
+  'the', 'and', 'for',
+])
+
+/** Content-word token set for a stem, accent- and stopword-stripped. */
+function stemTokens(stem: string): Set<string> {
+  const words = stem
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length >= 3 && !STOPWORDS.has(w))
+  return new Set(words)
+}
+
+function jaccard(a: Set<string>, b: Set<string>): number {
+  const inter = [...a].filter((x) => b.has(x)).length
+  const union = new Set([...a, ...b]).size
+  return union === 0 ? 0 : inter / union
+}
+
+/** The mechanical checks: length tell + near-duplicate stems. Reported, not enforced. */
+function reportStats(checks: Check[]): void {
+  // How often the correct option is the single longest (the pickable-by-length tell).
+  let correctLongest = 0
+  for (const c of checks) {
+    const lens = c.options.map((o) => wordCount(o.text))
+    const max = Math.max(...lens)
+    const correctLen = wordCount(c.options.find((o) => o.correct)?.text ?? '')
+    if (correctLen === max && lens.filter((l) => l === max).length === 1) correctLongest++
+  }
+  const pct = Math.round((100 * correctLongest) / checks.length)
+  console.log(
+    `\ncorrect option is the single longest: ${correctLongest}/${checks.length} (${pct}%) — target ~25%`,
+  )
+
+  // Near-duplicate stems across the section.
+  const tokens = checks.map((c) => stemTokens(c.stem))
+  const pairs: Array<{ i: number; j: number; sim: number }> = []
+  for (let i = 0; i < checks.length; i++) {
+    for (let j = i + 1; j < checks.length; j++) {
+      const sim = jaccard(tokens[i], tokens[j])
+      if (sim >= 0.45) pairs.push({ i, j, sim })
+    }
+  }
+  pairs.sort((a, b) => b.sim - a.sim)
+  if (pairs.length === 0) {
+    console.log('near-duplicate stems: none above 0.45 Jaccard')
+  } else {
+    console.log(`near-duplicate stems (Jaccard ≥ 0.45): ${pairs.length}`)
+    for (const { i, j, sim } of pairs) {
+      console.log(`  [${sim.toFixed(2)}] #${i + 1} "${checks[i].stem}"`)
+      console.log(`         #${j + 1} "${checks[j].stem}"`)
+    }
+  }
+}
+
 async function main(): Promise<void> {
   const questionsFile = questionsFileSchema.parse(
     JSON.parse(readFileSync(`${DATA_DIR}questions.json`, 'utf8')),
@@ -217,6 +325,7 @@ async function main(): Promise<void> {
   writeFileSync(`${DATA_DIR}checks-principiante.json`, `${JSON.stringify(file, null, 2)}\n`)
 
   printChecks(checks, new Map(questions.map((q) => [q.id, q])))
+  reportStats(checks)
   console.error(`\nWrote ${checks.length} checks -> src/content/data/checks-principiante.json`)
 }
 
