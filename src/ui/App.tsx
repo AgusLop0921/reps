@@ -1,61 +1,118 @@
 import { useMemo, useState } from 'react'
-import { curriculum, questionsById } from '../content/load'
-import type { Score } from '../content/schema'
-import { buildLessonDeck, nextLesson } from '../core/curriculum'
+import { checksByQuestionId, curriculum, questionsById } from '../content/load'
+import type { Lesson, Section } from '../content/schema'
+import { orderedOptions } from '../core/checks'
+import { buildLessonDeck, lessonAfter, nextLesson } from '../core/curriculum'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
+import { Path } from './Path'
+
+/** A card answered incorrectly, kept so the end screen can resurface its explanation. */
+type MissedCard = { questionId: string; title: string; explanation: string }
+
+/** The section a lesson belongs to, plus the lesson itself, looked up by id. */
+function locate(lessonId: string | null): { lesson: Lesson; section: Section } | null {
+  for (const section of curriculum.sections) {
+    const lesson = section.lessons.find((l) => l.id === lessonId)
+    if (lesson) return { lesson, section }
+  }
+  return null
+}
 
 /**
- * The one screen (ADR-0010): boot straight into the current lesson and run its deck in
- * memory. No router, no home, no persistence — a reload starts the lesson over (Stage 3
- * adds storage). All business logic lives in core/; this only renders and tracks position.
+ * The screens (ADR-0010): the app opens straight into the current lesson's card and runs its
+ * deck in memory. The path screen is reachable but read-only; onboarding and persistence are
+ * the next stage. Business logic lives in core/; this only renders and tracks position.
  */
 export function App() {
-  // No stored progress yet, so this is always the first lesson of the first section.
-  const lesson = useMemo(() => nextLesson(curriculum, []), [])
-  const section = useMemo(
-    () => curriculum.sections.find((s) => s.lessons.some((l) => l.id === lesson?.id)) ?? null,
-    [lesson],
-  )
+  const firstLessonId = useMemo(() => nextLesson(curriculum, [])?.id ?? null, [])
+
+  const [screen, setScreen] = useState<'card' | 'path'>('card')
+  const [lessonId, setLessonId] = useState<string | null>(firstLessonId)
+  const [index, setIndex] = useState(0)
+  const [picked, setPicked] = useState<number | null>(null)
+  const [missed, setMissed] = useState<MissedCard[]>([])
+
+  const located = useMemo(() => locate(lessonId), [lessonId])
   const deck = useMemo(
     () =>
-      lesson ? buildLessonDeck({ lesson, progress: [], lessonProgress: null, now: Date.now() }) : [],
-    [lesson],
+      located
+        ? buildLessonDeck({ lesson: located.lesson, progress: [], lessonProgress: null, now: Date.now() })
+        : [],
+    [located],
   )
 
-  const [index, setIndex] = useState(0)
-  const [revealed, setRevealed] = useState(false)
+  const openLesson = (id: string): void => {
+    setLessonId(id)
+    setIndex(0)
+    setPicked(null)
+    setMissed([])
+    setScreen('card')
+  }
 
-  if (!lesson || !section) {
+  if (screen === 'path') {
     return (
       <main className="app">
-        <p className="app-tagline">{copy.noLesson}</p>
+        <Path
+          curriculum={curriculum}
+          currentLessonId={lessonId}
+          onOpenLesson={openLesson}
+          onBack={() => setScreen('card')}
+        />
       </main>
     )
   }
 
+  if (!located) {
+    return (
+      <main className="app">
+        <p className="empty">{copy.noLesson}</p>
+      </main>
+    )
+  }
+  const { lesson, section } = located
+
   const header = (
     <header className="lesson-head">
-      <span className="eyebrow">{section.title}</span>
-      <h1 className="lesson-title">
-        {copy.lessonLabel} {lesson.order}
-      </h1>
+      <button type="button" className="back" aria-label={copy.pathBack} onClick={() => setScreen('path')}>
+        ‹
+      </button>
+      <div className="segments">
+        {deck.map((_, k) => {
+          const done = k < index || (k === index && picked !== null)
+          const current = k === index && picked === null
+          return <span key={k} className={`seg${done ? ' seg-done' : current ? ' seg-current' : ''}`} />
+        })}
+      </div>
       {index < deck.length && (
-        <span className="progress">{copy.progress(index + 1, deck.length)}</span>
+        <span className="card-count">{copy.cardCount(index + 1, deck.length)}</span>
       )}
     </header>
   )
 
   if (index >= deck.length) {
+    const upcoming = lessonAfter(curriculum, lesson.id)
+    // The next lesson has no title (ADR-0016); its first question is its topic. Announcing
+    // it lets curiosity, not a generic label, pull the next tap (ADR-0018).
+    const nextTopic = upcoming
+      ? (questionsById.get(upcoming.questionIds[0])?.question ?? null)
+      : null
     return (
       <main className="app">
         {header}
         <EndOfLesson
+          lessonOrder={lesson.order}
+          hasNext={upcoming !== null}
+          nextTopic={nextTopic}
+          missed={missed}
+          onNext={() => upcoming && openLesson(upcoming.id)}
           onRestart={() => {
             setIndex(0)
-            setRevealed(false)
+            setPicked(null)
+            setMissed([])
           }}
+          onPath={() => setScreen('path')}
         />
       </main>
     )
@@ -67,16 +124,23 @@ export function App() {
     return (
       <main className="app">
         {header}
-        <p className="app-tagline">{copy.noLesson}</p>
+        <p className="empty">{copy.noLesson}</p>
       </main>
     )
   }
 
-  const onGrade = (score: Score): void => {
-    // Stage 2 keeps no state: the grade only advances the deck. The scheduler (which turns
-    // a Score into review timing) is wired in Stage 3 with persistence.
-    void score
-    setRevealed(false)
+  const check = checksByQuestionId.get(card.questionId) ?? null
+  const isLast = index === deck.length - 1
+  const advanceLabel = isLast ? copy.finishLesson : copy.nextCard(index + 2, deck.length)
+
+  const advance = (): void => {
+    if (check && picked !== null && !orderedOptions(check, 0)[picked].correct) {
+      setMissed((m) => [
+        ...m,
+        { questionId: question.id, title: question.question, explanation: check.explanation },
+      ])
+    }
+    setPicked(null)
     setIndex((i) => i + 1)
   }
 
@@ -86,10 +150,15 @@ export function App() {
       <Card
         key={card.questionId}
         question={question}
+        check={check}
+        sectionTitle={section.title}
+        lessonOrder={lesson.order}
         isReview={card.kind === 'review'}
-        revealed={revealed}
-        onReveal={() => setRevealed(true)}
-        onGrade={onGrade}
+        reviewCount={0}
+        picked={picked}
+        onPick={setPicked}
+        onAdvance={advance}
+        advanceLabel={advanceLabel}
       />
     </main>
   )

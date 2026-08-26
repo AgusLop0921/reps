@@ -1,6 +1,6 @@
 # ADR-0010: Mobile-first, positioned against aimless scrolling
 
-- **Status:** Accepted
+- **Status:** Accepted — amended by ADR-0018
 - **Date:** 2026-08-24
 - **Supersedes:** the usage assumption in ADR-0003
 

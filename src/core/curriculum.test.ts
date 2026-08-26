@@ -4,6 +4,7 @@ import {
   buildLessonDeck,
   isCompleted,
   isUnlocked,
+  lessonAfter,
   nextLesson,
   sectionCompletion,
 } from './curriculum'
@@ -82,6 +83,32 @@ describe('nextLesson', () => {
 
   it('returns null when the whole path is complete', () => {
     expect(nextLesson(curriculum, [done('b1'), done('b2'), done('a1')])).toBeNull()
+  })
+})
+
+describe('lessonAfter', () => {
+  const curriculum: Curriculum = {
+    generatedAt: '2026-08-24',
+    sections: [
+      section('basic', [lesson('b1', 1, [qid(1)]), lesson('b2', 2, [qid(2)])]),
+      section('advanced', [lesson('a1', 1, [qid(3)])]),
+    ],
+  }
+
+  it('returns the next lesson within a section', () => {
+    expect(lessonAfter(curriculum, 'b1')?.id).toBe('b2')
+  })
+
+  it('crosses into the next section at a section boundary', () => {
+    expect(lessonAfter(curriculum, 'b2')?.id).toBe('a1')
+  })
+
+  it('returns null at the end of the path', () => {
+    expect(lessonAfter(curriculum, 'a1')).toBeNull()
+  })
+
+  it('returns null for an unknown lesson', () => {
+    expect(lessonAfter(curriculum, 'nope')).toBeNull()
   })
 })
 
