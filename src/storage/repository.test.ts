@@ -4,8 +4,10 @@ import type { LessonProgress, Progress } from '../content/schema'
 import { db, RepsDb } from './db'
 import {
   clearAll,
+  exportData,
   getAllLessonProgress,
   getAllProgress,
+  importData,
   putLessonProgress,
   putProgress,
 } from './repository'
@@ -63,6 +65,48 @@ describe('read validation (ADR-0004 boundary)', () => {
     expect(all).toEqual([progress(qid(1))])
     expect(warn).toHaveBeenCalledOnce()
     warn.mockRestore()
+  })
+})
+
+describe('export / import', () => {
+  it('round-trips all progress through a JSON string', async () => {
+    await putProgress(progress(qid(1)))
+    await putLessonProgress(lessonProgress('lesson-1'))
+    const json = await exportData()
+
+    await clearAll()
+    await importData(json)
+
+    expect(await getAllProgress()).toEqual([progress(qid(1))])
+    expect(await getAllLessonProgress()).toEqual([lessonProgress('lesson-1')])
+  })
+
+  it('replaces existing data rather than merging', async () => {
+    await putProgress(progress(qid(1)))
+    const incoming = JSON.stringify({
+      version: 1,
+      progress: [progress(qid(2))],
+      lessonProgress: [],
+    })
+
+    await importData(incoming)
+
+    expect(await getAllProgress()).toEqual([progress(qid(2))])
+  })
+
+  it('exports a version-1 payload', async () => {
+    expect(JSON.parse(await exportData()).version).toBe(1)
+  })
+
+  it('rejects a file that is not JSON, leaving data untouched', async () => {
+    await putProgress(progress(qid(1)))
+    await expect(importData('not json')).rejects.toThrow(/not valid JSON/)
+    expect(await getAllProgress()).toEqual([progress(qid(1))])
+  })
+
+  it('rejects a foreign or wrong-version file', async () => {
+    const wrongVersion = JSON.stringify({ version: 2, progress: [], lessonProgress: [] })
+    await expect(importData(wrongVersion)).rejects.toThrow(/valid Reps progress export/)
   })
 })
 

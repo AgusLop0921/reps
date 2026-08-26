@@ -112,6 +112,17 @@ export const lessonProgressSchema = z.object({
 })
 
 /**
+ * The JSON export/import payload (ADR-0005): all local progress in one file, the only
+ * mitigation for per-browser data. `version` is literal so a future schema change can
+ * detect and migrate an old export on import instead of silently accepting it.
+ */
+export const progressExportSchema = z.object({
+  version: z.literal(1),
+  progress: z.array(progressSchema),
+  lessonProgress: z.array(lessonProgressSchema),
+})
+
+/**
  * A generated multiple-choice check for a question (ADR-0017). Options range 2–4; the UI
  * shuffles them from a seed at display time, so stored order is arbitrary. No `sourceId`:
  * generated checks are ours, not the source's — they carry no attribution.
@@ -145,6 +156,7 @@ export type Curriculum = z.infer<typeof curriculumSchema>
 export type QuestionsFile = z.infer<typeof questionsFileSchema>
 export type Progress = z.infer<typeof progressSchema>
 export type LessonProgress = z.infer<typeof lessonProgressSchema>
+export type ProgressExport = z.infer<typeof progressExportSchema>
 export type Check = z.infer<typeof checkSchema>
 export type ChecksFile = z.infer<typeof checksFileSchema>
 export type Box = Progress['box']
