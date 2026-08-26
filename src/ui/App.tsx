@@ -3,6 +3,7 @@ import { checksByQuestionId, curriculum, questionsById } from '../content/load'
 import type { Lesson, LessonProgress, Progress, Score, Section } from '../content/schema'
 import { orderedOptions, scoreForCheck } from '../core/checks'
 import { buildLessonDeck, type DeckCard, lessonAfter, nextLesson } from '../core/curriculum'
+import { exportData, importData } from '../storage/repository'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
@@ -41,7 +42,7 @@ function deckFor(
  * position, and passes `now` into the pure domain.
  */
 export function App() {
-  const { loading, progress, lessonProgress, answer } = useProgress()
+  const { loading, progress, lessonProgress, answer, reload } = useProgress()
 
   const [booted, setBooted] = useState(false)
   const [screen, setScreen] = useState<'card' | 'path'>('card')
@@ -50,6 +51,7 @@ export function App() {
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
   const [missed, setMissed] = useState<MissedCard[]>([])
+  const [notice, setNotice] = useState<string | null>(null)
 
   // Once storage has loaded, land on the resumed lesson and build its deck a single time.
   useEffect(() => {
@@ -66,7 +68,40 @@ export function App() {
     setIndex(0)
     setPicked(null)
     setMissed([])
+    setNotice(null)
     setScreen('card')
+  }
+
+  const handleExport = (): void => {
+    void (async () => {
+      const json = await exportData()
+      const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }))
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'reps-progress.json'
+      link.click()
+      URL.revokeObjectURL(url)
+    })()
+  }
+
+  // Replace all progress with an imported file, then re-land on the resumed lesson.
+  const handleImport = (file: File): void => {
+    void (async () => {
+      try {
+        await importData(await file.text())
+      } catch {
+        setNotice(copy.importError)
+        return
+      }
+      const { progress: p, lessonProgress: lp } = await reload()
+      const id = nextLesson(curriculum, lp)?.id ?? null
+      setLessonId(id)
+      setDeck(deckFor(id, p, lp, Date.now()))
+      setIndex(0)
+      setPicked(null)
+      setMissed([])
+      setNotice(copy.importDone)
+    })()
   }
 
   const located = useMemo(() => locate(lessonId), [lessonId])
@@ -86,7 +121,10 @@ export function App() {
           curriculum={curriculum}
           currentLessonId={lessonId}
           progress={lessonProgress}
+          notice={notice}
           onOpenLesson={openLesson}
+          onExport={handleExport}
+          onImport={handleImport}
           onBack={() => setScreen('card')}
         />
       </main>
@@ -104,7 +142,15 @@ export function App() {
 
   const header = (
     <header className="lesson-head">
-      <button type="button" className="back" aria-label={copy.pathBack} onClick={() => setScreen('path')}>
+      <button
+        type="button"
+        className="back"
+        aria-label={copy.pathBack}
+        onClick={() => {
+          setNotice(null)
+          setScreen('path')
+        }}
+      >
         ‹
       </button>
       <div className="segments">

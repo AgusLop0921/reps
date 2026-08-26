@@ -48,10 +48,11 @@ export function useProgress() {
     }
   }, [])
 
-  async function reload(): Promise<void> {
+  async function reload(): Promise<{ progress: Progress[]; lessonProgress: LessonProgress[] }> {
     const [p, lp] = await Promise.all([getAllProgress(), getAllLessonProgress()])
     setProgress(p)
     setLessonProgress(lp)
+    return { progress: p, lessonProgress: lp }
   }
 
   async function answer(input: AnswerInput): Promise<void> {

@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import type { Curriculum, LessonProgress } from '../content/schema'
 import { isCompleted, isUnlocked } from '../core/curriculum'
 import { copy } from './copy'
@@ -12,15 +13,29 @@ export function Path({
   curriculum,
   currentLessonId,
   progress,
+  notice,
   onOpenLesson,
+  onExport,
+  onImport,
   onBack,
 }: {
   curriculum: Curriculum
   currentLessonId: string | null
   progress: LessonProgress[]
+  notice: string | null
   onOpenLesson: (lessonId: string) => void
+  onExport: () => void
+  onImport: (file: File) => void
   onBack: () => void
 }) {
+  const fileInput = useRef<HTMLInputElement>(null)
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = event.target.files?.[0]
+    if (file) onImport(file)
+    event.target.value = '' // let the same file be picked again after an error
+  }
+
   return (
     <section className="path">
       <header className="path-head">
@@ -77,6 +92,23 @@ export function Path({
           )
         })}
       </div>
+
+      <footer className="path-actions">
+        <button type="button" className="path-action" onClick={onExport}>
+          {copy.exportProgress}
+        </button>
+        <button type="button" className="path-action" onClick={() => fileInput.current?.click()}>
+          {copy.importProgress}
+        </button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="application/json"
+          className="path-file"
+          onChange={onFileChange}
+        />
+        {notice && <p className="path-notice">{notice}</p>}
+      </footer>
     </section>
   )
 }
