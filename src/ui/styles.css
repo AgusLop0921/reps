@@ -357,6 +357,22 @@ button {
   color: var(--text);
 }
 
+/* Restart: available, but never a main action — a quiet link under the real ones. */
+.tertiary {
+  width: 100%;
+  min-height: 40px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tertiary:hover {
+  color: var(--text);
+}
+
 /* ---- Path ------------------------------------------------------------------- */
 
 .back {

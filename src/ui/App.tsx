@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { checksByQuestionId, curriculum, questionsById } from '../content/load'
 import type { Lesson, Section } from '../content/schema'
-import { buildLessonDeck, nextLesson } from '../core/curriculum'
+import { buildLessonDeck, lessonAfter, nextLesson } from '../core/curriculum'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
@@ -86,11 +86,14 @@ export function App() {
   )
 
   if (index >= deck.length) {
+    const upcoming = lessonAfter(curriculum, lesson.id)
     return (
       <main className="app">
         {header}
         <EndOfLesson
           lessonOrder={lesson.order}
+          hasNext={upcoming !== null}
+          onNext={() => upcoming && openLesson(upcoming.id)}
           onRestart={() => {
             setIndex(0)
             setPicked(null)

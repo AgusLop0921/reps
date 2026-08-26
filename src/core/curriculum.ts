@@ -41,6 +41,18 @@ export function nextLesson(
   return null
 }
 
+/**
+ * The lesson immediately after this one in path order, crossing section boundaries, or
+ * null at the end of the path. Unlike {@link nextLesson} this ignores progress: it answers
+ * "what comes next in the sequence", which is what the end-of-lesson screen offers.
+ */
+export function lessonAfter(curriculum: Curriculum, lessonId: string): Lesson | null {
+  const path = curriculum.sections.flatMap((s) => s.lessons)
+  const index = path.findIndex((l) => l.id === lessonId)
+  if (index === -1 || index === path.length - 1) return null
+  return path[index + 1]
+}
+
 export type DeckCard =
   | { kind: 'review'; questionId: string }
   | { kind: 'new'; questionId: string }
