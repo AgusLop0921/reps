@@ -34,7 +34,7 @@ change contracts.
 | [0007](0007-content-licensing.md) | Content licensing and attribution | Amended by 0015 |
 | [0008](0008-english-repo-spanish-product.md) | English repository, Spanish product | Amended by 0016 |
 | [0009](0009-git-workflow.md) | Branch, commit and PR workflow | Accepted |
-| [0010](0010-mobile-first-scroll-replacement.md) | Mobile-first, positioned against aimless scrolling | Accepted |
+| [0010](0010-mobile-first-scroll-replacement.md) | Mobile-first, positioned against aimless scrolling | Amended by 0018 |
 | [0011](0011-linear-lesson-path.md) | A linear lesson path as the primary structure | Partially superseded by 0014 |
 | [0012](0012-review-inside-lessons.md) | Review cards inside lessons | Accepted |
 | [0013](0013-interview-simulation-byok.md) | Interview simulation with the user's own API key | Accepted (v2) |
@@ -42,3 +42,4 @@ change contracts.
 | [0015](0015-strip-transport-artifacts.md) | Strip transport artifacts, not content | Accepted |
 | [0016](0016-lesson-titles-composed-in-ui.md) | Lesson titles are composed in the UI | Accepted |
 | [0017](0017-generated-checks-build-time.md) | Multiple-choice checks are generated at build time | Accepted |
+| [0018](0018-long-sessions-from-content-pull.md) | Long sessions are welcome when they come from content pull | Accepted |
