@@ -1,10 +1,19 @@
-import type { Check } from '../content/schema'
+import type { Check, Score } from '../content/schema'
 
 /**
  * Display order for a check's options (ADR-0017). Deterministic in `(questionId,
  * reviewCount)`, so the stored order never matters and a re-review reshuffles. Pure — no
  * clock, no Math.random — which is what keeps `core` exhaustively testable.
  */
+
+/**
+ * The Leitner score a binary check outcome feeds the scheduler (ADR-0019). Wrong resets the
+ * card (1); right promotes it one box (3, never 4) — the explanation sits above the check,
+ * so a correct answer confirms comprehension, not unaided recall.
+ */
+export function scoreForCheck(correct: boolean): Score {
+  return correct ? 3 : 1
+}
 
 /** FNV-1a → 32-bit unsigned. */
 function hash(seed: string): number {

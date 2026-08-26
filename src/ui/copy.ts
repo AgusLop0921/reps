@@ -6,6 +6,8 @@ export const copy = {
   appName: 'Reps',
   tagline: 'React en tarjetas cortas. Tres por día, cuatro minutos, y se termina.',
 
+  loading: 'Cargando…',
+
   lessonLabel: 'Lección',
   reviewBadge: 'Repaso',
   cardCount: (current: number, total: number): string => `${current}/${total}`,

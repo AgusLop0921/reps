@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Check } from '../content/schema'
-import { orderedOptions } from './checks'
+import { orderedOptions, scoreForCheck } from './checks'
 
 const check: Check = {
   questionId: '00000000000a',
@@ -37,5 +37,15 @@ describe('orderedOptions', () => {
     const other: Check = { ...check, questionId: '00000000000b' }
     // Not guaranteed different, but these two seeds land on different orders.
     expect(order(check, 0)).not.toBe(order(other, 0))
+  })
+})
+
+describe('scoreForCheck', () => {
+  it('maps a correct answer to 3 (promote one box, not 4)', () => {
+    expect(scoreForCheck(true)).toBe(3)
+  })
+
+  it('maps a wrong answer to 1 (reset to box 1)', () => {
+    expect(scoreForCheck(false)).toBe(1)
   })
 })
