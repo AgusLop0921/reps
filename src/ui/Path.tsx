@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import type { Curriculum, LessonProgress } from '../content/schema'
-import { isCompleted, isUnlocked } from '../core/curriculum'
+import { isCompleted, isUnlocked, nextLesson } from '../core/curriculum'
 import { copy } from './copy'
 
 /**
@@ -8,10 +8,12 @@ import { copy } from './copy'
  * (isUnlocked/isCompleted) applied to real stored progress (ADR-0005): completed lessons
  * are marked, the next lesson in a section unlocks once the previous is done, and the first
  * lesson of every section is always enterable — so an experienced user can start at Advanced.
+ *
+ * "acá" marks the next actionable lesson (nextLesson), not whichever lesson is open — a
+ * completed lesson you are sitting on should not claim to be where the work is.
  */
 export function Path({
   curriculum,
-  currentLessonId,
   progress,
   notice,
   onOpenLesson,
@@ -20,7 +22,6 @@ export function Path({
   onBack,
 }: {
   curriculum: Curriculum
-  currentLessonId: string | null
   progress: LessonProgress[]
   notice: string | null
   onOpenLesson: (lessonId: string) => void
@@ -29,6 +30,7 @@ export function Path({
   onBack: () => void
 }) {
   const fileInput = useRef<HTMLInputElement>(null)
+  const nextId = nextLesson(curriculum, progress)?.id ?? null
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0]
@@ -69,8 +71,8 @@ export function Path({
                 {section.lessons.map((lesson) => {
                   const unlocked = isUnlocked(lesson, section, progress)
                   const completed = isCompleted(lesson, progress)
-                  const current = lesson.id === currentLessonId
-                  const cls = `path-lesson${current ? ' path-lesson-current' : ''}${unlocked ? '' : ' path-lesson-locked'}`
+                  const isNext = lesson.id === nextId
+                  const cls = `path-lesson${isNext ? ' path-lesson-current' : ''}${unlocked ? '' : ' path-lesson-locked'}`
                   return (
                     <li key={lesson.id}>
                       <button
@@ -92,7 +94,7 @@ export function Path({
                             {copy.lessonDoneMark}
                           </span>
                         )}
-                        <span className="path-lesson-tag">{current ? copy.pathCurrent : ''}</span>
+                        <span className="path-lesson-tag">{isNext ? copy.pathCurrent : ''}</span>
                       </button>
                     </li>
                   )

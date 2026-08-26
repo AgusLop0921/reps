@@ -119,7 +119,6 @@ export function App() {
       <main className="app">
         <Path
           curriculum={curriculum}
-          currentLessonId={lessonId}
           progress={lessonProgress}
           notice={notice}
           onOpenLesson={openLesson}
