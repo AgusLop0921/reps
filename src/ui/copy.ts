@@ -37,6 +37,9 @@ export const copy = {
   sectionProgress: (done: number, total: number): string => `${done} de ${total}`,
   sectionEnter: 'Empezar acá',
   pathCurrent: 'acá',
+  // A done lesson is a fact, not a reward — a quiet mark, never a badge to collect (ADR-0018).
+  lessonDoneMark: '✓',
+  lessonDoneLabel: 'Lección terminada',
 
   // Export/import is the only mitigation for per-browser data (ADR-0005).
   exportProgress: 'Exportar progreso',

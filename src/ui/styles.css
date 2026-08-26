@@ -572,6 +572,13 @@ button {
   flex: 1;
 }
 
+.path-lesson-done {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  line-height: 1;
+  color: var(--correct);
+}
+
 .path-lesson-tag {
   font-family: var(--mono);
   font-size: 0.7rem;

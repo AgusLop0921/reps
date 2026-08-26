@@ -68,6 +68,7 @@ export function Path({
               <ul className="path-lessons">
                 {section.lessons.map((lesson) => {
                   const unlocked = isUnlocked(lesson, section, progress)
+                  const completed = isCompleted(lesson, progress)
                   const current = lesson.id === currentLessonId
                   const cls = `path-lesson${current ? ' path-lesson-current' : ''}${unlocked ? '' : ' path-lesson-locked'}`
                   return (
@@ -82,6 +83,15 @@ export function Path({
                         <span className="path-lesson-name">
                           {copy.lessonLabel} {lesson.order}
                         </span>
+                        {completed && (
+                          <span
+                            className="path-lesson-done"
+                            role="img"
+                            aria-label={copy.lessonDoneLabel}
+                          >
+                            {copy.lessonDoneMark}
+                          </span>
+                        )}
                         <span className="path-lesson-tag">{current ? copy.pathCurrent : ''}</span>
                       </button>
                     </li>
