@@ -38,7 +38,6 @@ export function EndOfLesson({
         {copy.lessonLabel} {lessonOrder} · {copy.endDone}
       </div>
       <h2 className="end-title">{copy.endTitle}</h2>
-      <p className="end-subtitle">{hasNext ? copy.endSubtitle : copy.endSubtitleLast}</p>
       {hasNext && nextTopic && (
         <div className="end-next">
           <span className="end-next-kicker">{copy.endNextKicker}</span>

@@ -24,11 +24,7 @@ export const copy = {
 
   endDone: 'terminada',
   endTitle: 'Listo.',
-  // The lesson is done; the next one is right there and stopping is equally fine — no
-  // "come back tomorrow", no "nothing left to do". Continuation is pulled by the content,
-  // never pushed by the app (ADR-0018).
-  endSubtitle: 'Seguí si te interesa lo que viene, o dejalo acá. Las dos están bien.',
-  endSubtitleLast: 'Llegaste al final del camino por ahora.',
+  // The next lesson is announced so curiosity pulls the next tap, never the app (ADR-0018).
   endNextKicker: 'Lo que sigue',
   endNext: 'Empezar la próxima',
   endMissedTitle: 'Para repasar',
