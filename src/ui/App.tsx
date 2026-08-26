@@ -85,6 +85,7 @@ export function App() {
         <Path
           curriculum={curriculum}
           currentLessonId={lessonId}
+          progress={lessonProgress}
           onOpenLesson={openLesson}
           onBack={() => setScreen('card')}
         />

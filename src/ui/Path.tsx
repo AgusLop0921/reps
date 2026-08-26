@@ -3,24 +3,24 @@ import { isCompleted, isUnlocked } from '../core/curriculum'
 import { copy } from './copy'
 
 /**
- * The path screen (ADR-0011): sections and their lessons, read-only for now. Status comes
- * from core (isUnlocked/isCompleted). With no stored progress yet, the first lesson of every
- * section is enterable — so an experienced user can start at Advanced — and the rest are
- * locked. Persistence (next stage) fills in real completion and unlocking.
+ * The path screen (ADR-0011): sections and their lessons. Status comes from core
+ * (isUnlocked/isCompleted) applied to real stored progress (ADR-0005): completed lessons
+ * are marked, the next lesson in a section unlocks once the previous is done, and the first
+ * lesson of every section is always enterable — so an experienced user can start at Advanced.
  */
 export function Path({
   curriculum,
   currentLessonId,
+  progress,
   onOpenLesson,
   onBack,
 }: {
   curriculum: Curriculum
   currentLessonId: string | null
+  progress: LessonProgress[]
   onOpenLesson: (lessonId: string) => void
   onBack: () => void
 }) {
-  const progress: LessonProgress[] = []
-
   return (
     <section className="path">
       <header className="path-head">
