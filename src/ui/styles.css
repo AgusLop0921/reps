@@ -373,6 +373,76 @@ button {
   color: var(--text);
 }
 
+/* Cards missed this lesson — reopenable explanations, no score. Left-aligned against the
+   centred end message; each item is a native <details> so it needs no JavaScript. */
+.end {
+  overflow-y: auto;
+}
+
+.end-missed {
+  width: 100%;
+  max-width: 420px;
+  margin-top: var(--space);
+  padding-top: var(--space);
+  border-top: 1px solid var(--border);
+  text-align: left;
+}
+
+.end-missed-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.end-missed-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.end-missed-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 0.6rem 0.85rem;
+}
+
+.end-missed-q {
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  list-style: none;
+}
+
+.end-missed-q::-webkit-details-marker {
+  display: none;
+}
+
+.end-missed-q::after {
+  content: '+';
+  float: right;
+  margin-left: 10px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.end-missed-item[open] .end-missed-q::after {
+  content: '–';
+}
+
+.end-missed-explanation {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
 /* ---- Path ------------------------------------------------------------------- */
 
 .back {

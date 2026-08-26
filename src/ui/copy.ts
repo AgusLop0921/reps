@@ -26,6 +26,7 @@ export const copy = {
   endTitle: 'Listo por hoy.',
   endSubtitle: 'Mañana sigue la próxima. No hay nada más que hacer acá.',
   endNext: 'Empezar la próxima',
+  endMissedTitle: 'Para repasar',
   restart: 'Empezar de nuevo',
 
   pathBack: 'Ver el camino',

@@ -1,11 +1,15 @@
 import { useMemo, useState } from 'react'
 import { checksByQuestionId, curriculum, questionsById } from '../content/load'
 import type { Lesson, Section } from '../content/schema'
+import { orderedOptions } from '../core/checks'
 import { buildLessonDeck, lessonAfter, nextLesson } from '../core/curriculum'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
 import { Path } from './Path'
+
+/** A card answered incorrectly, kept so the end screen can resurface its explanation. */
+type MissedCard = { questionId: string; title: string; explanation: string }
 
 /** The section a lesson belongs to, plus the lesson itself, looked up by id. */
 function locate(lessonId: string | null): { lesson: Lesson; section: Section } | null {
@@ -28,6 +32,7 @@ export function App() {
   const [lessonId, setLessonId] = useState<string | null>(firstLessonId)
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
+  const [missed, setMissed] = useState<MissedCard[]>([])
 
   const located = useMemo(() => locate(lessonId), [lessonId])
   const deck = useMemo(
@@ -42,6 +47,7 @@ export function App() {
     setLessonId(id)
     setIndex(0)
     setPicked(null)
+    setMissed([])
     setScreen('card')
   }
 
@@ -93,10 +99,12 @@ export function App() {
         <EndOfLesson
           lessonOrder={lesson.order}
           hasNext={upcoming !== null}
+          missed={missed}
           onNext={() => upcoming && openLesson(upcoming.id)}
           onRestart={() => {
             setIndex(0)
             setPicked(null)
+            setMissed([])
           }}
           onPath={() => setScreen('path')}
         />
@@ -120,6 +128,12 @@ export function App() {
   const advanceLabel = isLast ? copy.finishLesson : copy.nextCard(index + 2, deck.length)
 
   const advance = (): void => {
+    if (check && picked !== null && !orderedOptions(check, 0)[picked].correct) {
+      setMissed((m) => [
+        ...m,
+        { questionId: question.id, title: question.question, explanation: check.explanation },
+      ])
+    }
     setPicked(null)
     setIndex((i) => i + 1)
   }
