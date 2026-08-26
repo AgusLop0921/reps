@@ -23,8 +23,13 @@ export const copy = {
   sourcePrefix: 'Contenido de',
 
   endDone: 'terminada',
-  endTitle: 'Listo por hoy.',
-  endSubtitle: 'Mañana sigue la próxima. No hay nada más que hacer acá.',
+  endTitle: 'Listo.',
+  // The lesson is done; the next one is right there and stopping is equally fine — no
+  // "come back tomorrow", no "nothing left to do". Continuation is pulled by the content,
+  // never pushed by the app (ADR-0018).
+  endSubtitle: 'Seguí si te interesa lo que viene, o dejalo acá. Las dos están bien.',
+  endSubtitleLast: 'Llegaste al final del camino por ahora.',
+  endNextKicker: 'Lo que sigue',
   endNext: 'Empezar la próxima',
   endMissedTitle: 'Para repasar',
   restart: 'Empezar de nuevo',

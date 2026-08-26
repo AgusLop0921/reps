@@ -341,6 +341,29 @@ button {
   line-height: 1.55;
 }
 
+/* The next lesson's topic, announced so curiosity pulls the next tap (ADR-0018). */
+.end-next {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 0.4rem;
+}
+
+.end-next-kicker {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.end-next-topic {
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
 .end-actions {
   display: flex;
   flex-direction: column;

@@ -4,9 +4,11 @@ import { copy } from './copy'
 type Missed = { questionId: string; title: string; explanation: string }
 
 /**
- * End of lesson (ADR-0010): a finished lesson leads forward, not back into itself. The
- * primary action is the next lesson in the path; when the path is finished it becomes the
- * path itself. Restart stays as a quiet tertiary link — cheap, but never the main action.
+ * End of lesson (ADR-0010, ADR-0018): a finished lesson leads forward, not back into
+ * itself. When there is a next lesson, its topic is announced so curiosity — not a generic
+ * label — pulls the next tap; continuing and stopping each cost one tap, with no
+ * interstitial and no celebration. The primary action is the next lesson; when the path is
+ * finished it becomes the path itself. Restart stays a quiet tertiary link.
  *
  * Below the actions, the cards answered incorrectly, each reopening its explanation. No
  * score: on a teaching card the explanation was already on screen above the check, so a
@@ -16,6 +18,7 @@ type Missed = { questionId: string; title: string; explanation: string }
 export function EndOfLesson({
   lessonOrder,
   hasNext,
+  nextTopic,
   missed,
   onNext,
   onRestart,
@@ -23,6 +26,7 @@ export function EndOfLesson({
 }: {
   lessonOrder: number
   hasNext: boolean
+  nextTopic: string | null
   missed: Missed[]
   onNext: () => void
   onRestart: () => void
@@ -34,7 +38,13 @@ export function EndOfLesson({
         {copy.lessonLabel} {lessonOrder} · {copy.endDone}
       </div>
       <h2 className="end-title">{copy.endTitle}</h2>
-      <p className="end-subtitle">{copy.endSubtitle}</p>
+      <p className="end-subtitle">{hasNext ? copy.endSubtitle : copy.endSubtitleLast}</p>
+      {hasNext && nextTopic && (
+        <div className="end-next">
+          <span className="end-next-kicker">{copy.endNextKicker}</span>
+          <span className="end-next-topic">{nextTopic}</span>
+        </div>
+      )}
       <div className="end-actions">
         {hasNext ? (
           <>

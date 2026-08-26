@@ -93,12 +93,18 @@ export function App() {
 
   if (index >= deck.length) {
     const upcoming = lessonAfter(curriculum, lesson.id)
+    // The next lesson has no title (ADR-0016); its first question is its topic. Announcing
+    // it lets curiosity, not a generic label, pull the next tap (ADR-0018).
+    const nextTopic = upcoming
+      ? (questionsById.get(upcoming.questionIds[0])?.question ?? null)
+      : null
     return (
       <main className="app">
         {header}
         <EndOfLesson
           lessonOrder={lesson.order}
           hasNext={upcoming !== null}
+          nextTopic={nextTopic}
           missed={missed}
           onNext={() => upcoming && openLesson(upcoming.id)}
           onRestart={() => {
