@@ -1,6 +1,6 @@
 # ADR-0006: Spaced repetition with a 5-box Leitner system
 
-- **Status:** Accepted — amended by ADR-0012
+- **Status:** Accepted — amended by ADR-0012, ADR-0019
 - **Date:** 2026-08-24
 
 ## Context

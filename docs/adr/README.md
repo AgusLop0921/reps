@@ -30,7 +30,7 @@ change contracts.
 | [0003](0003-vite-react-no-backend.md) | Vite + React + TS, no backend | Partially superseded by 0010 |
 | [0004](0004-content-via-adapters.md) | Third-party content via adapters and a normalized schema | Accepted |
 | [0005](0005-indexeddb-persistence.md) | Local persistence in IndexedDB with Dexie | Accepted |
-| [0006](0006-leitner-spaced-repetition.md) | Spaced repetition with a 5-box Leitner system | Amended by 0012 |
+| [0006](0006-leitner-spaced-repetition.md) | Spaced repetition with a 5-box Leitner system | Amended by 0012, 0019 |
 | [0007](0007-content-licensing.md) | Content licensing and attribution | Amended by 0015 |
 | [0008](0008-english-repo-spanish-product.md) | English repository, Spanish product | Amended by 0016 |
 | [0009](0009-git-workflow.md) | Branch, commit and PR workflow | Accepted |
@@ -43,3 +43,4 @@ change contracts.
 | [0016](0016-lesson-titles-composed-in-ui.md) | Lesson titles are composed in the UI | Accepted |
 | [0017](0017-generated-checks-build-time.md) | Multiple-choice checks are generated at build time | Accepted |
 | [0018](0018-long-sessions-from-content-pull.md) | Long sessions are welcome when they come from content pull | Accepted |
+| [0019](0019-check-outcome-to-leitner-score.md) | A check outcome maps to a Leitner score of 1 or 3 | Accepted |
