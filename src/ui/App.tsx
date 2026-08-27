@@ -3,10 +3,12 @@ import { checksByQuestionId, curriculum, questionsById } from '../content/load'
 import type { Lesson, LessonProgress, Progress, Score, Section } from '../content/schema'
 import { orderedOptions, scoreForCheck } from '../core/checks'
 import { buildLessonDeck, type DeckCard, lessonAfter, nextLesson } from '../core/curriculum'
+import { hasOnboarded, markOnboarded } from '../storage/onboarding'
 import { exportData, importData } from '../storage/repository'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
+import { Onboarding } from './Onboarding'
 import { Path } from './Path'
 import { useAuth } from './useAuth'
 import { useProgress } from './useProgress'
@@ -55,6 +57,7 @@ export function App() {
   const [picked, setPicked] = useState<number | null>(null)
   const [missed, setMissed] = useState<MissedCard[]>([])
   const [notice, setNotice] = useState<string | null>(null)
+  const [onboarded, setOnboarded] = useState(() => hasOnboarded())
 
   // Reload progress from storage after it changes underneath us (import, sync). On the
   // initial sync after sign-in, also re-land on the resumed lesson so a device that had done
@@ -129,6 +132,13 @@ export function App() {
     })()
   }
 
+  // The first-run choice is recorded the moment it's made, so the screen is shown once, ever
+  // (ADR-0021) — even if a redirect or magic-link sign-in isn't completed.
+  const completeOnboarding = (): void => {
+    markOnboarded()
+    setOnboarded(true)
+  }
+
   const handleSignIn = (email: string): void => {
     void (async () => {
       try {
@@ -164,6 +174,23 @@ export function App() {
     return (
       <main className="app">
         <p className="empty">{copy.loading}</p>
+      </main>
+    )
+  }
+
+  // First run only, and only when sync exists to sign into (ADR-0021). Once past, never again.
+  if (auth.configured && !onboarded) {
+    return (
+      <main className="app">
+        <Onboarding
+          onGoogle={() => {
+            markOnboarded()
+            handleGoogleSignIn()
+          }}
+          onEmail={handleSignIn}
+          onContinue={completeOnboarding}
+          onSkip={completeOnboarding}
+        />
       </main>
     )
   }

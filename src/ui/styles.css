@@ -72,6 +72,58 @@ body {
   text-align: center;
 }
 
+/* First-run account choice (ADR-0021). Three options of deliberately equal weight — same
+   size, same neutral treatment, no accent on any — so none reads as the real path. */
+.onboarding {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 360px;
+  margin-inline: auto;
+  padding: var(--space);
+  text-align: center;
+}
+
+.onboarding-title {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.onboarding-body {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.onboarding-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.onboarding-option {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.onboarding-back {
+  min-height: 36px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 :where(a) {
   color: var(--accent);
 }
