@@ -47,5 +47,18 @@ export const copy = {
   importDone: 'Progreso importado.',
   importError: 'No se pudo importar el archivo.',
 
+  // Cross-device sync (ADR-0020). One affordance, never a nag (ADR-0018).
+  syncTitle: 'Sincronizar entre dispositivos',
+  syncEmailPlaceholder: 'tu correo',
+  syncSend: 'Enviarme el enlace',
+  syncCheckEmail: 'Te mandamos un enlace. Revisá tu correo.',
+  syncError: 'No se pudo enviar el enlace. Probá de nuevo.',
+  syncedAs: (email: string): string => `Sincronizado como ${email}`,
+  signOut: 'Cerrar sesión',
+  deleteAccount: 'Eliminar cuenta',
+  deleteConfirm: '¿Eliminar tu cuenta y todo tu progreso? No se puede deshacer.',
+  accountDeleted: 'Cuenta eliminada.',
+  syncPrivacy: 'Guardamos solo tu progreso: cajas, fechas y posición. Nunca el contenido ni tus respuestas.',
+
   noLesson: 'No hay ninguna lección para mostrar.',
 } as const
