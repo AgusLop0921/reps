@@ -71,6 +71,7 @@ export function useProgress() {
         lessonId,
         answeredQuestionIds: [],
         completedAt: null,
+        updatedAt: now,
       }
       const answeredQuestionIds = lp.answeredQuestionIds.includes(questionId)
         ? lp.answeredQuestionIds
@@ -80,6 +81,7 @@ export function useProgress() {
         ...lp,
         answeredQuestionIds,
         completedAt: done ? (lp.completedAt ?? now) : lp.completedAt,
+        updatedAt: now,
       }
       await putLessonProgress(updated)
       setLessonProgress((prev) => [...prev.filter((l) => l.lessonId !== lessonId), updated])

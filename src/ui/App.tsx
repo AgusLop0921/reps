@@ -8,7 +8,9 @@ import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
 import { Path } from './Path'
+import { useAuth } from './useAuth'
 import { useProgress } from './useProgress'
+import { useSync } from './useSync'
 
 /** A card answered incorrectly, kept so the end screen can resurface its explanation. */
 type MissedCard = { questionId: string; title: string; explanation: string }
@@ -43,6 +45,7 @@ function deckFor(
  */
 export function App() {
   const { loading, progress, lessonProgress, answer, reload } = useProgress()
+  const auth = useAuth()
 
   const [booted, setBooted] = useState(false)
   const [screen, setScreen] = useState<'card' | 'path'>('card')
@@ -52,6 +55,24 @@ export function App() {
   const [picked, setPicked] = useState<number | null>(null)
   const [missed, setMissed] = useState<MissedCard[]>([])
   const [notice, setNotice] = useState<string | null>(null)
+
+  // Reload progress from storage after it changes underneath us (import, sync). On the
+  // initial sync after sign-in, also re-land on the resumed lesson so a device that had done
+  // more elsewhere picks up there rather than at lesson 1.
+  const refreshFromStorage = async (reposition: boolean): Promise<void> => {
+    const { progress: p, lessonProgress: lp } = await reload()
+    if (reposition) {
+      const id = nextLesson(curriculum, lp)?.id ?? null
+      setLessonId(id)
+      setDeck(deckFor(id, p, lp, Date.now()))
+      setIndex(0)
+      setPicked(null)
+      setMissed([])
+    }
+  }
+
+  // Two-way sync while signed in (ADR-0020). No-op with no session or no Supabase.
+  useSync(auth.userId, (isInitial) => refreshFromStorage(isInitial))
 
   // Once storage has loaded, land on the resumed lesson and build its deck a single time.
   useEffect(() => {
@@ -93,14 +114,37 @@ export function App() {
         setNotice(copy.importError)
         return
       }
-      const { progress: p, lessonProgress: lp } = await reload()
-      const id = nextLesson(curriculum, lp)?.id ?? null
-      setLessonId(id)
-      setDeck(deckFor(id, p, lp, Date.now()))
-      setIndex(0)
-      setPicked(null)
-      setMissed([])
+      await refreshFromStorage(true)
       setNotice(copy.importDone)
+    })()
+  }
+
+  const handleSignIn = (email: string): void => {
+    void (async () => {
+      try {
+        await auth.signIn(email)
+        setNotice(copy.syncCheckEmail)
+      } catch {
+        setNotice(copy.syncError)
+      }
+    })()
+  }
+
+  const handleSignOut = (): void => {
+    void auth.signOut()
+  }
+
+  // "Delete my account and everything in it" (ADR-0020): remote rows, auth user, and local.
+  const handleDeleteAccount = (): void => {
+    if (!window.confirm(copy.deleteConfirm)) return
+    void (async () => {
+      try {
+        await auth.deleteAccount()
+        await refreshFromStorage(true)
+        setNotice(copy.accountDeleted)
+      } catch {
+        setNotice(copy.syncError)
+      }
     })()
   }
 
@@ -121,9 +165,14 @@ export function App() {
           curriculum={curriculum}
           progress={lessonProgress}
           notice={notice}
+          authConfigured={auth.configured}
+          authEmail={auth.email}
           onOpenLesson={openLesson}
           onExport={handleExport}
           onImport={handleImport}
+          onSignIn={handleSignIn}
+          onSignOut={handleSignOut}
+          onDeleteAccount={handleDeleteAccount}
           onBack={() => setScreen('card')}
         />
       </main>

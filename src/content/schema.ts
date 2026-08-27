@@ -99,6 +99,8 @@ export const progressSchema = z.object({
       score: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
     }),
   ),
+  /** Last local write, in ms. The key sync compares for last-write-wins (ADR-0020). */
+  updatedAt: z.number().int(),
 })
 
 /**
@@ -109,17 +111,25 @@ export const lessonProgressSchema = z.object({
   lessonId: z.string().min(1),
   answeredQuestionIds: z.array(z.string().length(12)),
   completedAt: z.number().int().nullable(),
+  /** Last local write, in ms — last-write-wins key for sync (ADR-0020). */
+  updatedAt: z.number().int(),
 })
 
 /**
- * The JSON export/import payload (ADR-0005): all local progress in one file, the only
- * mitigation for per-browser data. `version` is literal so a future schema change can
- * detect and migrate an old export on import instead of silently accepting it.
+ * The JSON export/import payload (ADR-0005): all local progress in one file. `version` is
+ * literal so import can detect an old shape and migrate it. v2 adds `updatedAt` (ADR-0020);
+ * v1 files predate it and are backfilled on import (see `repository.importData`).
  */
 export const progressExportSchema = z.object({
-  version: z.literal(1),
+  version: z.literal(2),
   progress: z.array(progressSchema),
   lessonProgress: z.array(lessonProgressSchema),
+})
+
+export const progressExportV1Schema = z.object({
+  version: z.literal(1),
+  progress: z.array(progressSchema.omit({ updatedAt: true })),
+  lessonProgress: z.array(lessonProgressSchema.omit({ updatedAt: true })),
 })
 
 /**

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { Curriculum, LessonProgress } from '../content/schema'
 import { isCompleted, isUnlocked, nextLesson } from '../core/curriculum'
 import { copy } from './copy'
@@ -16,26 +16,42 @@ export function Path({
   curriculum,
   progress,
   notice,
+  authConfigured,
+  authEmail,
   onOpenLesson,
   onExport,
   onImport,
+  onSignIn,
+  onSignOut,
+  onDeleteAccount,
   onBack,
 }: {
   curriculum: Curriculum
   progress: LessonProgress[]
   notice: string | null
+  authConfigured: boolean
+  authEmail: string | null
   onOpenLesson: (lessonId: string) => void
   onExport: () => void
   onImport: (file: File) => void
+  onSignIn: (email: string) => void
+  onSignOut: () => void
+  onDeleteAccount: () => void
   onBack: () => void
 }) {
   const fileInput = useRef<HTMLInputElement>(null)
+  const [email, setEmail] = useState('')
   const nextId = nextLesson(curriculum, progress)?.id ?? null
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0]
     if (file) onImport(file)
     event.target.value = '' // let the same file be picked again after an error
+  }
+
+  const onSignInSubmit = (event: React.FormEvent): void => {
+    event.preventDefault()
+    if (email.trim()) onSignIn(email.trim())
   }
 
   return (
@@ -119,6 +135,46 @@ export function Path({
           className="path-file"
           onChange={onFileChange}
         />
+
+        {authConfigured && (
+          <div className="path-sync">
+            {authEmail ? (
+              <>
+                <span className="path-note">{copy.syncedAs(authEmail)}</span>
+                <div className="path-sync-row">
+                  <button type="button" className="path-action" onClick={onSignOut}>
+                    {copy.signOut}
+                  </button>
+                  <button type="button" className="path-action" onClick={onDeleteAccount}>
+                    {copy.deleteAccount}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <form className="path-sync-form" onSubmit={onSignInSubmit}>
+                <label className="path-note" htmlFor="sync-email">
+                  {copy.syncTitle}
+                </label>
+                <div className="path-sync-row">
+                  <input
+                    id="sync-email"
+                    type="email"
+                    required
+                    className="path-email"
+                    placeholder={copy.syncEmailPlaceholder}
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                  />
+                  <button type="submit" className="path-action">
+                    {copy.syncSend}
+                  </button>
+                </div>
+              </form>
+            )}
+            <p className="path-note">{copy.syncPrivacy}</p>
+          </div>
+        )}
+
         {notice && <p className="path-notice">{notice}</p>}
       </footer>
     </section>

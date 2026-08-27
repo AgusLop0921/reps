@@ -1,6 +1,6 @@
 # ADR-0005: Local persistence in IndexedDB with Dexie
 
-- **Status:** Accepted
+- **Status:** Accepted — amended by ADR-0020
 - **Date:** 2026-08-24
 
 ## Context

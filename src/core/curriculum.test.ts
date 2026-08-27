@@ -32,6 +32,7 @@ const done = (lessonId: string): LessonProgress => ({
   lessonId,
   answeredQuestionIds: [],
   completedAt: NOW,
+  updatedAt: NOW,
 })
 
 describe('isUnlocked', () => {
@@ -161,7 +162,7 @@ describe('buildLessonDeck', () => {
     const deck = buildLessonDeck({
       lesson: current,
       progress: [],
-      lessonProgress: { lessonId: 'b2', answeredQuestionIds: [qid(10)], completedAt: null },
+      lessonProgress: { lessonId: 'b2', answeredQuestionIds: [qid(10)], completedAt: null, updatedAt: NOW },
       now: NOW,
     })
 
@@ -187,6 +188,7 @@ describe('isCompleted', () => {
       lessonId: 'b1',
       answeredQuestionIds: [qid(1)],
       completedAt: null,
+      updatedAt: NOW,
     }
     expect(isCompleted(lesson('b1', 1, [qid(1)]), [half])).toBe(false)
   })
