@@ -8,6 +8,15 @@ export const copy = {
 
   loading: 'Cargando…',
 
+  // First-run account choice (ADR-0021). Honest, symmetric, no default. Shown once, ever.
+  onboardingTitle: 'Antes de empezar',
+  onboardingBody:
+    'Con una cuenta, tu progreso se guarda y te sigue entre dispositivos. Sin cuenta, queda en este navegador.',
+  onboardingEmail: 'Entrar con email',
+  onboardingSkip: 'Seguir sin cuenta',
+  onboardingBack: 'Volver',
+  onboardingStart: 'Empezar',
+
   lessonLabel: 'Lección',
   reviewBadge: 'Repaso',
   cardCount: (current: number, total: number): string => `${current}/${total}`,
