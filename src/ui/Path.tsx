@@ -124,20 +124,6 @@ export function Path({
       </div>
 
       <footer className="path-actions">
-        <button type="button" className="path-action" onClick={onExport}>
-          {copy.exportProgress}
-        </button>
-        <button type="button" className="path-action" onClick={() => fileInput.current?.click()}>
-          {copy.importProgress}
-        </button>
-        <input
-          ref={fileInput}
-          type="file"
-          accept="application/json"
-          className="path-file"
-          onChange={onFileChange}
-        />
-
         {authConfigured && (
           <div className="path-sync">
             {authEmail ? (
@@ -179,6 +165,29 @@ export function Path({
             <p className="path-note">{copy.syncPrivacy}</p>
           </div>
         )}
+
+        <details className="path-advanced">
+          <summary className="path-advanced-summary">{copy.advanced}</summary>
+          <div className="path-advanced-body">
+            <button type="button" className="path-action" onClick={onExport}>
+              {copy.exportProgress}
+            </button>
+            <button
+              type="button"
+              className="path-action"
+              onClick={() => fileInput.current?.click()}
+            >
+              {copy.importProgress}
+            </button>
+            <input
+              ref={fileInput}
+              type="file"
+              accept="application/json"
+              className="path-file"
+              onChange={onFileChange}
+            />
+          </div>
+        </details>
 
         {notice && <p className="path-notice">{notice}</p>}
       </footer>
