@@ -34,6 +34,15 @@ export function useAuth() {
     if (error) throw error
   }
 
+  async function signInWithGoogle(): Promise<void> {
+    if (!supabase) return
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    })
+    if (error) throw error
+  }
+
   async function signOut(): Promise<void> {
     if (!supabase) return
     await supabase.auth.signOut()
@@ -47,5 +56,13 @@ export function useAuth() {
     await clearAll()
   }
 
-  return { configured: isSyncConfigured, email, userId, signIn, signOut, deleteAccount }
+  return {
+    configured: isSyncConfigured,
+    email,
+    userId,
+    signIn,
+    signInWithGoogle,
+    signOut,
+    deleteAccount,
+  }
 }

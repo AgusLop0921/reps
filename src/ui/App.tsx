@@ -119,6 +119,16 @@ export function App() {
     })()
   }
 
+  const handleGoogleSignIn = (): void => {
+    void (async () => {
+      try {
+        await auth.signInWithGoogle()
+      } catch {
+        setNotice(copy.syncError)
+      }
+    })()
+  }
+
   const handleSignIn = (email: string): void => {
     void (async () => {
       try {
@@ -170,6 +180,7 @@ export function App() {
           onOpenLesson={openLesson}
           onExport={handleExport}
           onImport={handleImport}
+          onGoogleSignIn={handleGoogleSignIn}
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           onDeleteAccount={handleDeleteAccount}

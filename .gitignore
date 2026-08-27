@@ -9,3 +9,6 @@ coverage/
 .env
 .env.local
 .env.*.local
+
+# Supabase CLI scratch
+supabase/.temp/
