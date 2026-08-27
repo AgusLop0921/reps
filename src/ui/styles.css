@@ -711,6 +711,27 @@ button {
   line-height: 1.5;
 }
 
+/* Export/import, demoted under a collapsed "Avanzado" (ADR-0021). */
+.path-advanced {
+  flex-basis: 100%;
+  margin-top: 4px;
+  padding-top: var(--space);
+  border-top: 1px solid var(--border);
+}
+
+.path-advanced-summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.path-advanced-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 /* ---- Markdown answers ------------------------------------------------------- */
 
 .markdown {

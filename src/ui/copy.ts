@@ -50,7 +50,8 @@ export const copy = {
   lessonDoneMark: '✓',
   lessonDoneLabel: 'Lección terminada',
 
-  // Export/import is the only mitigation for per-browser data (ADR-0005).
+  // Export/import lives under "Avanzado" now that sync is the primary path (ADR-0021).
+  advanced: 'Avanzado',
   exportProgress: 'Exportar progreso',
   importProgress: 'Importar progreso',
   importDone: 'Progreso importado.',
