@@ -16,6 +16,7 @@
     "verify": "pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.4",
     "dexie": "^4.4.5",
     "highlight.js": "^11.10.0",
     "react": "^19.0.0",

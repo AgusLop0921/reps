@@ -4,3 +4,8 @@ coverage/
 *.log
 .DS_Store
 .vitest/
+
+# Local env: real Supabase credentials live here, never committed (ADR-0020).
+.env
+.env.local
+.env.*.local
