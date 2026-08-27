@@ -1,25 +1,42 @@
+import { useRef } from 'react'
 import type { Curriculum, LessonProgress } from '../content/schema'
-import { isCompleted, isUnlocked } from '../core/curriculum'
+import { isCompleted, isUnlocked, nextLesson } from '../core/curriculum'
 import { copy } from './copy'
 
 /**
- * The path screen (ADR-0011): sections and their lessons, read-only for now. Status comes
- * from core (isUnlocked/isCompleted). With no stored progress yet, the first lesson of every
- * section is enterable — so an experienced user can start at Advanced — and the rest are
- * locked. Persistence (next stage) fills in real completion and unlocking.
+ * The path screen (ADR-0011): sections and their lessons. Status comes from core
+ * (isUnlocked/isCompleted) applied to real stored progress (ADR-0005): completed lessons
+ * are marked, the next lesson in a section unlocks once the previous is done, and the first
+ * lesson of every section is always enterable — so an experienced user can start at Advanced.
+ *
+ * "acá" marks the next actionable lesson (nextLesson), not whichever lesson is open — a
+ * completed lesson you are sitting on should not claim to be where the work is.
  */
 export function Path({
   curriculum,
-  currentLessonId,
+  progress,
+  notice,
   onOpenLesson,
+  onExport,
+  onImport,
   onBack,
 }: {
   curriculum: Curriculum
-  currentLessonId: string | null
+  progress: LessonProgress[]
+  notice: string | null
   onOpenLesson: (lessonId: string) => void
+  onExport: () => void
+  onImport: (file: File) => void
   onBack: () => void
 }) {
-  const progress: LessonProgress[] = []
+  const fileInput = useRef<HTMLInputElement>(null)
+  const nextId = nextLesson(curriculum, progress)?.id ?? null
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = event.target.files?.[0]
+    if (file) onImport(file)
+    event.target.value = '' // let the same file be picked again after an error
+  }
 
   return (
     <section className="path">
@@ -53,8 +70,9 @@ export function Path({
               <ul className="path-lessons">
                 {section.lessons.map((lesson) => {
                   const unlocked = isUnlocked(lesson, section, progress)
-                  const current = lesson.id === currentLessonId
-                  const cls = `path-lesson${current ? ' path-lesson-current' : ''}${unlocked ? '' : ' path-lesson-locked'}`
+                  const completed = isCompleted(lesson, progress)
+                  const isNext = lesson.id === nextId
+                  const cls = `path-lesson${isNext ? ' path-lesson-current' : ''}${unlocked ? '' : ' path-lesson-locked'}`
                   return (
                     <li key={lesson.id}>
                       <button
@@ -67,7 +85,16 @@ export function Path({
                         <span className="path-lesson-name">
                           {copy.lessonLabel} {lesson.order}
                         </span>
-                        <span className="path-lesson-tag">{current ? copy.pathCurrent : ''}</span>
+                        {completed && (
+                          <span
+                            className="path-lesson-done"
+                            role="img"
+                            aria-label={copy.lessonDoneLabel}
+                          >
+                            {copy.lessonDoneMark}
+                          </span>
+                        )}
+                        <span className="path-lesson-tag">{isNext ? copy.pathCurrent : ''}</span>
                       </button>
                     </li>
                   )
@@ -77,6 +104,23 @@ export function Path({
           )
         })}
       </div>
+
+      <footer className="path-actions">
+        <button type="button" className="path-action" onClick={onExport}>
+          {copy.exportProgress}
+        </button>
+        <button type="button" className="path-action" onClick={() => fileInput.current?.click()}>
+          {copy.importProgress}
+        </button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="application/json"
+          className="path-file"
+          onChange={onFileChange}
+        />
+        {notice && <p className="path-notice">{notice}</p>}
+      </footer>
     </section>
   )
 }

@@ -6,6 +6,8 @@ export const copy = {
   appName: 'Reps',
   tagline: 'React en tarjetas cortas. Tres por día, cuatro minutos, y se termina.',
 
+  loading: 'Cargando…',
+
   lessonLabel: 'Lección',
   reviewBadge: 'Repaso',
   cardCount: (current: number, total: number): string => `${current}/${total}`,
@@ -35,6 +37,15 @@ export const copy = {
   sectionProgress: (done: number, total: number): string => `${done} de ${total}`,
   sectionEnter: 'Empezar acá',
   pathCurrent: 'acá',
+  // A done lesson is a fact, not a reward — a quiet mark, never a badge to collect (ADR-0018).
+  lessonDoneMark: '✓',
+  lessonDoneLabel: 'Lección terminada',
+
+  // Export/import is the only mitigation for per-browser data (ADR-0005).
+  exportProgress: 'Exportar progreso',
+  importProgress: 'Importar progreso',
+  importDone: 'Progreso importado.',
+  importError: 'No se pudo importar el archivo.',
 
   noLesson: 'No hay ninguna lección para mostrar.',
 } as const

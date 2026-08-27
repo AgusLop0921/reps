@@ -1,12 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { checksByQuestionId, curriculum, questionsById } from '../content/load'
-import type { Lesson, Section } from '../content/schema'
-import { orderedOptions } from '../core/checks'
-import { buildLessonDeck, lessonAfter, nextLesson } from '../core/curriculum'
+import type { Lesson, LessonProgress, Progress, Score, Section } from '../content/schema'
+import { orderedOptions, scoreForCheck } from '../core/checks'
+import { buildLessonDeck, type DeckCard, lessonAfter, nextLesson } from '../core/curriculum'
+import { exportData, importData } from '../storage/repository'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
 import { Path } from './Path'
+import { useProgress } from './useProgress'
 
 /** A card answered incorrectly, kept so the end screen can resurface its explanation. */
 type MissedCard = { questionId: string; title: string; explanation: string }
@@ -20,35 +22,96 @@ function locate(lessonId: string | null): { lesson: Lesson; section: Section } |
   return null
 }
 
+/** The deck for a lesson, built from progress at the moment it opens (not on every answer). */
+function deckFor(
+  lessonId: string | null,
+  progress: Progress[],
+  lessonProgress: LessonProgress[],
+  now: number,
+): DeckCard[] {
+  const located = locate(lessonId)
+  if (!located) return []
+  const lp = lessonProgress.find((l) => l.lessonId === located.lesson.id) ?? null
+  return buildLessonDeck({ lesson: located.lesson, progress, lessonProgress: lp, now })
+}
+
 /**
- * The screens (ADR-0010): the app opens straight into the current lesson's card and runs its
- * deck in memory. The path screen is reachable but read-only; onboarding and persistence are
- * the next stage. Business logic lives in core/; this only renders and tracks position.
+ * The screens (ADR-0010): the app opens straight into the current lesson's card. Progress is
+ * loaded from storage at boot and written back on every answer (ADR-0005), so reloading
+ * resumes where the user left off. Business logic lives in core/; this renders, tracks
+ * position, and passes `now` into the pure domain.
  */
 export function App() {
-  const firstLessonId = useMemo(() => nextLesson(curriculum, [])?.id ?? null, [])
+  const { loading, progress, lessonProgress, answer, reload } = useProgress()
 
+  const [booted, setBooted] = useState(false)
   const [screen, setScreen] = useState<'card' | 'path'>('card')
-  const [lessonId, setLessonId] = useState<string | null>(firstLessonId)
+  const [lessonId, setLessonId] = useState<string | null>(null)
+  const [deck, setDeck] = useState<DeckCard[]>([])
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
   const [missed, setMissed] = useState<MissedCard[]>([])
+  const [notice, setNotice] = useState<string | null>(null)
 
-  const located = useMemo(() => locate(lessonId), [lessonId])
-  const deck = useMemo(
-    () =>
-      located
-        ? buildLessonDeck({ lesson: located.lesson, progress: [], lessonProgress: null, now: Date.now() })
-        : [],
-    [located],
-  )
+  // Once storage has loaded, land on the resumed lesson and build its deck a single time.
+  useEffect(() => {
+    if (loading || booted) return
+    const id = nextLesson(curriculum, lessonProgress)?.id ?? null
+    setLessonId(id)
+    setDeck(deckFor(id, progress, lessonProgress, Date.now()))
+    setBooted(true)
+  }, [loading, booted, lessonProgress, progress])
 
   const openLesson = (id: string): void => {
     setLessonId(id)
+    setDeck(deckFor(id, progress, lessonProgress, Date.now()))
     setIndex(0)
     setPicked(null)
     setMissed([])
+    setNotice(null)
     setScreen('card')
+  }
+
+  const handleExport = (): void => {
+    void (async () => {
+      const json = await exportData()
+      const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }))
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'reps-progress.json'
+      link.click()
+      URL.revokeObjectURL(url)
+    })()
+  }
+
+  // Replace all progress with an imported file, then re-land on the resumed lesson.
+  const handleImport = (file: File): void => {
+    void (async () => {
+      try {
+        await importData(await file.text())
+      } catch {
+        setNotice(copy.importError)
+        return
+      }
+      const { progress: p, lessonProgress: lp } = await reload()
+      const id = nextLesson(curriculum, lp)?.id ?? null
+      setLessonId(id)
+      setDeck(deckFor(id, p, lp, Date.now()))
+      setIndex(0)
+      setPicked(null)
+      setMissed([])
+      setNotice(copy.importDone)
+    })()
+  }
+
+  const located = useMemo(() => locate(lessonId), [lessonId])
+
+  if (loading || !booted) {
+    return (
+      <main className="app">
+        <p className="empty">{copy.loading}</p>
+      </main>
+    )
   }
 
   if (screen === 'path') {
@@ -56,8 +119,11 @@ export function App() {
       <main className="app">
         <Path
           curriculum={curriculum}
-          currentLessonId={lessonId}
+          progress={lessonProgress}
+          notice={notice}
           onOpenLesson={openLesson}
+          onExport={handleExport}
+          onImport={handleImport}
           onBack={() => setScreen('card')}
         />
       </main>
@@ -75,7 +141,15 @@ export function App() {
 
   const header = (
     <header className="lesson-head">
-      <button type="button" className="back" aria-label={copy.pathBack} onClick={() => setScreen('path')}>
+      <button
+        type="button"
+        className="back"
+        aria-label={copy.pathBack}
+        onClick={() => {
+          setNotice(null)
+          setScreen('path')
+        }}
+      >
         ‹
       </button>
       <div className="segments">
@@ -130,16 +204,32 @@ export function App() {
   }
 
   const check = checksByQuestionId.get(card.questionId) ?? null
+  const reviewCount = progress.find((p) => p.questionId === card.questionId)?.history.length ?? 0
   const isLast = index === deck.length - 1
   const advanceLabel = isLast ? copy.finishLesson : copy.nextCard(index + 2, deck.length)
 
   const advance = (): void => {
-    if (check && picked !== null && !orderedOptions(check, 0)[picked].correct) {
-      setMissed((m) => [
-        ...m,
-        { questionId: question.id, title: question.question, explanation: check.explanation },
-      ])
+    const now = Date.now()
+    let score: Score | null = null
+    if (check !== null && picked !== null) {
+      const correct = orderedOptions(check, reviewCount)[picked].correct
+      score = scoreForCheck(correct)
+      if (!correct) {
+        setMissed((m) => [
+          ...m,
+          { questionId: question.id, title: question.question, explanation: check.explanation },
+        ])
+      }
     }
+    // Grade the card and record the answer; persistence is optimistic (ADR-0005).
+    void answer({
+      lessonId: lesson.id,
+      lessonQuestionIds: lesson.questionIds,
+      questionId: card.questionId,
+      isLessonQuestion: card.kind === 'new',
+      score,
+      now,
+    })
     setPicked(null)
     setIndex((i) => i + 1)
   }
@@ -154,7 +244,7 @@ export function App() {
         sectionTitle={section.title}
         lessonOrder={lesson.order}
         isReview={card.kind === 'review'}
-        reviewCount={0}
+        reviewCount={reviewCount}
         picked={picked}
         onPick={setPicked}
         onAdvance={advance}
