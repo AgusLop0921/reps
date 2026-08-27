@@ -4,6 +4,7 @@ import {
   type Progress,
   type ProgressExport,
   progressExportSchema,
+  progressExportV1Schema,
   progressSchema,
 } from '../content/schema'
 import { db } from './db'
@@ -62,8 +63,24 @@ export async function exportData(): Promise<string> {
     getAllProgress(),
     getAllLessonProgress(),
   ])
-  const payload: ProgressExport = { version: 1, progress, lessonProgress }
+  const payload: ProgressExport = { version: 2, progress, lessonProgress }
   return JSON.stringify(payload, null, 2)
+}
+
+/** Normalize an imported payload to the current shape, backfilling `updatedAt` on v1 files. */
+function normalizeExport(raw: unknown): ProgressExport | null {
+  const v2 = progressExportSchema.safeParse(raw)
+  if (v2.success) return v2.data
+
+  const v1 = progressExportV1Schema.safeParse(raw)
+  if (v1.success) {
+    return {
+      version: 2,
+      progress: v1.data.progress.map((p) => ({ ...p, updatedAt: 0 })),
+      lessonProgress: v1.data.lessonProgress.map((l) => ({ ...l, updatedAt: 0 })),
+    }
+  }
+  return null
 }
 
 /**
@@ -78,11 +95,11 @@ export async function importData(json: string): Promise<void> {
   } catch {
     throw new Error('Import failed: the file is not valid JSON.')
   }
-  const parsed = progressExportSchema.safeParse(raw)
-  if (!parsed.success) {
+  const parsed = normalizeExport(raw)
+  if (!parsed) {
     throw new Error('Import failed: the file is not a valid Reps progress export.')
   }
-  const { progress, lessonProgress } = parsed.data
+  const { progress, lessonProgress } = parsed
   await db.transaction('rw', db.progress, db.lessonProgress, async () => {
     await db.progress.clear()
     await db.lessonProgress.clear()

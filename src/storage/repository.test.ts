@@ -1,4 +1,5 @@
 import 'fake-indexeddb/auto'
+import Dexie from 'dexie'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { LessonProgress, Progress } from '../content/schema'
 import { db, RepsDb } from './db'
@@ -20,12 +21,14 @@ const progress = (questionId: string): Progress => ({
   box: 2,
   dueAt: NOW,
   history: [{ at: NOW, score: 3 }],
+  updatedAt: NOW,
 })
 
 const lessonProgress = (lessonId: string): LessonProgress => ({
   lessonId,
   answeredQuestionIds: [qid(1)],
   completedAt: NOW,
+  updatedAt: NOW,
 })
 
 beforeEach(async () => {
@@ -84,7 +87,7 @@ describe('export / import', () => {
   it('replaces existing data rather than merging', async () => {
     await putProgress(progress(qid(1)))
     const incoming = JSON.stringify({
-      version: 1,
+      version: 2,
       progress: [progress(qid(2))],
       lessonProgress: [],
     })
@@ -94,8 +97,21 @@ describe('export / import', () => {
     expect(await getAllProgress()).toEqual([progress(qid(2))])
   })
 
-  it('exports a version-1 payload', async () => {
-    expect(JSON.parse(await exportData()).version).toBe(1)
+  it('exports a version-2 payload', async () => {
+    expect(JSON.parse(await exportData()).version).toBe(2)
+  })
+
+  it('imports a v1 file by backfilling updatedAt (ADR-0020)', async () => {
+    const v1 = JSON.stringify({
+      version: 1,
+      progress: [{ questionId: qid(3), box: 2, dueAt: NOW, history: [{ at: NOW, score: 3 }] }],
+      lessonProgress: [{ lessonId: 'lesson-1', answeredQuestionIds: [], completedAt: null }],
+    })
+
+    await importData(v1)
+
+    expect(await getAllProgress()).toEqual([{ ...progress(qid(3)), updatedAt: 0 }])
+    expect((await getAllLessonProgress())[0].updatedAt).toBe(0)
   })
 
   it('rejects a file that is not JSON, leaving data untouched', async () => {
@@ -104,16 +120,16 @@ describe('export / import', () => {
     expect(await getAllProgress()).toEqual([progress(qid(1))])
   })
 
-  it('rejects a foreign or wrong-version file', async () => {
-    const wrongVersion = JSON.stringify({ version: 2, progress: [], lessonProgress: [] })
-    await expect(importData(wrongVersion)).rejects.toThrow(/valid Reps progress export/)
+  it('rejects a foreign or unknown-version file', async () => {
+    const unknown = JSON.stringify({ version: 99, progress: [], lessonProgress: [] })
+    await expect(importData(unknown)).rejects.toThrow(/valid Reps progress export/)
   })
 })
 
-describe('schema v1 persistence', () => {
-  it('opens at version 1 with both stores', async () => {
+describe('schema persistence and migration', () => {
+  it('opens at version 2 with both stores', async () => {
     await clearAll() // forces open
-    expect(db.verno).toBe(1)
+    expect(db.verno).toBe(2)
     expect(db.tables.map((t) => t.name).sort()).toEqual(['lessonProgress', 'progress'])
   })
 
@@ -123,5 +139,28 @@ describe('schema v1 persistence', () => {
     await reopened.open()
     expect(await reopened.progress.toArray()).toHaveLength(1)
     reopened.close()
+  })
+
+  it('backfills updatedAt on the v1 → v2 upgrade (ADR-0020)', async () => {
+    const name = 'reps-migration-test'
+    await Dexie.delete(name)
+
+    // A pre-sync database: v1 schema, rows without updatedAt.
+    const old = new Dexie(name)
+    old.version(1).stores({ progress: 'questionId, dueAt', lessonProgress: 'lessonId' })
+    await old.open()
+    await old
+      .table('progress')
+      .put({ questionId: qid(9), box: 3, dueAt: NOW, history: [{ at: 111, score: 3 }, { at: 222, score: 4 }] })
+    await old.table('lessonProgress').put({ lessonId: 'L9', answeredQuestionIds: [], completedAt: 333 })
+    old.close()
+
+    // Reopening with the current schema runs the upgrade.
+    const migrated = new RepsDb(name)
+    await migrated.open()
+    expect((await migrated.progress.get(qid(9)))?.updatedAt).toBe(222) // last review
+    expect((await migrated.lessonProgress.get('L9'))?.updatedAt).toBe(333) // completion
+    migrated.close()
+    await Dexie.delete(name)
   })
 })
