@@ -27,9 +27,9 @@ change contracts.
 |---|---|---|
 | [0001](0001-record-decisions-with-adrs.md) | Record decisions with ADRs | Accepted |
 | [0002](0002-standalone-project.md) | Standalone project, not a section of an existing site | Accepted |
-| [0003](0003-vite-react-no-backend.md) | Vite + React + TS, no backend | Partially superseded by 0010 |
+| [0003](0003-vite-react-no-backend.md) | Vite + React + TS, no backend | Partially superseded by 0010, 0020 |
 | [0004](0004-content-via-adapters.md) | Third-party content via adapters and a normalized schema | Accepted |
-| [0005](0005-indexeddb-persistence.md) | Local persistence in IndexedDB with Dexie | Accepted |
+| [0005](0005-indexeddb-persistence.md) | Local persistence in IndexedDB with Dexie | Amended by 0020 |
 | [0006](0006-leitner-spaced-repetition.md) | Spaced repetition with a 5-box Leitner system | Amended by 0012, 0019 |
 | [0007](0007-content-licensing.md) | Content licensing and attribution | Amended by 0015 |
 | [0008](0008-english-repo-spanish-product.md) | English repository, Spanish product | Amended by 0016 |
@@ -44,3 +44,4 @@ change contracts.
 | [0017](0017-generated-checks-build-time.md) | Multiple-choice checks are generated at build time | Accepted |
 | [0018](0018-long-sessions-from-content-pull.md) | Long sessions are welcome when they come from content pull | Accepted |
 | [0019](0019-check-outcome-to-leitner-score.md) | A check outcome maps to a Leitner score of 1 or 3 | Accepted |
+| [0020](0020-cross-device-sync-supabase.md) | Cross-device progress sync with Supabase, local-first | Accepted |

@@ -1,6 +1,7 @@
 # ADR-0003: Vite + React + TypeScript, no backend
 
-- **Status:** Accepted — partially superseded by ADR-0010
+- **Status:** Accepted — partially superseded by ADR-0010, and by ADR-0020 (the "no backend"
+  clause)
 - **Date:** 2026-08-24
 
 ## Context
