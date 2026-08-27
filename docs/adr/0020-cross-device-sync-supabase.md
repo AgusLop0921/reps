@@ -1,6 +1,6 @@
 # ADR-0020: Cross-device progress sync with Supabase, local-first
 
-- **Status:** Accepted
+- **Status:** Accepted — amended by ADR-0021
 - **Date:** 2026-08-27
 - **Supersedes:** the "no backend / no cross-device sync" decision of ADR-0003
 - **Amends:** ADR-0005
@@ -32,17 +32,17 @@ store, export/import is the backup, nothing degrades and nothing nags (ADR-0010,
 An anonymous user never contacts Supabase at all. Signing in is purely additive: it turns
 sync on.
 
-**Auth: passwordless email magic link only** (Supabase Auth OTP). No passwords for us to
-store, leak, or reset; no OAuth, so no client secrets and one provider fewer to trust — a
-single user does not need it. The only personal data collected is an email address, and only
-from those who opt in. Anonymous Supabase sessions are deliberately not used — they don't
-link two devices, which is the whole point.
+**Auth: Google OAuth and passwordless email magic link** (Supabase Auth). No passwords for us
+to store, leak, or reset. The personal data collected is an email address, only from those
+who opt in. Anonymous Supabase sessions are deliberately not used — they don't link two
+devices, which is the whole point. (This ADR originally shipped magic link only; ADR-0021
+adds Google after the returning-user case showed "continue with Google" is the natural first
+tap.)
 
 The no-account path must **never degrade** into a funnel toward signing in (ADR-0018).
-Beyond one affordance on the path screen, there is no nag, no banner, no
-"sincronizá tu progreso" prompt, no red dot. Sync is an option the user can reach for, not a
-state the app pushes them toward; someone who never signs in should not be able to tell the
-feature exists except by looking for it.
+Beyond one affordance on the path screen — and the single first-run choice sanctioned by
+ADR-0021 — there is no nag, no banner, no "sincronizá tu progreso" prompt, no red dot. Sync
+is an option the user can reach for, not a state the app pushes them toward.
 
 ### 2. Local-first — IndexedDB stays the source of truth
 

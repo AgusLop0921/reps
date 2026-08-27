@@ -42,6 +42,7 @@ change contracts.
 | [0015](0015-strip-transport-artifacts.md) | Strip transport artifacts, not content | Accepted |
 | [0016](0016-lesson-titles-composed-in-ui.md) | Lesson titles are composed in the UI | Accepted |
 | [0017](0017-generated-checks-build-time.md) | Multiple-choice checks are generated at build time | Accepted |
-| [0018](0018-long-sessions-from-content-pull.md) | Long sessions are welcome when they come from content pull | Accepted |
+| [0018](0018-long-sessions-from-content-pull.md) | Long sessions are welcome when they come from content pull | Amended by 0021 |
 | [0019](0019-check-outcome-to-leitner-score.md) | A check outcome maps to a Leitner score of 1 or 3 | Accepted |
-| [0020](0020-cross-device-sync-supabase.md) | Cross-device progress sync with Supabase, local-first | Accepted |
+| [0020](0020-cross-device-sync-supabase.md) | Cross-device progress sync with Supabase, local-first | Amended by 0021 |
+| [0021](0021-first-run-account-choice.md) | A one-time first-run account choice | Accepted |
