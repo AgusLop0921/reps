@@ -21,6 +21,7 @@ export function Path({
   onOpenLesson,
   onExport,
   onImport,
+  onGoogleSignIn,
   onSignIn,
   onSignOut,
   onDeleteAccount,
@@ -34,6 +35,7 @@ export function Path({
   onOpenLesson: (lessonId: string) => void
   onExport: () => void
   onImport: (file: File) => void
+  onGoogleSignIn: () => void
   onSignIn: (email: string) => void
   onSignOut: () => void
   onDeleteAccount: () => void
@@ -151,25 +153,28 @@ export function Path({
                 </div>
               </>
             ) : (
-              <form className="path-sync-form" onSubmit={onSignInSubmit}>
-                <label className="path-note" htmlFor="sync-email">
-                  {copy.syncTitle}
-                </label>
-                <div className="path-sync-row">
-                  <input
-                    id="sync-email"
-                    type="email"
-                    required
-                    className="path-email"
-                    placeholder={copy.syncEmailPlaceholder}
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                  />
-                  <button type="submit" className="path-action">
-                    {copy.syncSend}
-                  </button>
-                </div>
-              </form>
+              <>
+                <span className="path-note">{copy.syncTitle}</span>
+                <button type="button" className="path-action" onClick={onGoogleSignIn}>
+                  {copy.googleSignIn}
+                </button>
+                <form className="path-sync-form" onSubmit={onSignInSubmit}>
+                  <div className="path-sync-row">
+                    <input
+                      id="sync-email"
+                      type="email"
+                      required
+                      className="path-email"
+                      placeholder={copy.syncEmailPlaceholder}
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                    />
+                    <button type="submit" className="path-action">
+                      {copy.syncSend}
+                    </button>
+                  </div>
+                </form>
+              </>
             )}
             <p className="path-note">{copy.syncPrivacy}</p>
           </div>

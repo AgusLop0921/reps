@@ -47,8 +47,9 @@ export const copy = {
   importDone: 'Progreso importado.',
   importError: 'No se pudo importar el archivo.',
 
-  // Cross-device sync (ADR-0020). One affordance, never a nag (ADR-0018).
+  // Cross-device sync (ADR-0020, ADR-0021). One affordance, never a nag (ADR-0018).
   syncTitle: 'Sincronizar entre dispositivos',
+  googleSignIn: 'Continuar con Google',
   syncEmailPlaceholder: 'tu correo',
   syncSend: 'Enviarme el enlace',
   syncCheckEmail: 'Te mandamos un enlace. Revisá tu correo.',
