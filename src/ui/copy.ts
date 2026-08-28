@@ -8,6 +8,52 @@ export const copy = {
 
   loading: 'Cargando…',
 
+  // Landing — "Diagonal" direction (ADR-0021). First-run and revisitable. Body copy is
+  // transcribed from the design prototype (to refine); the credit interpolates
+  // author/name/url/license from sources.ts (ADR-0007), never hardcoded.
+  landingNavStart: 'Empezar',
+  landingNavSystem: 'Sistema',
+  landingEyebrowLeft: 'Lección diaria · Tres tarjetas · Se termina',
+  landingEyebrowRight: 'Basado en preguntas-entrevista-react',
+  landingLead:
+    'Ocupa el lugar del scroll: abrís, hacés tres tarjetas de React, y se acaba. No hay feed que siga.',
+  landingCta: 'Empezar la lección 1',
+  landingCtaNote: 'Sin cuenta, sin configuraciones. Tu progreso queda en este navegador.',
+  landingHowEyebrow: 'Cómo funciona',
+  landingHowEyebrowRight: 'Orden, no algoritmo',
+  landingPoints: [
+    {
+      title: 'Lecciones que terminan',
+      body: 'Tres tarjetas nuevas, un repaso y una pregunta. Al final no hay un "siguiente" infinito: la tanda se termina, y eso es todo.',
+    },
+    {
+      title: 'Camino ordenado',
+      body: 'Un camino lineal, de lo básico a lo avanzado. No elegís temas al azar: te deja donde quedaste y sigue desde ahí.',
+    },
+    {
+      title: 'Las preguntas vuelven',
+      body: 'Repaso espaciado: lo que viste reaparece justo antes de que se te olvide, mezclado con la lección nueva.',
+    },
+  ],
+  landingCreditEyebrow: 'Crédito del contenido',
+  landingCreditPre: (author: string): string =>
+    `Las preguntas y respuestas son de ${author}, del repositorio `,
+  landingCreditPost: (license: string): string => `, con licencia ${license}.`,
+  landingCreditNote:
+    'Solo agregamos la capa de práctica. Los tests de opción múltiple los generamos nosotros; no son parte del contenido original.',
+  landingFooterMeta: (author: string, license: string): string =>
+    `Contenido de ${author} · ${license}`,
+  pathViewIntro: 'Ver la introducción',
+
+  // First-run account choice (ADR-0021). Honest, symmetric, no default. Shown once, ever.
+  onboardingTitle: 'Antes de empezar',
+  onboardingBody:
+    'Con una cuenta, tu progreso se guarda y te sigue entre dispositivos. Sin cuenta, queda en este navegador.',
+  onboardingEmail: 'Entrar con email',
+  onboardingSkip: 'Seguir sin cuenta',
+  onboardingBack: 'Volver',
+  onboardingStart: 'Empezar',
+
   lessonLabel: 'Lección',
   reviewBadge: 'Repaso',
   cardCount: (current: number, total: number): string => `${current}/${total}`,
@@ -41,14 +87,16 @@ export const copy = {
   lessonDoneMark: '✓',
   lessonDoneLabel: 'Lección terminada',
 
-  // Export/import is the only mitigation for per-browser data (ADR-0005).
+  // Export/import lives under "Avanzado" now that sync is the primary path (ADR-0021).
+  advanced: 'Avanzado',
   exportProgress: 'Exportar progreso',
   importProgress: 'Importar progreso',
   importDone: 'Progreso importado.',
   importError: 'No se pudo importar el archivo.',
 
-  // Cross-device sync (ADR-0020). One affordance, never a nag (ADR-0018).
+  // Cross-device sync (ADR-0020, ADR-0021). One affordance, never a nag (ADR-0018).
   syncTitle: 'Sincronizar entre dispositivos',
+  googleSignIn: 'Continuar con Google',
   syncEmailPlaceholder: 'tu correo',
   syncSend: 'Enviarme el enlace',
   syncCheckEmail: 'Te mandamos un enlace. Revisá tu correo.',

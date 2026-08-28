@@ -1,6 +1,6 @@
 # ADR-0018: Long sessions are welcome when they come from content pull
 
-- **Status:** Accepted
+- **Status:** Accepted — amended by ADR-0021
 - **Date:** 2026-08-26
 - **Amends:** ADR-0010
 

@@ -19,8 +19,10 @@ export function Path({
   authConfigured,
   authEmail,
   onOpenLesson,
+  onViewIntro,
   onExport,
   onImport,
+  onGoogleSignIn,
   onSignIn,
   onSignOut,
   onDeleteAccount,
@@ -32,8 +34,10 @@ export function Path({
   authConfigured: boolean
   authEmail: string | null
   onOpenLesson: (lessonId: string) => void
+  onViewIntro: () => void
   onExport: () => void
   onImport: (file: File) => void
+  onGoogleSignIn: () => void
   onSignIn: (email: string) => void
   onSignOut: () => void
   onDeleteAccount: () => void
@@ -122,20 +126,6 @@ export function Path({
       </div>
 
       <footer className="path-actions">
-        <button type="button" className="path-action" onClick={onExport}>
-          {copy.exportProgress}
-        </button>
-        <button type="button" className="path-action" onClick={() => fileInput.current?.click()}>
-          {copy.importProgress}
-        </button>
-        <input
-          ref={fileInput}
-          type="file"
-          accept="application/json"
-          className="path-file"
-          onChange={onFileChange}
-        />
-
         {authConfigured && (
           <div className="path-sync">
             {authEmail ? (
@@ -151,31 +141,61 @@ export function Path({
                 </div>
               </>
             ) : (
-              <form className="path-sync-form" onSubmit={onSignInSubmit}>
-                <label className="path-note" htmlFor="sync-email">
-                  {copy.syncTitle}
-                </label>
-                <div className="path-sync-row">
-                  <input
-                    id="sync-email"
-                    type="email"
-                    required
-                    className="path-email"
-                    placeholder={copy.syncEmailPlaceholder}
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                  />
-                  <button type="submit" className="path-action">
-                    {copy.syncSend}
-                  </button>
-                </div>
-              </form>
+              <>
+                <span className="path-note">{copy.syncTitle}</span>
+                <button type="button" className="path-action" onClick={onGoogleSignIn}>
+                  {copy.googleSignIn}
+                </button>
+                <form className="path-sync-form" onSubmit={onSignInSubmit}>
+                  <div className="path-sync-row">
+                    <input
+                      id="sync-email"
+                      type="email"
+                      required
+                      className="path-email"
+                      placeholder={copy.syncEmailPlaceholder}
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                    />
+                    <button type="submit" className="path-action">
+                      {copy.syncSend}
+                    </button>
+                  </div>
+                </form>
+              </>
             )}
             <p className="path-note">{copy.syncPrivacy}</p>
           </div>
         )}
 
+        <details className="path-advanced">
+          <summary className="path-advanced-summary">{copy.advanced}</summary>
+          <div className="path-advanced-body">
+            <button type="button" className="path-action" onClick={onExport}>
+              {copy.exportProgress}
+            </button>
+            <button
+              type="button"
+              className="path-action"
+              onClick={() => fileInput.current?.click()}
+            >
+              {copy.importProgress}
+            </button>
+            <input
+              ref={fileInput}
+              type="file"
+              accept="application/json"
+              className="path-file"
+              onChange={onFileChange}
+            />
+          </div>
+        </details>
+
         {notice && <p className="path-notice">{notice}</p>}
+
+        <button type="button" className="path-intro-link" onClick={onViewIntro}>
+          {copy.pathViewIntro}
+        </button>
       </footer>
     </section>
   )

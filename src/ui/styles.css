@@ -72,6 +72,292 @@ body {
   text-align: center;
 }
 
+/* Landing (ADR-0021), "Diagonal" direction: a wide, rule-framed editorial page — nav, an
+   oversized wordmark, a numbered three-point section, a quiet credit, and a footer. It breaks
+   out of the app's 640px column into its own wider shell, and scrolls as a page. Same tokens,
+   serif, and dark palette; accent only on links, the outline CTA, and the numerals. */
+.landing-shell {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.landing {
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 6vh, 4rem);
+  padding: calc(var(--space) + env(safe-area-inset-top)) clamp(var(--space), 5vw, 3rem)
+    calc(var(--space) + env(safe-area-inset-bottom));
+}
+
+.landing-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space);
+}
+
+.landing-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.landing-brand {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.landing-nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.landing-nav-link {
+  padding: 0;
+  border: none;
+  background: none;
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.landing-nav-link:hover {
+  color: var(--text);
+}
+
+/* A hairline rule with an eyebrow at each end — the framing device of the direction. */
+.landing-rule {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem var(--space);
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+.landing-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.landing-hero {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.landing-title {
+  margin: 0;
+  font-size: clamp(3.5rem, 18vw, 12rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+}
+
+.landing-hero-body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.landing-lead {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  line-height: 1.4;
+  max-width: 34ch;
+}
+
+.landing-hero-cta {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.landing-cta-btn {
+  align-self: flex-start;
+  min-height: 52px;
+  padding: 0 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: none;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  color: var(--accent);
+  font-size: 0.95rem;
+}
+
+.landing-cta-btn:hover {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.landing-cta-note {
+  margin: 0;
+  max-width: 28ch;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.landing-how {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.landing-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.landing-point {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.landing-point-num {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.landing-point-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.landing-point-body {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Credit: quiet, ruled, legible — the source link (accent) is unmissable, the block is not. */
+.landing-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 68ch;
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
+  border-top: 1px solid var(--border);
+}
+
+.landing-credit-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.landing-credit-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.landing-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space);
+  padding-top: var(--space);
+  border-top: 1px solid var(--border);
+}
+
+.landing-footer-meta {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@media (min-width: 720px) {
+  .landing-hero-body {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 3rem;
+  }
+
+  .landing-points {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* First-run account choice (ADR-0021). Three options of deliberately equal weight — same
+   size, same neutral treatment, no accent on any — so none reads as the real path. */
+.onboarding {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 360px;
+  margin-inline: auto;
+  padding: var(--space);
+  text-align: center;
+}
+
+.onboarding-title {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.onboarding-body {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.onboarding-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.onboarding-option {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.onboarding-back {
+  min-height: 36px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 :where(a) {
   color: var(--accent);
 }
@@ -616,6 +902,23 @@ button {
   font-size: 0.85rem;
 }
 
+/* Quiet link back to the landing (ADR-0021) — user-initiated, not a nag. */
+.path-intro-link {
+  flex-basis: 100%;
+  margin-top: 4px;
+  text-align: left;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.path-intro-link:hover {
+  color: var(--text);
+}
+
 /* Sync: one quiet affordance, never a nag (ADR-0018). */
 .path-sync {
   flex-basis: 100%;
@@ -657,6 +960,27 @@ button {
   color: var(--muted);
   font-size: 0.8rem;
   line-height: 1.5;
+}
+
+/* Export/import, demoted under a collapsed "Avanzado" (ADR-0021). */
+.path-advanced {
+  flex-basis: 100%;
+  margin-top: 4px;
+  padding-top: var(--space);
+  border-top: 1px solid var(--border);
+}
+
+.path-advanced-summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.path-advanced-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 /* ---- Markdown answers ------------------------------------------------------- */

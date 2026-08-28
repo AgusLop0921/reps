@@ -3,10 +3,15 @@ import { checksByQuestionId, curriculum, questionsById } from '../content/load'
 import type { Lesson, LessonProgress, Progress, Score, Section } from '../content/schema'
 import { orderedOptions, scoreForCheck } from '../core/checks'
 import { buildLessonDeck, type DeckCard, lessonAfter, nextLesson } from '../core/curriculum'
+import { SOURCES } from '../content/sources'
+import { advanceFromLanding, type FirstRunStep, initialStep, screenForStep } from '../core/firstRun'
+import { hasOnboarded, markOnboarded } from '../storage/onboarding'
 import { exportData, importData } from '../storage/repository'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
+import { Landing } from './Landing'
+import { Onboarding } from './Onboarding'
 import { Path } from './Path'
 import { useAuth } from './useAuth'
 import { useProgress } from './useProgress'
@@ -48,13 +53,14 @@ export function App() {
   const auth = useAuth()
 
   const [booted, setBooted] = useState(false)
-  const [screen, setScreen] = useState<'card' | 'path'>('card')
+  const [screen, setScreen] = useState<'card' | 'path' | 'landing'>('card')
   const [lessonId, setLessonId] = useState<string | null>(null)
   const [deck, setDeck] = useState<DeckCard[]>([])
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
   const [missed, setMissed] = useState<MissedCard[]>([])
   const [notice, setNotice] = useState<string | null>(null)
+  const [firstRunStep, setFirstRunStep] = useState<FirstRunStep>(() => initialStep(hasOnboarded()))
 
   // Reload progress from storage after it changes underneath us (import, sync). On the
   // initial sync after sign-in, also re-land on the resumed lesson so a device that had done
@@ -119,6 +125,27 @@ export function App() {
     })()
   }
 
+  const handleGoogleSignIn = (): void => {
+    void (async () => {
+      try {
+        await auth.signInWithGoogle()
+      } catch {
+        setNotice(copy.syncError)
+      }
+    })()
+  }
+
+  // Leaving the landing ("Empezar"): record the choice now — before the account screen — so the
+  // sequence never recurs even if abandoned there (ADR-0021), then advance per the pure rule.
+  const startFromLanding = (): void => {
+    const { step, persist } = advanceFromLanding(auth.configured)
+    if (persist) markOnboarded()
+    setFirstRunStep(step)
+  }
+
+  // Any account-choice action ends the sequence; the flag was already set on the landing.
+  const finishAccount = (): void => setFirstRunStep('app')
+
   const handleSignIn = (email: string): void => {
     void (async () => {
       try {
@@ -158,6 +185,39 @@ export function App() {
     )
   }
 
+  // First run: landing, then the account choice (ADR-0021). Once past, never again — a pure
+  // sequencer (core/firstRun) decides which shows. The landing appears regardless of sync
+  // config; the account screen only when there's something to sign into.
+  const firstRunScreen = screenForStep(firstRunStep)
+  if (firstRunScreen === 'landing') {
+    return (
+      <main className="landing-shell">
+        <Landing source={SOURCES['midudev-react']} onStart={startFromLanding} />
+      </main>
+    )
+  }
+  if (firstRunScreen === 'account') {
+    return (
+      <main className="app">
+        <Onboarding
+          onGoogle={handleGoogleSignIn}
+          onEmail={handleSignIn}
+          onContinue={finishAccount}
+          onSkip={finishAccount}
+        />
+      </main>
+    )
+  }
+
+  // The landing, reopened from the path on demand (ADR-0021) — read-only, no "Empezar".
+  if (screen === 'landing') {
+    return (
+      <main className="landing-shell">
+        <Landing source={SOURCES['midudev-react']} onBack={() => setScreen('path')} />
+      </main>
+    )
+  }
+
   if (screen === 'path') {
     return (
       <main className="app">
@@ -168,8 +228,10 @@ export function App() {
           authConfigured={auth.configured}
           authEmail={auth.email}
           onOpenLesson={openLesson}
+          onViewIntro={() => setScreen('landing')}
           onExport={handleExport}
           onImport={handleImport}
+          onGoogleSignIn={handleGoogleSignIn}
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           onDeleteAccount={handleDeleteAccount}

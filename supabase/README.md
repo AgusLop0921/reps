@@ -9,8 +9,9 @@ runs local-only, exactly as before.
 2. Run `migrations/0001_progress_sync.sql` — either `supabase db push`, or paste it into the
    project's SQL editor. It creates the `progress` and `lesson_progress` tables, their
    Row-Level Security policies, and the `delete_account()` function.
-3. **Authentication → Providers**: enable **Email**, with "Confirm email" on (magic link).
-   No other provider is used (ADR-0020: magic link only).
+3. **Authentication → Providers**: enable **Email** with "Confirm email" on (magic link), and
+   **Google** (OAuth client ID + secret from Google Cloud) — both are offered at first run and
+   on the path screen (ADR-0021).
 4. Copy `.env.example` to `.env` and fill in from **Project Settings → API**:
    - `VITE_SUPABASE_URL` — the project URL
    - `VITE_SUPABASE_ANON_KEY` — the public anon key
