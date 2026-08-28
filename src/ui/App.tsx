@@ -53,7 +53,7 @@ export function App() {
   const auth = useAuth()
 
   const [booted, setBooted] = useState(false)
-  const [screen, setScreen] = useState<'card' | 'path'>('card')
+  const [screen, setScreen] = useState<'card' | 'path' | 'landing'>('card')
   const [lessonId, setLessonId] = useState<string | null>(null)
   const [deck, setDeck] = useState<DeckCard[]>([])
   const [index, setIndex] = useState(0)
@@ -209,6 +209,15 @@ export function App() {
     )
   }
 
+  // The landing, reopened from the path on demand (ADR-0021) — read-only, no "Empezar".
+  if (screen === 'landing') {
+    return (
+      <main className="app">
+        <Landing source={SOURCES['midudev-react']} onBack={() => setScreen('path')} />
+      </main>
+    )
+  }
+
   if (screen === 'path') {
     return (
       <main className="app">
@@ -219,6 +228,7 @@ export function App() {
           authConfigured={auth.configured}
           authEmail={auth.email}
           onOpenLesson={openLesson}
+          onViewIntro={() => setScreen('landing')}
           onExport={handleExport}
           onImport={handleImport}
           onGoogleSignIn={handleGoogleSignIn}

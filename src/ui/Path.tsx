@@ -19,6 +19,7 @@ export function Path({
   authConfigured,
   authEmail,
   onOpenLesson,
+  onViewIntro,
   onExport,
   onImport,
   onGoogleSignIn,
@@ -33,6 +34,7 @@ export function Path({
   authConfigured: boolean
   authEmail: string | null
   onOpenLesson: (lessonId: string) => void
+  onViewIntro: () => void
   onExport: () => void
   onImport: (file: File) => void
   onGoogleSignIn: () => void
@@ -190,6 +192,10 @@ export function Path({
         </details>
 
         {notice && <p className="path-notice">{notice}</p>}
+
+        <button type="button" className="path-intro-link" onClick={onViewIntro}>
+          {copy.pathViewIntro}
+        </button>
       </footer>
     </section>
   )

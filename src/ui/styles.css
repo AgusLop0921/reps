@@ -746,6 +746,23 @@ button {
   font-size: 0.85rem;
 }
 
+/* Quiet link back to the landing (ADR-0021) — user-initiated, not a nag. */
+.path-intro-link {
+  flex-basis: 100%;
+  margin-top: 4px;
+  text-align: left;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.path-intro-link:hover {
+  color: var(--text);
+}
+
 /* Sync: one quiet affordance, never a nag (ADR-0018). */
 .path-sync {
   flex-basis: 100%;
