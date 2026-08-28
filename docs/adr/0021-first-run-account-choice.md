@@ -19,8 +19,18 @@ honest, once-ever choice at the very start.
 
 ## Decision
 
-Show **one first-run screen**, before the first card, offering three options of **equal
-weight**:
+The first run is a **two-screen sequence, shown once, before the first card**: a **landing**
+that says what the app is and credits the source, then the **account choice**. After it the
+app opens straight into the current card, forever (ADR-0010); a quiet link on the path screen
+reopens the landing for anyone who wants to read it again.
+
+The landing is short — what it is (short daily React lessons that end), why (to take the place
+of the scroll, not to be another feed), how (a linear path; questions return before you forget
+them), a **prominent credit** to the source (ADR-0007), and a line that the generated checks
+are ours, not the source's (ADR-0017). Unlike the account choice, it shows **regardless of
+whether sync is configured**, because it is about the product, not accounts.
+
+The account choice offers three options of **equal weight**:
 
 - Continuar con Google
 - Entrar con email (magic link)
@@ -32,18 +42,22 @@ benefits list, no "recomendado" badge, no pre-selected option, no default.**
 
 ### The boundary (so no future feature can cite this as precedent)
 
-- **First run only, once ever.** The choice — including "Seguir sin cuenta" — is remembered
-  permanently in local storage and the screen is never shown again: not after N lessons, not
-  on a timer, not on sign-out. If "never again" cannot be made reliable (e.g. local storage
-  unavailable), the screen **fails closed** — not shown — rather than risk re-prompting.
-- **Equal visual weight.** All three options share one size and treatment. If "Seguir sin
-  cuenta" reads as the escape hatch and the other two as the real path, it is a funnel with
-  better manners, and that is out of bounds.
-- **After the screen, the app opens straight into the current card, forever** (ADR-0010). The
-  screen is an entry, not a recurring surface.
+- **First run only, once ever — both screens.** The sequence is recorded the moment the user
+  leaves the landing ("Empezar"), so neither screen is ever shown again: not after N lessons,
+  not on a timer, not on sign-out, and **not even if the user abandons between the two steps**.
+  If "never again" cannot be made reliable (e.g. local storage unavailable), the sequence
+  **fails closed** — not shown — rather than risk re-prompting.
+- **Equal visual weight** (account screen). All three options share one size and treatment. If
+  "Seguir sin cuenta" reads as the escape hatch and the other two as the real path, it is a
+  funnel with better manners, and that is out of bounds.
+- **After the sequence, the app opens straight into the current card, forever** (ADR-0010).
+  These screens are an entry, not a recurring surface; the path link that reopens the landing
+  is the only way back, and it is user-initiated.
 
-This is the **single sanctioned prompt**. It is a first-run *choice*, not a nag: shown once,
-options equal, dismissible forever. ADR-0018's ban on nags stands for everything else;
+These **two screens are the whole sanctioned first run** — a landing and a choice, shown once,
+dismissible forever. **Two, and no more**: a future feature cannot add a third or re-show
+these. It is a first-run *sequence*, not a nag. ADR-0018's ban on nags stands for everything
+else;
 ADR-0020's "no funnel" stands for every surface after this one. Ongoing sign-in stays the one
 path-screen affordance (ADR-0020), and export/import moves under an "Avanzado" section there —
 demoted, not removed.
@@ -67,10 +81,14 @@ Supabase.
 
 ## Consequences
 
-- One screen of first-run friction for everyone, newcomers included — the honest cost of
-  serving the returning user. Bounded to exactly one screen, one time.
+- Two screens of first-run friction for everyone — a landing and the account choice — the
+  honest cost of explaining the app and serving the returning user. Bounded to exactly two
+  screens, one time.
 - "Never again" now rests on a local-storage flag; a browser where that storage is unavailable
-  simply never sees the screen (fail closed), and can still sign in from the path affordance.
+  simply never sees the sequence (fail closed), and can still sign in from the path affordance.
+- The sequencing rule — which screen shows given the persisted flag, whether sync is
+  configured, and the current step — is the part most likely to break silently, so it lives as
+  a pure function in `core/` and is tested against each path, including abandonment.
 - Two auth providers to configure (Google + email) rather than one: a Google client secret and
   provider setup in Supabase.
 - A future contributor cannot cite this screen as license to prompt again. The boundary above
