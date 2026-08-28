@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import type { Curriculum, LessonProgress } from '../content/schema'
 import { isCompleted, isUnlocked, nextLesson } from '../core/curriculum'
+import { type Theme, THEMES } from '../core/theme'
 import { copy } from './copy'
 
 /**
@@ -26,6 +27,8 @@ export function Path({
   onSignIn,
   onSignOut,
   onDeleteAccount,
+  theme,
+  onSetTheme,
   onBack,
 }: {
   curriculum: Curriculum
@@ -41,6 +44,8 @@ export function Path({
   onSignIn: (email: string) => void
   onSignOut: () => void
   onDeleteAccount: () => void
+  theme: Theme
+  onSetTheme: (theme: Theme) => void
   onBack: () => void
 }) {
   const fileInput = useRef<HTMLInputElement>(null)
@@ -167,6 +172,23 @@ export function Path({
             <p className="path-note">{copy.syncPrivacy}</p>
           </div>
         )}
+
+        <div className="path-theme">
+          <span className="path-note">{copy.themeLabel}</span>
+          <div className="path-theme-seg" role="group" aria-label={copy.themeLabel}>
+            {THEMES.map((t) => (
+              <button
+                key={t}
+                type="button"
+                className={`path-theme-opt${t === theme ? ' path-theme-opt-active' : ''}`}
+                aria-pressed={t === theme}
+                onClick={() => onSetTheme(t)}
+              >
+                {copy.themeOptions[t]}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <details className="path-advanced">
           <summary className="path-advanced-summary">{copy.advanced}</summary>
