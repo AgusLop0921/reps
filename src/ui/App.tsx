@@ -191,7 +191,7 @@ export function App() {
   const firstRunScreen = screenForStep(firstRunStep)
   if (firstRunScreen === 'landing') {
     return (
-      <main className="app">
+      <main className="landing-shell">
         <Landing source={SOURCES['midudev-react']} onStart={startFromLanding} />
       </main>
     )
@@ -212,7 +212,7 @@ export function App() {
   // The landing, reopened from the path on demand (ADR-0021) — read-only, no "Empezar".
   if (screen === 'landing') {
     return (
-      <main className="app">
+      <main className="landing-shell">
         <Landing source={SOURCES['midudev-react']} onBack={() => setScreen('path')} />
       </main>
     )
