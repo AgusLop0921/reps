@@ -16,6 +16,7 @@ import { Path } from './Path'
 import { useAuth } from './useAuth'
 import { useProgress } from './useProgress'
 import { useSync } from './useSync'
+import { useTheme } from './useTheme'
 
 /** A card answered incorrectly, kept so the end screen can resurface its explanation. */
 type MissedCard = { questionId: string; title: string; explanation: string }
@@ -51,6 +52,7 @@ function deckFor(
 export function App() {
   const { loading, progress, lessonProgress, answer, reload } = useProgress()
   const auth = useAuth()
+  const { theme, setTheme } = useTheme()
 
   const [booted, setBooted] = useState(false)
   const [screen, setScreen] = useState<'card' | 'path' | 'landing'>('card')
@@ -235,6 +237,8 @@ export function App() {
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           onDeleteAccount={handleDeleteAccount}
+          theme={theme}
+          onSetTheme={setTheme}
           onBack={() => setScreen('card')}
         />
       </main>

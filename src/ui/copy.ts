@@ -87,6 +87,10 @@ export const copy = {
   lessonDoneMark: '✓',
   lessonDoneLabel: 'Lección terminada',
 
+  // Theme toggle (dark / light / system), on the path near the other settings.
+  themeLabel: 'Tema',
+  themeOptions: { dark: 'Oscuro', light: 'Claro', system: 'Sistema' },
+
   // Export/import lives under "Avanzado" now that sync is the primary path (ADR-0021).
   advanced: 'Avanzado',
   exportProgress: 'Exportar progreso',

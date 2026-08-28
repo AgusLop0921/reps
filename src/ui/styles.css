@@ -1,6 +1,14 @@
 /*
- * Design tokens — "Papel nocturno". Dark is the designed default (from the prototype); the
- * light block is a conservative derivation and is untested against a real design.
+ * Design tokens — "Papel nocturno". Dark is the designed default (from the prototype).
+ *
+ * Theme selection: `:root` is dark. Explicit choices set `data-theme` on the root
+ * (`[data-theme="light"]`, or `="dark"` which needs nothing since dark is the default).
+ * `data-theme` absent = "system": the `prefers-color-scheme` block below, scoped to
+ * `:root:not([data-theme])`, applies and follows the OS live. The `data-theme` attribute is
+ * set before first paint by an inline script in index.html to avoid a flash.
+ *
+ * The light values live in two places by necessity (an explicit-light selector and a
+ * media-query system selector); keep them in sync.
  */
 :root {
   --bg: #080706;
@@ -22,8 +30,20 @@
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
+:root[data-theme='light'] {
+  --bg: #f3f0e9;
+  --surface: #fbf9f4;
+  --surface-2: #efeadf;
+  --text: #1b1712;
+  --muted: #6e655a;
+  --border: #e1dacc;
+  --accent: #9a6b2f;
+  --correct: #46654c;
+  --danger: #a85a3e;
+}
+
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme]) {
     --bg: #f3f0e9;
     --surface: #fbf9f4;
     --surface-2: #efeadf;
@@ -967,6 +987,44 @@ button {
   line-height: 1.5;
 }
 
+/* Theme toggle: a small segmented control, the active option marked. */
+.path-theme {
+  flex-basis: 100%;
+  margin-top: 4px;
+  padding-top: var(--space);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.path-theme-seg {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.path-theme-opt {
+  min-height: 34px;
+  padding: 0 0.8rem;
+  border: none;
+  border-left: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.path-theme-opt:first-child {
+  border-left: none;
+}
+
+.path-theme-opt-active {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
 /* Export/import, demoted under a collapsed "Avanzado" (ADR-0021). */
 .path-advanced {
   flex-basis: 100%;
@@ -1051,8 +1109,18 @@ button {
   --hl-attr: #8fa98c;
 }
 
+:root[data-theme='light'] {
+  --hl-comment: #726a5d;
+  --hl-keyword: #9a6b2f;
+  --hl-string: #7a5a33;
+  --hl-number: #46654c;
+  --hl-title: #46654c;
+  --hl-built: #46654c;
+  --hl-attr: #46654c;
+}
+
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme]) {
     --hl-comment: #726a5d;
     --hl-keyword: #9a6b2f;
     --hl-string: #7a5a33;
