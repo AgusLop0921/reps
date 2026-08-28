@@ -523,8 +523,9 @@ body {
 }
 
 .option-other {
+  /* Muted, but no opacity: over a light background opacity fades the distractors to
+     near-invisible, and they must stay readable for the comparison. */
   color: var(--muted);
-  opacity: 0.6;
 }
 
 .option-mark {
@@ -837,12 +838,16 @@ button {
 }
 
 .path-lesson-current {
+  /* A thin accent bar marks "acá" in both themes; the surface tint alone is invisible on
+     light, where --surface and --bg are nearly identical. */
   background: var(--surface);
+  box-shadow: inset 2px 0 0 var(--accent);
 }
 
 .path-lesson-locked {
+  /* Muted, not faded: opacity over a light background washes locked lessons out entirely.
+     Muted text already reads as secondary against the full-strength unlocked ones. */
   color: var(--muted);
-  opacity: 0.55;
   cursor: default;
 }
 
@@ -1048,7 +1053,7 @@ button {
 
 @media (prefers-color-scheme: light) {
   :root {
-    --hl-comment: #8a8275;
+    --hl-comment: #726a5d;
     --hl-keyword: #9a6b2f;
     --hl-string: #7a5a33;
     --hl-number: #46654c;
