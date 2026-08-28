@@ -3,11 +3,14 @@ import { checksByQuestionId, curriculum, questionsById } from '../content/load'
 import type { Lesson, LessonProgress, Progress, Score, Section } from '../content/schema'
 import { orderedOptions, scoreForCheck } from '../core/checks'
 import { buildLessonDeck, type DeckCard, lessonAfter, nextLesson } from '../core/curriculum'
+import { SOURCES } from '../content/sources'
+import { advanceFromLanding, type FirstRunStep, initialStep, screenForStep } from '../core/firstRun'
 import { hasOnboarded, markOnboarded } from '../storage/onboarding'
 import { exportData, importData } from '../storage/repository'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
+import { Landing } from './Landing'
 import { Onboarding } from './Onboarding'
 import { Path } from './Path'
 import { useAuth } from './useAuth'
@@ -57,7 +60,7 @@ export function App() {
   const [picked, setPicked] = useState<number | null>(null)
   const [missed, setMissed] = useState<MissedCard[]>([])
   const [notice, setNotice] = useState<string | null>(null)
-  const [onboarded, setOnboarded] = useState(() => hasOnboarded())
+  const [firstRunStep, setFirstRunStep] = useState<FirstRunStep>(() => initialStep(hasOnboarded()))
 
   // Reload progress from storage after it changes underneath us (import, sync). On the
   // initial sync after sign-in, also re-land on the resumed lesson so a device that had done
@@ -132,12 +135,16 @@ export function App() {
     })()
   }
 
-  // The first-run choice is recorded the moment it's made, so the screen is shown once, ever
-  // (ADR-0021) — even if a redirect or magic-link sign-in isn't completed.
-  const completeOnboarding = (): void => {
-    markOnboarded()
-    setOnboarded(true)
+  // Leaving the landing ("Empezar"): record the choice now — before the account screen — so the
+  // sequence never recurs even if abandoned there (ADR-0021), then advance per the pure rule.
+  const startFromLanding = (): void => {
+    const { step, persist } = advanceFromLanding(auth.configured)
+    if (persist) markOnboarded()
+    setFirstRunStep(step)
   }
+
+  // Any account-choice action ends the sequence; the flag was already set on the landing.
+  const finishAccount = (): void => setFirstRunStep('app')
 
   const handleSignIn = (email: string): void => {
     void (async () => {
@@ -178,18 +185,25 @@ export function App() {
     )
   }
 
-  // First run only, and only when sync exists to sign into (ADR-0021). Once past, never again.
-  if (auth.configured && !onboarded) {
+  // First run: landing, then the account choice (ADR-0021). Once past, never again — a pure
+  // sequencer (core/firstRun) decides which shows. The landing appears regardless of sync
+  // config; the account screen only when there's something to sign into.
+  const firstRunScreen = screenForStep(firstRunStep)
+  if (firstRunScreen === 'landing') {
+    return (
+      <main className="app">
+        <Landing source={SOURCES['midudev-react']} onStart={startFromLanding} />
+      </main>
+    )
+  }
+  if (firstRunScreen === 'account') {
     return (
       <main className="app">
         <Onboarding
-          onGoogle={() => {
-            markOnboarded()
-            handleGoogleSignIn()
-          }}
+          onGoogle={handleGoogleSignIn}
           onEmail={handleSignIn}
-          onContinue={completeOnboarding}
-          onSkip={completeOnboarding}
+          onContinue={finishAccount}
+          onSkip={finishAccount}
         />
       </main>
     )
