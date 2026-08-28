@@ -9,9 +9,11 @@ on:
   pull_request:
   workflow_dispatch:
 
-# One run per commit: a branch push and its PR event share a group, and the older is cancelled.
+# Cancel superseded runs of the SAME event on new pushes, but keep push and pull_request in
+# separate groups so they never cancel each other — a cancelled run reports as a red "fail",
+# which is exactly the misleading check state this workflow exists to avoid.
 concurrency:
-  group: ci-${{ github.event.pull_request.head.sha || github.sha }}
+  group: ci-${{ github.event_name }}-${{ github.event.pull_request.head.sha || github.ref }}
   cancel-in-progress: true
 
 jobs:
