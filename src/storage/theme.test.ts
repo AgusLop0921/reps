@@ -19,9 +19,9 @@ afterEach(() => {
 })
 
 describe('theme preference', () => {
-  it('defaults to system when unset', () => {
+  it('defaults to dark when unset', () => {
     stubLocalStorage()
-    expect(getTheme()).toBe('system')
+    expect(getTheme()).toBe('dark')
   })
 
   it('persists and reads back a choice', () => {
@@ -30,15 +30,15 @@ describe('theme preference', () => {
     expect(getTheme()).toBe('light')
   })
 
-  it('ignores a corrupt stored value, falling back to system', () => {
+  it('ignores a corrupt stored value, falling back to dark', () => {
     stubLocalStorage()
     localStorage.setItem('reps.theme', 'sepia')
-    expect(getTheme()).toBe('system')
+    expect(getTheme()).toBe('dark')
   })
 
-  it('falls back to system when storage is unavailable', () => {
+  it('falls back to dark when storage is unavailable', () => {
     // No localStorage in the node test env: reading throws, and we must not break.
-    expect(getTheme()).toBe('system')
-    expect(() => setTheme('dark')).not.toThrow()
+    expect(getTheme()).toBe('dark')
+    expect(() => setTheme('light')).not.toThrow()
   })
 })

@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Reps</title>
     <script>
-      // Set the theme before first paint to avoid a flash of the wrong one. Only an explicit
-      // dark/light choice sets the attribute; 'system', a missing key, or unavailable storage
-      // leaves it off so prefers-color-scheme governs. Mirrors src/storage/theme.ts.
+      // Set the theme before first paint to avoid a flash. A stored 'light' sets the
+      // attribute; anything else (dark, missing key, unavailable storage) leaves it off, and
+      // :root is dark by default. Mirrors src/storage/theme.ts.
       try {
         var t = localStorage.getItem('reps.theme')
         if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t)

@@ -1,20 +1,16 @@
 import { useState } from 'react'
-import { resolveThemeAttr, type Theme } from '../core/theme'
+import { type Theme } from '../core/theme'
 import { getTheme, setTheme as persistTheme } from '../storage/theme'
 
-/** Set or clear the root's data-theme; 'system' clears it so prefers-color-scheme governs. */
+/** Set the root's data-theme; :root is dark by default, [data-theme="light"] overrides it. */
 function applyTheme(theme: Theme): void {
-  const attr = resolveThemeAttr(theme)
-  const root = document.documentElement
-  if (attr) root.setAttribute('data-theme', attr)
-  else root.removeAttribute('data-theme')
+  document.documentElement.setAttribute('data-theme', theme)
 }
 
 /**
- * The theme choice and a setter. The initial attribute was set before paint by the inline
- * script in index.html (matching this hook's initial state), so there's nothing to apply on
- * mount; choosing persists, applies to the root, and updates the control. 'system' follows the
- * OS live through CSS — no listener needed.
+ * The theme choice (dark/light) and a setter. The initial attribute was set before paint by
+ * the inline script in index.html (matching this hook's initial state), so there's nothing to
+ * apply on mount; choosing persists, applies to the root, and updates the control.
  */
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(() => getTheme())

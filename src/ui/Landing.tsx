@@ -50,8 +50,7 @@ export function Landing({
         </div>
       </nav>
 
-      <div className="landing-rule">
-        <span className="landing-eyebrow">{copy.landingEyebrowLeft}</span>
+      <div className="landing-rule landing-rule-end">
         <span className="landing-eyebrow">{copy.landingEyebrowRight}</span>
       </div>
 
