@@ -13,6 +13,16 @@ describe('first-run sequencing (ADR-0021)', () => {
     expect(screenOnLoad(true)).toBe('app')
   })
 
+  it('the landing is gated on first visit, not on auth (ADR-0018, ADR-0021)', () => {
+    // Someone who chose "Seguir sin cuenta" is onboarded but logged out. They must go straight
+    // to the card like a signed-in user — showing the landing to every logged-out visitor
+    // would turn it into a funnel. `initialStep` takes only the persisted flag; auth is not an
+    // input, so an onboarded visitor lands on the app regardless of auth state.
+    expect(screenOnLoad(true)).toBe('app')
+    // The signature makes the guarantee structural: this call has no auth argument to pass.
+    expect(initialStep(true)).toBe('app')
+  })
+
   it('after "Empezar" with sync configured, shows the account screen', () => {
     const { step } = advanceFromLanding(true)
     expect(screenForStep(step)).toBe('account')
