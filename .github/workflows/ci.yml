@@ -1,9 +1,18 @@
 name: CI
 
+# Run on every branch push (so a commit is checked even when its PR is closed, merged, or
+# not yet open), on pull requests (to check the merge result), and on manual dispatch as a
+# guaranteed way to trigger a run. A stale green check from an older commit is worse than red.
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+# One run per commit: a branch push and its PR event share a group, and the older is cancelled.
+concurrency:
+  group: ci-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: true
 
 jobs:
   verify:
