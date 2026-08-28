@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react'
 import type { Curriculum, LessonProgress } from '../content/schema'
 import { isCompleted, isUnlocked, nextLesson } from '../core/curriculum'
-import { type Theme, THEMES } from '../core/theme'
+import { type Theme } from '../core/theme'
 import { copy } from './copy'
+import { ThemeControl } from './ThemeControl'
 
 /**
  * The path screen (ADR-0011): sections and their lessons. Status comes from core
@@ -70,6 +71,7 @@ export function Path({
           ‹
         </button>
         <h1 className="path-title">{copy.pathTitle}</h1>
+        <ThemeControl theme={theme} onSetTheme={onSetTheme} />
       </header>
 
       <div className="path-body">
@@ -172,23 +174,6 @@ export function Path({
             <p className="path-note">{copy.syncPrivacy}</p>
           </div>
         )}
-
-        <div className="path-theme">
-          <span className="path-note">{copy.themeLabel}</span>
-          <div className="path-theme-seg" role="group" aria-label={copy.themeLabel}>
-            {THEMES.map((t) => (
-              <button
-                key={t}
-                type="button"
-                className={`path-theme-opt${t === theme ? ' path-theme-opt-active' : ''}`}
-                aria-pressed={t === theme}
-                onClick={() => onSetTheme(t)}
-              >
-                {copy.themeOptions[t]}
-              </button>
-            ))}
-          </div>
-        </div>
 
         <details className="path-advanced">
           <summary className="path-advanced-summary">{copy.advanced}</summary>

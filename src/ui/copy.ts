@@ -87,9 +87,11 @@ export const copy = {
   lessonDoneMark: '✓',
   lessonDoneLabel: 'Lección terminada',
 
-  // Theme toggle (dark / light / system), on the path near the other settings.
+  // Theme toggle (dark / light / system), a quiet icon control top-right. The words are the
+  // accessible labels; the glyphs are the monochrome icons (kept quiet — no accent).
   themeLabel: 'Tema',
   themeOptions: { dark: 'Oscuro', light: 'Claro', system: 'Sistema' },
+  themeGlyphs: { dark: '☾', light: '☼', system: '◐' },
 
   // Export/import lives under "Avanzado" now that sync is the primary path (ADR-0021).
   advanced: 'Avanzado',

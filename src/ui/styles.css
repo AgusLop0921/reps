@@ -154,6 +154,40 @@ body {
   color: var(--text);
 }
 
+.landing-nav-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+/* Quiet theme control: monochrome icons, active at full text colour, no accent, no label.
+   40px tap targets, small glyph — it must not pull attention from the content. */
+.theme-control {
+  display: inline-flex;
+  flex: none;
+}
+
+.theme-opt {
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.theme-opt:hover {
+  color: var(--text);
+}
+
+.theme-opt-active {
+  color: var(--text);
+}
+
 /* A hairline rule with an eyebrow at each end — the framing device of the direction. */
 .landing-rule {
   display: flex;
@@ -801,6 +835,11 @@ button {
   margin: 0;
 }
 
+/* Push the theme control to the top-right of the header. */
+.path-head .theme-control {
+  margin-left: auto;
+}
+
 .path-body {
   flex: 1;
   min-height: 0;
@@ -988,43 +1027,6 @@ button {
 }
 
 /* Theme toggle: a small segmented control, the active option marked. */
-.path-theme {
-  flex-basis: 100%;
-  margin-top: 4px;
-  padding-top: var(--space);
-  border-top: 1px solid var(--border);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.path-theme-seg {
-  display: inline-flex;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.path-theme-opt {
-  min-height: 34px;
-  padding: 0 0.8rem;
-  border: none;
-  border-left: 1px solid var(--border);
-  background: none;
-  color: var(--muted);
-  font-size: 0.82rem;
-}
-
-.path-theme-opt:first-child {
-  border-left: none;
-}
-
-.path-theme-opt-active {
-  background: var(--surface-2);
-  color: var(--text);
-}
-
 /* Export/import, demoted under a collapsed "Avanzado" (ADR-0021). */
 .path-advanced {
   flex-basis: 100%;

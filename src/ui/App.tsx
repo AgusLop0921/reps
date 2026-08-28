@@ -194,7 +194,12 @@ export function App() {
   if (firstRunScreen === 'landing') {
     return (
       <main className="landing-shell">
-        <Landing source={SOURCES['midudev-react']} onStart={startFromLanding} />
+        <Landing
+          source={SOURCES['midudev-react']}
+          theme={theme}
+          onSetTheme={setTheme}
+          onStart={startFromLanding}
+        />
       </main>
     )
   }
@@ -215,7 +220,12 @@ export function App() {
   if (screen === 'landing') {
     return (
       <main className="landing-shell">
-        <Landing source={SOURCES['midudev-react']} onBack={() => setScreen('path')} />
+        <Landing
+          source={SOURCES['midudev-react']}
+          theme={theme}
+          onSetTheme={setTheme}
+          onBack={() => setScreen('path')}
+        />
       </main>
     )
   }

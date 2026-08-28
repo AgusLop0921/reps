@@ -1,5 +1,7 @@
 import type { SourceInfo } from '../content/sources'
+import { type Theme } from '../core/theme'
 import { copy } from './copy'
+import { ThemeControl } from './ThemeControl'
 
 /**
  * The landing (ADR-0021), "Diagonal" direction from the design prototype: a nav, a rule-framed
@@ -11,10 +13,14 @@ import { copy } from './copy'
  */
 export function Landing({
   source,
+  theme,
+  onSetTheme,
   onStart,
   onBack,
 }: {
   source: SourceInfo
+  theme: Theme
+  onSetTheme: (theme: Theme) => void
   onStart?: () => void
   onBack?: () => void
 }) {
@@ -29,15 +35,18 @@ export function Landing({
           )}
           <span className="landing-brand">{copy.appName}</span>
         </div>
-        <div className="landing-nav-links">
-          <a className="landing-nav-link" href="#landing-how">
-            {copy.landingNavSystem}
-          </a>
-          {onStart && (
-            <button type="button" className="landing-nav-link" onClick={onStart}>
-              {copy.landingNavStart}
-            </button>
-          )}
+        <div className="landing-nav-right">
+          <div className="landing-nav-links">
+            <a className="landing-nav-link" href="#landing-how">
+              {copy.landingNavSystem}
+            </a>
+            {onStart && (
+              <button type="button" className="landing-nav-link" onClick={onStart}>
+                {copy.landingNavStart}
+              </button>
+            )}
+          </div>
+          <ThemeControl theme={theme} onSetTheme={onSetTheme} />
         </div>
       </nav>
 
