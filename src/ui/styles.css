@@ -72,81 +72,101 @@ body {
   text-align: center;
 }
 
-/* Landing (ADR-0021): a page read in twenty seconds, same visual language as the app. Shown
-   once at first run, and reopenable from the path. The credit is prominent, not a footnote. */
+/* Landing (ADR-0021), set like a book's title page: a dominant hero, a stepped-and-ruled
+   explanation, and a quiet credit anchored at the foot. Fills the viewport — hero up top, foot
+   pinned to the bottom by `margin-top: auto`, deliberate space between. No cards, no rules
+   beyond hairlines, same tokens and serif as the app. */
 .landing {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  overflow-y: auto;
 }
 
 .landing-head {
-  margin-bottom: var(--space);
+  flex: none;
 }
 
-.landing-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
+.landing-hero {
+  flex: none;
+  padding-top: clamp(1.5rem, 9vh, 7rem);
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
-  padding-bottom: var(--space);
+  gap: clamp(1.75rem, 5vh, 3rem);
 }
 
 .landing-title {
   margin: 0;
-  font-size: 2rem;
+  font-size: clamp(2.75rem, 9vw, 4.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
 }
 
+/* The one-line description: dominant, paired with the name. */
 .landing-lead {
   margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.4;
+  font-size: clamp(1.4rem, 4.6vw, 2.15rem);
+  line-height: 1.28;
+  max-width: 24ch;
 }
 
-.landing-text {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.landing-credit {
-  margin-top: 0.6rem;
-  padding: var(--space);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+/* Supporting lines: a clear step down in size and colour, separated by hairline rules. */
+.landing-points {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
 }
 
-.landing-credit .landing-text {
-  color: var(--text);
+.landing-step {
+  margin: 0;
+  padding-top: 1.1rem;
+  margin-top: 1.1rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  max-width: 34ch;
+}
+
+.landing-foot {
+  flex: none;
+  margin-top: auto;
+  padding-top: clamp(2rem, 6vh, 3.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space);
+}
+
+/* Credit: demoted — no surface, no box. A quiet block set apart by a rule and spacing. */
+.landing-credit {
+  padding-top: var(--space);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.landing-credit-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
 }
 
 .landing-credit-source {
   margin: 0;
   font-family: var(--mono);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .landing-note {
   margin: 0;
-  padding-top: 0.6rem;
-  border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   line-height: 1.5;
 }
 
-.landing-cta {
-  padding-top: var(--space);
-}
-
-.landing-cta .primary {
+.landing-start {
   border-radius: 10px;
 }
 
