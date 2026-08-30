@@ -1,6 +1,9 @@
 /*
- * Design tokens — "Papel nocturno". Dark is the designed default (from the prototype); the
- * light block is a conservative derivation and is untested against a real design.
+ * Design tokens — "Papel nocturno". Dark is the designed default (from the prototype).
+ *
+ * Theme selection is an explicit two-way toggle: `:root` is dark, `[data-theme="light"]`
+ * overrides to light. There is no system/auto case. The `data-theme` attribute is set before
+ * first paint by an inline script in index.html to avoid a flash.
  */
 :root {
   --bg: #080706;
@@ -22,18 +25,16 @@
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f3f0e9;
-    --surface: #fbf9f4;
-    --surface-2: #efeadf;
-    --text: #1b1712;
-    --muted: #6e655a;
-    --border: #e1dacc;
-    --accent: #9a6b2f;
-    --correct: #46654c;
-    --danger: #a85a3e;
-  }
+:root[data-theme='light'] {
+  --bg: #f3f0e9;
+  --surface: #fbf9f4;
+  --surface-2: #efeadf;
+  --text: #1b1712;
+  --muted: #6e655a;
+  --border: #e1dacc;
+  --accent: #9a6b2f;
+  --correct: #46654c;
+  --danger: #a85a3e;
 }
 
 * {
@@ -134,6 +135,40 @@ body {
   color: var(--text);
 }
 
+.landing-nav-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+/* Quiet theme control: monochrome icons, active at full text colour, no accent, no label.
+   40px tap targets, small glyph — it must not pull attention from the content. */
+.theme-control {
+  display: inline-flex;
+  flex: none;
+}
+
+.theme-opt {
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.theme-opt:hover {
+  color: var(--text);
+}
+
+.theme-opt-active {
+  color: var(--text);
+}
+
 /* A hairline rule with an eyebrow at each end — the framing device of the direction. */
 .landing-rule {
   display: flex;
@@ -142,6 +177,10 @@ body {
   gap: 0.5rem var(--space);
   padding-top: 0.6rem;
   border-top: 1px solid var(--border);
+}
+
+.landing-rule-end {
+  justify-content: flex-end;
 }
 
 .landing-eyebrow {
@@ -523,8 +562,9 @@ body {
 }
 
 .option-other {
+  /* Muted, but no opacity: over a light background opacity fades the distractors to
+     near-invisible, and they must stay readable for the comparison. */
   color: var(--muted);
-  opacity: 0.6;
 }
 
 .option-mark {
@@ -780,6 +820,11 @@ button {
   margin: 0;
 }
 
+/* Push the theme control to the top-right of the header. */
+.path-head .theme-control {
+  margin-left: auto;
+}
+
 .path-body {
   flex: 1;
   min-height: 0;
@@ -837,12 +882,16 @@ button {
 }
 
 .path-lesson-current {
+  /* A thin accent bar marks "acá" in both themes; the surface tint alone is invisible on
+     light, where --surface and --bg are nearly identical. */
   background: var(--surface);
+  box-shadow: inset 2px 0 0 var(--accent);
 }
 
 .path-lesson-locked {
+  /* Muted, not faded: opacity over a light background washes locked lessons out entirely.
+     Muted text already reads as secondary against the full-strength unlocked ones. */
   color: var(--muted);
-  opacity: 0.55;
   cursor: default;
 }
 
@@ -962,6 +1011,7 @@ button {
   line-height: 1.5;
 }
 
+/* Theme toggle: a small segmented control, the active option marked. */
 /* Export/import, demoted under a collapsed "Avanzado" (ADR-0021). */
 .path-advanced {
   flex-basis: 100%;
@@ -1046,16 +1096,14 @@ button {
   --hl-attr: #8fa98c;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --hl-comment: #8a8275;
-    --hl-keyword: #9a6b2f;
-    --hl-string: #7a5a33;
-    --hl-number: #46654c;
-    --hl-title: #46654c;
-    --hl-built: #46654c;
-    --hl-attr: #46654c;
-  }
+:root[data-theme='light'] {
+  --hl-comment: #726a5d;
+  --hl-keyword: #9a6b2f;
+  --hl-string: #7a5a33;
+  --hl-number: #46654c;
+  --hl-title: #46654c;
+  --hl-built: #46654c;
+  --hl-attr: #46654c;
 }
 
 .hljs-comment,

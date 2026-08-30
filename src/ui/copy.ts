@@ -13,7 +13,6 @@ export const copy = {
   // author/name/url/license from sources.ts (ADR-0007), never hardcoded.
   landingNavStart: 'Empezar',
   landingNavSystem: 'Sistema',
-  landingEyebrowLeft: 'Lección diaria · Tres tarjetas · Se termina',
   landingEyebrowRight: 'Basado en preguntas-entrevista-react',
   landingLead:
     'Ocupa el lugar del scroll: abrís, hacés tres tarjetas de React, y se acaba. No hay feed que siga.',
@@ -86,6 +85,12 @@ export const copy = {
   // A done lesson is a fact, not a reward — a quiet mark, never a badge to collect (ADR-0018).
   lessonDoneMark: '✓',
   lessonDoneLabel: 'Lección terminada',
+
+  // Theme toggle (dark / light), a quiet icon control top-right. The words are the accessible
+  // labels; the glyphs are the monochrome icons (kept quiet — no accent).
+  themeLabel: 'Tema',
+  themeOptions: { dark: 'Oscuro', light: 'Claro' },
+  themeGlyphs: { dark: '☾', light: '☼' },
 
   // Export/import lives under "Avanzado" now that sync is the primary path (ADR-0021).
   advanced: 'Avanzado',

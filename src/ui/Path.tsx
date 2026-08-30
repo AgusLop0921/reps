@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react'
 import type { Curriculum, LessonProgress } from '../content/schema'
 import { isCompleted, isUnlocked, nextLesson } from '../core/curriculum'
+import { type Theme } from '../core/theme'
 import { copy } from './copy'
+import { ThemeControl } from './ThemeControl'
 
 /**
  * The path screen (ADR-0011): sections and their lessons. Status comes from core
@@ -26,6 +28,8 @@ export function Path({
   onSignIn,
   onSignOut,
   onDeleteAccount,
+  theme,
+  onSetTheme,
   onBack,
 }: {
   curriculum: Curriculum
@@ -41,6 +45,8 @@ export function Path({
   onSignIn: (email: string) => void
   onSignOut: () => void
   onDeleteAccount: () => void
+  theme: Theme
+  onSetTheme: (theme: Theme) => void
   onBack: () => void
 }) {
   const fileInput = useRef<HTMLInputElement>(null)
@@ -65,6 +71,7 @@ export function Path({
           ‹
         </button>
         <h1 className="path-title">{copy.pathTitle}</h1>
+        <ThemeControl theme={theme} onSetTheme={onSetTheme} />
       </header>
 
       <div className="path-body">
