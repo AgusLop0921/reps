@@ -1,18 +1,81 @@
 import { useRef, useState } from 'react'
-import type { Curriculum, LessonProgress } from '../content/schema'
-import { isCompleted, isUnlocked, nextLesson } from '../core/curriculum'
+import type { Curriculum, Lesson, LessonProgress, Section } from '../content/schema'
+import { isCompleted, nextLesson, nodeState, type NodeState } from '../core/curriculum'
 import { type Theme } from '../core/theme'
 import { copy } from './copy'
 import { ThemeControl } from './ThemeControl'
 
+/** A checkmark for done nodes — an inline SVG shape, no icon library. */
+function Check() {
+  return (
+    <svg className="trail-glyph" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M5 13l4 4L19 7"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/** A star for the section-complete node — the one celebratory shape. */
+function Star() {
+  return (
+    <svg className="trail-glyph" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M12 2.5l2.7 5.9 6.4.6-4.8 4.3 1.4 6.3L12 16.9 6.3 19.6l1.4-6.3L2.9 9l6.4-.6z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+/** The zigzag: nodes wave center → right → center → left as they descend (learning-path Phase 1). */
+const OFFSETS = [0, 1, 0, -1]
+
+function TrailNode({
+  lesson,
+  state,
+  onOpen,
+}: {
+  lesson: Lesson
+  state: NodeState
+  onOpen: (id: string) => void
+}) {
+  const offset = OFFSETS[(lesson.order - 1) % OFFSETS.length]
+  return (
+    <li className="trail-item" style={{ transform: `translateX(${offset * 56}px)` }}>
+      <button
+        type="button"
+        className={`trail-node trail-node-${state}`}
+        disabled={state === 'locked'}
+        aria-label={`${copy.lessonLabel} ${lesson.order} · ${copy.nodeStateLabel[state]}`}
+        onClick={() => onOpen(lesson.id)}
+      >
+        {state === 'done' ? (
+          <Check />
+        ) : (
+          <span className="trail-num">{String(lesson.order).padStart(2, '0')}</span>
+        )}
+      </button>
+      {state === 'current' && (
+        <span className="trail-label">
+          {copy.lessonLabel} {lesson.order}
+        </span>
+      )}
+    </li>
+  )
+}
+
 /**
- * The path screen (ADR-0011): sections and their lessons. Status comes from core
- * (isUnlocked/isCompleted) applied to real stored progress (ADR-0005): completed lessons
- * are marked, the next lesson in a section unlocks once the previous is done, and the first
- * lesson of every section is always enterable — so an experienced user can start at Advanced.
- *
- * "acá" marks the next actionable lesson (nextLesson), not whichever lesson is open — a
- * completed lesson you are sitting on should not claim to be where the work is.
+ * The learning-path trail (Phase 1): one section per screen, paged, with node states derived
+ * from real progress (core/nodeState). Done = filled circle + check; current = ring + number +
+ * label, the only named and animated node; locked = flat, dim number — no padlock, no grey.
+ * Review stays inside lessons (ADR-0012): no stops on the trail. Titles are "Lección N"
+ * (ADR-0016): named units and per-lesson titles are Phase 2, not built here.
  */
 export function Path({
   curriculum,
@@ -51,7 +114,23 @@ export function Path({
 }) {
   const fileInput = useRef<HTMLInputElement>(null)
   const [email, setEmail] = useState('')
-  const nextId = nextLesson(curriculum, progress)?.id ?? null
+
+  const sections = curriculum.sections
+  // Open on the section holding the next actionable lesson; if the whole path is done, the last.
+  const next = nextLesson(curriculum, progress)
+  const activeIndex = next
+    ? Math.max(
+        0,
+        sections.findIndex((s) => s.lessons.some((l) => l.id === next.id)),
+      )
+    : sections.length - 1
+  const [sectionIndex, setSectionIndex] = useState(activeIndex)
+
+  const section: Section = sections[sectionIndex]
+  const doneCount = section.lessons.filter((l) => isCompleted(l, progress)).length
+  const total = section.lessons.length
+  const sectionComplete = doneCount === total
+  const nextSection = sections[sectionIndex + 1] ?? null
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0]
@@ -70,66 +149,73 @@ export function Path({
         <button type="button" className="back" aria-label={copy.pathBack} onClick={onBack}>
           ‹
         </button>
-        <h1 className="path-title">{copy.pathTitle}</h1>
         <ThemeControl theme={theme} onSetTheme={onSetTheme} />
       </header>
 
       <div className="path-body">
-        {curriculum.sections.map((section) => {
-          const done = section.lessons.filter((l) => isCompleted(l, progress)).length
-          const firstLesson = section.lessons.find((l) => l.order === 1)
-          return (
-            <div key={section.id} className="path-section">
-              <div className="path-section-head">
-                <span className="path-section-title">
-                  {section.title} · {copy.sectionProgress(done, section.lessons.length)}
-                </span>
-                {firstLesson && (
-                  <button
-                    type="button"
-                    className="path-enter"
-                    onClick={() => onOpenLesson(firstLesson.id)}
-                  >
-                    {copy.sectionEnter}
-                  </button>
-                )}
-              </div>
-              <ul className="path-lessons">
-                {section.lessons.map((lesson) => {
-                  const unlocked = isUnlocked(lesson, section, progress)
-                  const completed = isCompleted(lesson, progress)
-                  const isNext = lesson.id === nextId
-                  const cls = `path-lesson${isNext ? ' path-lesson-current' : ''}${unlocked ? '' : ' path-lesson-locked'}`
-                  return (
-                    <li key={lesson.id}>
-                      <button
-                        type="button"
-                        className={cls}
-                        disabled={!unlocked}
-                        onClick={() => onOpenLesson(lesson.id)}
-                      >
-                        <span className="path-lesson-num">{String(lesson.order).padStart(2, '0')}</span>
-                        <span className="path-lesson-name">
-                          {copy.lessonLabel} {lesson.order}
-                        </span>
-                        {completed && (
-                          <span
-                            className="path-lesson-done"
-                            role="img"
-                            aria-label={copy.lessonDoneLabel}
-                          >
-                            {copy.lessonDoneMark}
-                          </span>
-                        )}
-                        <span className="path-lesson-tag">{isNext ? copy.pathCurrent : ''}</span>
-                      </button>
-                    </li>
-                  )
-                })}
-              </ul>
+        <div className="trail-pager">
+          <button
+            type="button"
+            className="trail-pager-arrow"
+            aria-label={copy.prevSection}
+            disabled={sectionIndex === 0}
+            onClick={() => setSectionIndex((i) => Math.max(0, i - 1))}
+          >
+            ‹
+          </button>
+          <div className="trail-pager-label">
+            <span className="trail-pager-name">{section.title}</span>
+            <span className="trail-pager-progress">{copy.sectionProgress(doneCount, total)}</span>
+          </div>
+          <button
+            type="button"
+            className="trail-pager-arrow"
+            aria-label={copy.nextSection}
+            disabled={sectionIndex === sections.length - 1}
+            onClick={() => setSectionIndex((i) => Math.min(sections.length - 1, i + 1))}
+          >
+            ›
+          </button>
+        </div>
+        <div
+          className="trail-progress"
+          role="progressbar"
+          aria-valuenow={doneCount}
+          aria-valuemax={total}
+        >
+          <div className="trail-progress-fill" style={{ width: `${(doneCount / total) * 100}%` }} />
+        </div>
+
+        {sectionComplete ? (
+          <div className="trail-complete">
+            <div className="trail-trophy">
+              <Star />
             </div>
-          )
-        })}
+            <span className="trail-complete-eyebrow">{copy.sectionDone}</span>
+            <h2 className="trail-complete-title">{copy.sectionDoneTitle(section.title)}</h2>
+            <p className="trail-complete-note">{copy.sectionDoneNote}</p>
+            {nextSection && (
+              <button
+                type="button"
+                className="primary"
+                onClick={() => setSectionIndex((i) => i + 1)}
+              >
+                {copy.openNextSection(nextSection.title)}
+              </button>
+            )}
+          </div>
+        ) : (
+          <ol className="trail">
+            {section.lessons.map((lesson) => (
+              <TrailNode
+                key={lesson.id}
+                lesson={lesson}
+                state={nodeState(lesson, section, progress)}
+                onOpen={onOpenLesson}
+              />
+            ))}
+          </ol>
+        )}
       </div>
 
       <footer className="path-actions">

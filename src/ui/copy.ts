@@ -78,13 +78,17 @@ export const copy = {
   restart: 'Empezar de nuevo',
 
   pathBack: 'Ver el camino',
-  pathTitle: 'El camino',
   sectionProgress: (done: number, total: number): string => `${done} de ${total}`,
-  sectionEnter: 'Empezar acá',
-  pathCurrent: 'acá',
-  // A done lesson is a fact, not a reward — a quiet mark, never a badge to collect (ADR-0018).
-  lessonDoneMark: '✓',
   lessonDoneLabel: 'Lección terminada',
+
+  // Learning-path trail (Phase 1). One section per screen, paged; state carries node shape.
+  prevSection: 'Sección anterior',
+  nextSection: 'Sección siguiente',
+  nodeStateLabel: { done: 'terminada', current: 'actual', locked: 'bloqueada' },
+  sectionDone: 'Sección terminada',
+  sectionDoneTitle: (name: string): string => `${name}, listo.`,
+  sectionDoneNote: 'Lo de esta sección vuelve más adelante, mezclado con lo nuevo.',
+  openNextSection: (name: string): string => `Abrir ${name}`,
 
   // Theme toggle (dark / light), a quiet icon control top-right. The words are the accessible
   // labels; the glyphs are the monochrome icons (kept quiet — no accent).
