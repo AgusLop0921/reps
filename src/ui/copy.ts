@@ -20,7 +20,11 @@ export const copy = {
   landingLead: 'Practicás React con preguntas reales de entrevista, de a tres por vez.',
   landingWhy: 'Ocupa el lugar del scroll: el mismo reflejo, pero esto termina y algo queda.',
   landingCta: 'Empezar',
+  // Two notes: with sync available there's a real choice (account or not); without it,
+  // there's no account to offer, so only the local-only line is true.
   landingCtaNote: 'Sin cuenta, sin configuraciones. Tu progreso queda en este navegador.',
+  landingCtaNoteSync:
+    'Con cuenta, tu progreso te sigue entre dispositivos. Sin cuenta, queda en este navegador.',
   landingHowEyebrow: 'Cómo funciona',
   landingHowEyebrowRight: 'Orden, no algoritmo',
   landingPoints: [
