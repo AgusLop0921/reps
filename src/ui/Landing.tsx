@@ -1,6 +1,7 @@
 import type { SourceInfo } from '../content/sources'
 import { type Theme } from '../core/theme'
 import { copy } from './copy'
+import repsIcon from './reps-icon.svg'
 import { ThemeControl } from './ThemeControl'
 
 /**
@@ -36,7 +37,7 @@ export function Landing({
               ‹
             </button>
           )}
-          <span className="landing-brand">{copy.appName}</span>
+          <img className="landing-brand-icon" src={repsIcon} alt={copy.appName} width="32" height="32" />
         </div>
         <div className="landing-nav-right">
           <div className="landing-nav-links">
