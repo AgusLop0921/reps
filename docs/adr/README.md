@@ -34,7 +34,7 @@ change contracts.
 | [0007](0007-content-licensing.md) | Content licensing and attribution | Amended by 0015 |
 | [0008](0008-english-repo-spanish-product.md) | English repository, Spanish product | Amended by 0016 |
 | [0009](0009-git-workflow.md) | Branch, commit and PR workflow | Accepted |
-| [0010](0010-mobile-first-scroll-replacement.md) | Mobile-first, positioned against aimless scrolling | Amended by 0018 |
+| [0010](0010-mobile-first-scroll-replacement.md) | Mobile-first, positioned against aimless scrolling | Amended by 0018, 0022 |
 | [0011](0011-linear-lesson-path.md) | A linear lesson path as the primary structure | Partially superseded by 0014 |
 | [0012](0012-review-inside-lessons.md) | Review cards inside lessons | Accepted |
 | [0013](0013-interview-simulation-byok.md) | Interview simulation with the user's own API key | Accepted (v2) |
@@ -45,4 +45,5 @@ change contracts.
 | [0018](0018-long-sessions-from-content-pull.md) | Long sessions are welcome when they come from content pull | Amended by 0021 |
 | [0019](0019-check-outcome-to-leitner-score.md) | A check outcome maps to a Leitner score of 1 or 3 | Accepted |
 | [0020](0020-cross-device-sync-supabase.md) | Cross-device progress sync with Supabase, local-first | Amended by 0021 |
-| [0021](0021-first-run-account-choice.md) | A one-time first-run account choice | Accepted |
+| [0021](0021-first-run-account-choice.md) | A one-time first-run account choice | Amended by 0022 |
+| [0022](0022-open-to-the-home-not-the-lesson.md) | Open to the home, not straight into a lesson | Accepted |

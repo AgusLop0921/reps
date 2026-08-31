@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type { Curriculum, Lesson, LessonProgress, Section } from '../content/schema'
 import { isCompleted, nextLesson, nodeState, type NodeState } from '../core/curriculum'
 import { type Theme } from '../core/theme'
@@ -84,9 +84,6 @@ export function Path({
   authConfigured,
   authEmail,
   onOpenLesson,
-  onViewIntro,
-  onExport,
-  onImport,
   onGoogleSignIn,
   onSignIn,
   onSignOut,
@@ -101,9 +98,6 @@ export function Path({
   authConfigured: boolean
   authEmail: string | null
   onOpenLesson: (lessonId: string) => void
-  onViewIntro: () => void
-  onExport: () => void
-  onImport: (file: File) => void
   onGoogleSignIn: () => void
   onSignIn: (email: string) => void
   onSignOut: () => void
@@ -112,8 +106,12 @@ export function Path({
   onSetTheme: (theme: Theme) => void
   onBack: () => void
 }) {
-  const fileInput = useRef<HTMLInputElement>(null)
   const [email, setEmail] = useState('')
+
+  const onSignInSubmit = (event: React.FormEvent): void => {
+    event.preventDefault()
+    if (email.trim()) onSignIn(email.trim())
+  }
 
   const sections = curriculum.sections
   // Open on the section holding the next actionable lesson; if the whole path is done, the last.
@@ -131,17 +129,6 @@ export function Path({
   const total = section.lessons.length
   const sectionComplete = doneCount === total
   const nextSection = sections[sectionIndex + 1] ?? null
-
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = event.target.files?.[0]
-    if (file) onImport(file)
-    event.target.value = '' // let the same file be picked again after an error
-  }
-
-  const onSignInSubmit = (event: React.FormEvent): void => {
-    event.preventDefault()
-    if (email.trim()) onSignIn(email.trim())
-  }
 
   return (
     <section className="path">
@@ -261,34 +248,7 @@ export function Path({
           </div>
         )}
 
-        <details className="path-advanced">
-          <summary className="path-advanced-summary">{copy.advanced}</summary>
-          <div className="path-advanced-body">
-            <button type="button" className="path-action" onClick={onExport}>
-              {copy.exportProgress}
-            </button>
-            <button
-              type="button"
-              className="path-action"
-              onClick={() => fileInput.current?.click()}
-            >
-              {copy.importProgress}
-            </button>
-            <input
-              ref={fileInput}
-              type="file"
-              accept="application/json"
-              className="path-file"
-              onChange={onFileChange}
-            />
-          </div>
-        </details>
-
         {notice && <p className="path-notice">{notice}</p>}
-
-        <button type="button" className="path-intro-link" onClick={onViewIntro}>
-          {copy.pathViewIntro}
-        </button>
       </footer>
     </section>
   )

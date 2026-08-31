@@ -6,7 +6,6 @@ import { buildLessonDeck, type DeckCard, lessonAfter, nextLesson } from '../core
 import { SOURCES } from '../content/sources'
 import { advanceFromLanding, type FirstRunStep, initialStep, screenForStep } from '../core/firstRun'
 import { hasOnboarded, markOnboarded } from '../storage/onboarding'
-import { exportData, importData } from '../storage/repository'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
@@ -44,10 +43,10 @@ function deckFor(
 }
 
 /**
- * The screens (ADR-0010): the app opens straight into the current lesson's card. Progress is
- * loaded from storage at boot and written back on every answer (ADR-0005), so reloading
- * resumes where the user left off. Business logic lives in core/; this renders, tracks
- * position, and passes `now` into the pure domain.
+ * The screens (ADR-0022): opening the app never drops you into a lesson. It lands on the home
+ * — the path when signed in, the landing otherwise — and the card is reached only by tapping
+ * "Empezar" or a trail node. Progress loads at boot and is written back on every answer
+ * (ADR-0005). Business logic lives in core/; this renders, tracks position, passes `now` in.
  */
 export function App() {
   const { loading, progress, lessonProgress, answer, reload } = useProgress()
@@ -55,7 +54,8 @@ export function App() {
   const { theme, setTheme } = useTheme()
 
   const [booted, setBooted] = useState(false)
-  const [screen, setScreen] = useState<'card' | 'path' | 'landing'>('card')
+  // null = not navigated yet, so the app shows the home screen (see `activeScreen`).
+  const [screen, setScreen] = useState<'card' | 'path' | 'landing' | null>(null)
   const [lessonId, setLessonId] = useState<string | null>(null)
   const [deck, setDeck] = useState<DeckCard[]>([])
   const [index, setIndex] = useState(0)
@@ -101,31 +101,6 @@ export function App() {
     setScreen('card')
   }
 
-  const handleExport = (): void => {
-    void (async () => {
-      const json = await exportData()
-      const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }))
-      const link = document.createElement('a')
-      link.href = url
-      link.download = 'reps-progress.json'
-      link.click()
-      URL.revokeObjectURL(url)
-    })()
-  }
-
-  // Replace all progress with an imported file, then re-land on the resumed lesson.
-  const handleImport = (file: File): void => {
-    void (async () => {
-      try {
-        await importData(await file.text())
-      } catch {
-        setNotice(copy.importError)
-        return
-      }
-      await refreshFromStorage(true)
-      setNotice(copy.importDone)
-    })()
-  }
 
   const handleGoogleSignIn = (): void => {
     void (async () => {
@@ -142,11 +117,16 @@ export function App() {
   const startFromLanding = (): void => {
     const { step, persist } = advanceFromLanding(auth.configured)
     if (persist) markOnboarded()
+    if (step === 'app') setScreen('path') // no account step → land on the path, not the card
     setFirstRunStep(step)
   }
 
-  // Any account-choice action ends the sequence; the flag was already set on the landing.
-  const finishAccount = (): void => setFirstRunStep('app')
+  // Any account-choice action ends the sequence; go to the path, not back to the landing or
+  // into a lesson (ADR-0022). The onboarding flag was already set on the landing.
+  const finishAccount = (): void => {
+    setScreen('path')
+    setFirstRunStep('app')
+  }
 
   const handleSignIn = (email: string): void => {
     void (async () => {
@@ -179,7 +159,8 @@ export function App() {
 
   const located = useMemo(() => locate(lessonId), [lessonId])
 
-  if (loading || !booted) {
+  // Wait on auth too: the home depends on whether we're signed in (ADR-0022).
+  if (loading || !booted || auth.loading) {
     return (
       <main className="app">
         <p className="empty">{copy.loading}</p>
@@ -216,21 +197,25 @@ export function App() {
     )
   }
 
-  // The landing, reopened from the path on demand (ADR-0021) — read-only, no "Empezar".
-  if (screen === 'landing') {
+  // The home when nothing is navigated: path if signed in, else the landing — never the card
+  // (ADR-0022). Auth is resolved by now (gated above), so this doesn't flicker.
+  const activeScreen = screen ?? (auth.email ? 'path' : 'landing')
+
+  // The landing as home: "Empezar" goes to the path, not a lesson.
+  if (activeScreen === 'landing') {
     return (
       <main className="landing-shell">
         <Landing
           source={SOURCES['midudev-react']}
           theme={theme}
           onSetTheme={setTheme}
-          onBack={() => setScreen('path')}
+          onStart={() => setScreen('path')}
         />
       </main>
     )
   }
 
-  if (screen === 'path') {
+  if (activeScreen === 'path') {
     return (
       <main className="app">
         <Path
@@ -240,16 +225,13 @@ export function App() {
           authConfigured={auth.configured}
           authEmail={auth.email}
           onOpenLesson={openLesson}
-          onViewIntro={() => setScreen('landing')}
-          onExport={handleExport}
-          onImport={handleImport}
           onGoogleSignIn={handleGoogleSignIn}
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           onDeleteAccount={handleDeleteAccount}
           theme={theme}
           onSetTheme={setTheme}
-          onBack={() => setScreen('card')}
+          onBack={() => setScreen('landing')}
         />
       </main>
     )

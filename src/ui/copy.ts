@@ -42,7 +42,6 @@ export const copy = {
     'Solo agregamos la capa de práctica. Los tests de opción múltiple los generamos nosotros; no son parte del contenido original.',
   landingFooterMeta: (author: string, license: string): string =>
     `Contenido de ${author} · ${license}`,
-  pathViewIntro: 'Ver la introducción',
 
   // First-run account choice (ADR-0021). Honest, symmetric, no default. Shown once, ever.
   onboardingTitle: 'Antes de empezar',
@@ -90,18 +89,10 @@ export const copy = {
   sectionDoneNote: 'Lo de esta sección vuelve más adelante, mezclado con lo nuevo.',
   openNextSection: (name: string): string => `Abrir ${name}`,
 
-  // Theme toggle (dark / light), a quiet icon control top-right. The words are the accessible
-  // labels; the glyphs are the monochrome icons (kept quiet — no accent).
-  themeLabel: 'Tema',
+  // Theme toggle: a single icon showing the theme you'd switch to (sun in dark, moon in
+  // light). The words are the accessible labels; the glyphs are the monochrome icons.
   themeOptions: { dark: 'Oscuro', light: 'Claro' },
   themeGlyphs: { dark: '☾', light: '☼' },
-
-  // Export/import lives under "Avanzado" now that sync is the primary path (ADR-0021).
-  advanced: 'Avanzado',
-  exportProgress: 'Exportar progreso',
-  importProgress: 'Importar progreso',
-  importDone: 'Progreso importado.',
-  importError: 'No se pudo importar el archivo.',
 
   // Cross-device sync (ADR-0020, ADR-0021). One affordance, never a nag (ADR-0018).
   syncTitle: 'Sincronizar entre dispositivos',

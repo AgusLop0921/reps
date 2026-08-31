@@ -11,12 +11,16 @@ import { isSyncConfigured, supabase } from '../storage/supabaseClient'
 export function useAuth() {
   const [email, setEmail] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
+  // Until the initial session resolves we can't tell signed-in from out; the boot waits on
+  // this so it can route the home screen (ADR-0022). No Supabase → resolved immediately.
+  const [loading, setLoading] = useState(isSyncConfigured)
 
   useEffect(() => {
     if (!supabase) return
     void supabase.auth.getSession().then(({ data }) => {
       setEmail(data.session?.user.email ?? null)
       setUserId(data.session?.user.id ?? null)
+      setLoading(false)
     })
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setEmail(session?.user.email ?? null)
@@ -58,6 +62,7 @@ export function useAuth() {
 
   return {
     configured: isSyncConfigured,
+    loading,
     email,
     userId,
     signIn,
