@@ -56,6 +56,28 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
+/*
+ * "Papel": a fixed fractal-noise grain over the flat background so the surface stops reading
+ * as a void. A single inline-SVG feTurbulence (desaturated, seamlessly tiled) — static, tiny,
+ * no PNG, no canvas, no animation, non-interactive. It sits behind all content (z-index -1),
+ * so transparent surfaces show it and solid cards cover it. Tuned per theme; light multiplies.
+ * At ~5–6% it should be imperceptible as a pattern — just texture.
+ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+:root[data-theme='light'] body::before {
+  mix-blend-mode: multiply;
+  opacity: 0.06;
+}
+
 /* Mobile-first shell: a single full-width column, capped on larger screens. */
 .app {
   min-height: 100%;
