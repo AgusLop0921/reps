@@ -80,6 +80,7 @@ export const copy = {
   restart: 'Empezar de nuevo',
 
   pathBack: 'Ver el camino',
+  pathHome: 'Ir al inicio',
   sectionProgress: (done: number, total: number): string => `${done} de ${total}`,
   lessonDoneLabel: 'Lección terminada',
 

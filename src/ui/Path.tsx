@@ -3,6 +3,7 @@ import type { Curriculum, Lesson, LessonProgress, Section } from '../content/sch
 import { isCompleted, nextLesson, nodeState, type NodeState } from '../core/curriculum'
 import { type Theme } from '../core/theme'
 import { copy } from './copy'
+import repsIcon from './reps-icon.svg'
 import { ThemeControl } from './ThemeControl'
 
 /** A checkmark for done nodes — an inline SVG shape, no icon library. */
@@ -133,8 +134,8 @@ export function Path({
   return (
     <section className="path">
       <header className="path-head">
-        <button type="button" className="back" aria-label={copy.pathBack} onClick={onBack}>
-          ‹
+        <button type="button" className="path-home" aria-label={copy.pathHome} onClick={onBack}>
+          <img className="path-home-icon" src={repsIcon} alt="" width="30" height="30" />
         </button>
         <ThemeControl theme={theme} onSetTheme={onSetTheme} />
       </header>
