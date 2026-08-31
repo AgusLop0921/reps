@@ -178,6 +178,7 @@ export function App() {
         <Landing
           source={SOURCES['midudev-react']}
           questionCount={questionsById.size}
+          syncConfigured={auth.configured}
           theme={theme}
           onSetTheme={setTheme}
           onStart={startFromLanding}
@@ -209,6 +210,7 @@ export function App() {
         <Landing
           source={SOURCES['midudev-react']}
           questionCount={questionsById.size}
+          syncConfigured={auth.configured}
           theme={theme}
           onSetTheme={setTheme}
           onStart={() => setScreen('path')}

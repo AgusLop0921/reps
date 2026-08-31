@@ -16,6 +16,7 @@ import { ThemeControl } from './ThemeControl'
 export function Landing({
   source,
   questionCount,
+  syncConfigured,
   theme,
   onSetTheme,
   onStart,
@@ -23,6 +24,7 @@ export function Landing({
 }: {
   source: SourceInfo
   questionCount: number
+  syncConfigured: boolean
   theme: Theme
   onSetTheme: (theme: Theme) => void
   onStart?: () => void
@@ -67,7 +69,9 @@ export function Landing({
               <button type="button" className="landing-cta-btn" onClick={onStart}>
                 {copy.landingCta} <span aria-hidden="true">→</span>
               </button>
-              <p className="landing-cta-note">{copy.landingCtaNote}</p>
+              <p className="landing-cta-note">
+                {syncConfigured ? copy.landingCtaNoteSync : copy.landingCtaNote}
+              </p>
             </div>
           )}
         </div>
