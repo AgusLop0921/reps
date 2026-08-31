@@ -846,6 +846,26 @@ button {
   color: var(--text);
 }
 
+/* The app glyph as a home button in the path header — taps back to the landing. */
+.path-home {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 4px;
+  margin-left: -4px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.path-home-icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
 .path {
   flex: 1;
   display: flex;
