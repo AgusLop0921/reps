@@ -8,17 +8,20 @@ import { ThemeControl } from './ThemeControl'
  * hero with an oversized wordmark, a numbered three-point "cómo funciona" section, a quiet
  * credit, and a footer. Shown once at first run (with `onStart`) and reopenable from the path
  * (with `onBack`). The credit is pulled from source metadata (ADR-0007), never hardcoded; the
- * note keeps a generated check from being blamed on the source (ADR-0017). "Sistema" is an
- * in-page anchor; "Contacto" is dropped for want of a destination.
+ * note keeps a generated check from being blamed on the source (ADR-0017). "Cómo funciona" is
+ * an in-page anchor; "Contacto" is dropped for want of a destination. The scale line states the
+ * content's size as a fact, high up (count from the data, author from sources.ts).
  */
 export function Landing({
   source,
+  questionCount,
   theme,
   onSetTheme,
   onStart,
   onBack,
 }: {
   source: SourceInfo
+  questionCount: number
   theme: Theme
   onSetTheme: (theme: Theme) => void
   onStart?: () => void
@@ -38,7 +41,7 @@ export function Landing({
         <div className="landing-nav-right">
           <div className="landing-nav-links">
             <a className="landing-nav-link" href="#landing-how">
-              {copy.landingNavSystem}
+              {copy.landingNavHow}
             </a>
             {onStart && (
               <button type="button" className="landing-nav-link" onClick={onStart}>
@@ -50,14 +53,14 @@ export function Landing({
         </div>
       </nav>
 
-      <div className="landing-rule landing-rule-end">
-        <span className="landing-eyebrow">{copy.landingEyebrowRight}</span>
-      </div>
-
       <header className="landing-hero">
         <h1 className="landing-title">{copy.appName}</h1>
+        <p className="landing-scale">{copy.landingScale(questionCount, source.author)}</p>
         <div className="landing-hero-body">
-          <p className="landing-lead">{copy.landingLead}</p>
+          <div className="landing-hero-text">
+            <p className="landing-lead">{copy.landingLead}</p>
+            <p className="landing-why">{copy.landingWhy}</p>
+          </div>
           {onStart && (
             <div className="landing-hero-cta">
               <button type="button" className="landing-cta-btn" onClick={onStart}>
@@ -105,7 +108,7 @@ export function Landing({
             </button>
           )}
           <a className="landing-nav-link" href="#landing-how">
-            {copy.landingNavSystem}
+            {copy.landingNavHow}
           </a>
         </div>
         <span className="landing-footer-meta">

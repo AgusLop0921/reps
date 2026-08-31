@@ -177,6 +177,7 @@ export function App() {
       <main className="landing-shell">
         <Landing
           source={SOURCES['midudev-react']}
+          questionCount={questionsById.size}
           theme={theme}
           onSetTheme={setTheme}
           onStart={startFromLanding}
@@ -207,6 +208,7 @@ export function App() {
       <main className="landing-shell">
         <Landing
           source={SOURCES['midudev-react']}
+          questionCount={questionsById.size}
           theme={theme}
           onSetTheme={setTheme}
           onStart={() => setScreen('path')}

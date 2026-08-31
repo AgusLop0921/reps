@@ -201,10 +201,6 @@ body::before {
   border-top: 1px solid var(--border);
 }
 
-.landing-rule-end {
-  justify-content: flex-end;
-}
-
 .landing-eyebrow {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -227,10 +223,27 @@ body::before {
   font-weight: 500;
 }
 
+/* The content's scale as a fact, sitting under the wordmark. Mono so it reads as data. */
+.landing-scale {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  color: var(--text);
+  max-width: 42ch;
+}
+
 .landing-hero-body {
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.landing-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 }
 
 .landing-lead {
@@ -238,6 +251,15 @@ body::before {
   font-size: clamp(1.15rem, 2.4vw, 1.5rem);
   line-height: 1.4;
   max-width: 34ch;
+}
+
+/* The scroll idea as the "why", quieter than the lead it follows. */
+.landing-why {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 40ch;
 }
 
 .landing-hero-cta {
