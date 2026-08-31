@@ -12,11 +12,14 @@ export const copy = {
   // transcribed from the design prototype (to refine); the credit interpolates
   // author/name/url/license from sources.ts (ADR-0007), never hardcoded.
   landingNavStart: 'Empezar',
-  landingNavSystem: 'Sistema',
-  landingEyebrowRight: 'Basado en preguntas-entrevista-react',
-  landingLead:
-    'Ocupa el lugar del scroll: abrís, hacés tres tarjetas de React, y se acaba. No hay feed que siga.',
-  landingCta: 'Empezar la lección 1',
+  landingNavHow: 'Cómo funciona',
+  // The scale as a fact, high up — count derived from the data, author from sources.ts.
+  landingScale: (count: number, author: string): string =>
+    `${count} preguntas y respuestas de ${author}. Gratis, en español.`,
+  // Value first (what you do here), then the scroll idea as the why.
+  landingLead: 'Practicás React con preguntas reales de entrevista, de a tres por vez.',
+  landingWhy: 'Ocupa el lugar del scroll: el mismo reflejo, pero esto termina y algo queda.',
+  landingCta: 'Empezar',
   landingCtaNote: 'Sin cuenta, sin configuraciones. Tu progreso queda en este navegador.',
   landingHowEyebrow: 'Cómo funciona',
   landingHowEyebrowRight: 'Orden, no algoritmo',
