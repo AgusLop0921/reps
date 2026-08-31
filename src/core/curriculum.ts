@@ -27,6 +27,25 @@ export function isUnlocked(
   return previous ? isCompleted(previous, progress) : false
 }
 
+/**
+ * The trail node state for a lesson within its section (learning-path Phase 1). Derived from
+ * real progress, so the visual can't drift from the unlocking rules: a completed lesson is
+ * `done`; the single unlocked-not-completed lesson is `current` (the named, actionable one);
+ * everything still behind it is `locked`. Exactly one `current` per section, or none when the
+ * whole section is done.
+ */
+export type NodeState = 'done' | 'current' | 'locked'
+
+export function nodeState(
+  lesson: Lesson,
+  section: Section,
+  progress: LessonProgress[],
+): NodeState {
+  if (isCompleted(lesson, progress)) return 'done'
+  if (isUnlocked(lesson, section, progress)) return 'current'
+  return 'locked'
+}
+
 /** The lesson the user lands on when opening the app: first unlocked, not completed. */
 export function nextLesson(
   curriculum: Curriculum,

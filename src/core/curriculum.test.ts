@@ -6,6 +6,7 @@ import {
   isUnlocked,
   lessonAfter,
   nextLesson,
+  nodeState,
   sectionCompletion,
 } from './curriculum'
 import { initialProgress } from './scheduler'
@@ -33,6 +34,31 @@ const done = (lessonId: string): LessonProgress => ({
   answeredQuestionIds: [],
   completedAt: NOW,
   updatedAt: NOW,
+})
+
+describe('nodeState', () => {
+  const basic = section('basic', [
+    lesson('b1', 1, [qid(1)]),
+    lesson('b2', 2, [qid(2)]),
+    lesson('b3', 3, [qid(3)]),
+  ])
+
+  it('marks completed lessons done, the next actionable one current, the rest locked', () => {
+    const progress = [done('b1')]
+    expect(nodeState(basic.lessons[0], basic, progress)).toBe('done')
+    expect(nodeState(basic.lessons[1], basic, progress)).toBe('current')
+    expect(nodeState(basic.lessons[2], basic, progress)).toBe('locked')
+  })
+
+  it('makes the first lesson current in a fresh section', () => {
+    expect(nodeState(basic.lessons[0], basic, [])).toBe('current')
+    expect(nodeState(basic.lessons[1], basic, [])).toBe('locked')
+  })
+
+  it('has no current node once the section is complete', () => {
+    const all = [done('b1'), done('b2'), done('b3')]
+    expect(basic.lessons.map((l) => nodeState(l, basic, all))).toEqual(['done', 'done', 'done'])
+  })
 })
 
 describe('isUnlocked', () => {
