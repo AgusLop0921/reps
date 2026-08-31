@@ -1,6 +1,6 @@
 # ADR-0021: A one-time first-run account choice
 
-- **Status:** Accepted
+- **Status:** Accepted — amended by ADR-0022
 - **Date:** 2026-08-27
 - **Amends:** ADR-0018, ADR-0020
 
