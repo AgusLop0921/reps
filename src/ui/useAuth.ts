@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react'
 import { clearAll } from '../storage/repository'
 import { isSyncConfigured, supabase } from '../storage/supabaseClient'
 
+// Where OAuth / magic links return to: the app's own URL, base included. `origin` alone drops
+// the project-page base (`/reps/`), so it must be appended. This URL must also be in Supabase's
+// redirect allowlist, or Supabase falls back to the project's Site URL.
+const appUrl = window.location.origin + import.meta.env.BASE_URL
+
 /**
  * Supabase auth, magic-link only (ADR-0020). When Supabase is not configured this reports
  * `configured: false` and every method is a no-op, so the no-account, local-only path is
@@ -33,7 +38,7 @@ export function useAuth() {
     if (!supabase) return
     const { error } = await supabase.auth.signInWithOtp({
       email: address,
-      options: { emailRedirectTo: window.location.origin },
+      options: { emailRedirectTo: appUrl },
     })
     if (error) throw error
   }
@@ -42,7 +47,7 @@ export function useAuth() {
     if (!supabase) return
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: appUrl },
     })
     if (error) throw error
   }
