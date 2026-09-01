@@ -483,11 +483,21 @@ body::before {
   width: 100%;
   min-height: 52px;
   padding: 0 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--surface-2);
   color: var(--text);
   font-size: 0.95rem;
+}
+
+.onboarding-icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
 }
 
 .onboarding-back {
