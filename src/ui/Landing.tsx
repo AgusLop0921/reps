@@ -84,7 +84,6 @@ export function Landing({
       <section className="landing-how" id="landing-how">
         <div className="landing-rule">
           <span className="landing-eyebrow">{copy.landingHowEyebrow}</span>
-          <span className="landing-eyebrow">{copy.landingHowEyebrowRight}</span>
         </div>
         {/* A question on the left, a plain description of a lesson on the right. */}
         <div className="landing-feature">
@@ -94,7 +93,11 @@ export function Landing({
           </figure>
           <div className="landing-feature-text">
             <span className="landing-eyebrow">{copy.landingShotQuestion}</span>
-            <p className="landing-point-body">{copy.landingQuestionBody}</p>
+            <div className="landing-point">
+              <h2 className="landing-point-title">{copy.landingQuestionTitle}</h2>
+              <p className="landing-point-body">{copy.landingQuestionBody}</p>
+              <p className="landing-point-body">{copy.landingQuestionBody2}</p>
+            </div>
           </div>
         </div>
 

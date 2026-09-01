@@ -430,7 +430,7 @@ body::before {
 
   .landing-feature {
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     gap: clamp(2rem, 5vw, 4rem);
   }
 
@@ -439,8 +439,8 @@ body::before {
   }
 
   .landing-feature-shot {
-    align-self: auto;
-    width: clamp(220px, 30vw, 300px);
+    align-self: flex-start;
+    width: clamp(200px, 26vw, 260px);
   }
 
   .landing-feature-text {

@@ -27,7 +27,6 @@ export const copy = {
   landingCtaNoteSync:
     'Con cuenta, tu progreso te sigue entre dispositivos. Sin cuenta, queda en este navegador.',
   landingHowEyebrow: 'Cómo funciona',
-  landingHowEyebrowRight: 'Orden, no algoritmo',
   landingPoints: [
     {
       title: 'Lecciones que terminan',
@@ -46,8 +45,11 @@ export const copy = {
   // the numbered points. Eyebrows label each row against its screenshot.
   landingShotQuestion: 'Una pregunta',
   landingShotTrail: 'El camino',
+  landingQuestionTitle: 'Explica y pregunta',
   landingQuestionBody:
-    'Cada lección explica un tema y te hace preguntas sobre eso. Respondés, ves la respuesta, y seguís.',
+    'Cada lección toma un tema: te muestra la pregunta con su respuesta, explicada, y después un test corto de opción múltiple.',
+  landingQuestionBody2:
+    'Respondés, ves si acertaste y por qué, y seguís a la siguiente. Sin puntajes ni rachas, solo la pregunta que tenés adelante.',
   landingCreditEyebrow: 'Crédito del contenido',
   landingCreditPre: (author: string): string =>
     `Las preguntas y respuestas son de ${author}, del repositorio `,
