@@ -16,8 +16,9 @@ export const copy = {
   // The scale as a fact, high up — count derived from the data, author from sources.ts.
   landingScale: (count: number, author: string): string =>
     `${count} preguntas y respuestas de ${author}. Gratis, en español.`,
-  // Value first (what you do here), then the scroll idea as the why.
-  landingLead: 'Practicás React con preguntas reales de entrevista, de a tres por vez.',
+  // Value first (what you do here), then the scroll idea as the why. "de a pocas" — most
+  // lessons are three cards, but some are one; avoid claiming a fixed number.
+  landingLead: 'Practicás React con preguntas reales de entrevista, de a pocas por vez.',
   landingWhy: 'Ocupa el lugar del scroll: el mismo reflejo, pero esto termina y algo queda.',
   landingCta: 'Empezar',
   // Two notes: with sync available there's a real choice (account or not); without it,
@@ -30,17 +31,20 @@ export const copy = {
   landingPoints: [
     {
       title: 'Lecciones que terminan',
-      body: 'Tres tarjetas nuevas, un repaso y una pregunta. Al final no hay un "siguiente" infinito: la tanda se termina, y eso es todo.',
+      body: 'Unas pocas tarjetas nuevas y algún repaso de lo anterior. Al final no hay un "siguiente" infinito: la tanda se termina, y eso es todo.',
     },
     {
       title: 'Camino ordenado',
-      body: 'Un camino lineal, de lo básico a lo avanzado. No elegís temas al azar: te deja donde quedaste y sigue desde ahí.',
+      body: 'Un camino lineal, sección por sección. No elegís temas al azar: te deja donde quedaste y sigue desde ahí.',
     },
     {
       title: 'Las preguntas vuelven',
-      body: 'Repaso espaciado: lo que viste reaparece justo antes de que se te olvide, mezclado con la lección nueva.',
+      body: 'Repaso espaciado: lo que viste reaparece justo antes de que se te olvide, al empezar la lección nueva.',
     },
   ],
+  // Captions for the two app screenshots in the "cómo funciona" section.
+  landingShotQuestion: 'Una pregunta',
+  landingShotTrail: 'El camino',
   landingCreditEyebrow: 'Crédito del contenido',
   landingCreditPre: (author: string): string =>
     `Las preguntas y respuestas son de ${author}, del repositorio `,
