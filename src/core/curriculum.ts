@@ -113,3 +113,18 @@ export function sectionCompletion(section: Section, progress: LessonProgress[]):
   const done = section.lessons.filter((l) => isCompleted(l, progress)).length
   return done / section.lessons.length
 }
+
+/**
+ * How many distinct questions the path actually teaches — for the landing's scale line.
+ * Not every imported question ends up on the path, so this is the practised count, which can
+ * be lower than the raw import total.
+ */
+export function pathQuestionCount(curriculum: Curriculum): number {
+  const ids = new Set<string>()
+  for (const section of curriculum.sections) {
+    for (const lesson of section.lessons) {
+      for (const id of lesson.questionIds) ids.add(id)
+    }
+  }
+  return ids.size
+}
