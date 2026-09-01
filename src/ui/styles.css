@@ -89,6 +89,13 @@ body::before {
   flex-direction: column;
 }
 
+/* The path uses the same width and side padding as the landing so their edges line up. */
+.app-wide {
+  max-width: 1080px;
+  padding-left: clamp(var(--space), 5vw, 3rem);
+  padding-right: clamp(var(--space), 5vw, 3rem);
+}
+
 .empty {
   margin: auto;
   color: var(--muted);
