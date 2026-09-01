@@ -2,6 +2,10 @@ import type { SourceInfo } from '../content/sources'
 import { type Theme } from '../core/theme'
 import { copy } from './copy'
 import repsIcon from './reps-icon.svg'
+import cardDark from './shots/card-dark.png'
+import cardLight from './shots/card-light.png'
+import trailDark from './shots/trail-dark.png'
+import trailLight from './shots/trail-light.png'
 import { ThemeControl } from './ThemeControl'
 
 /**
@@ -91,6 +95,18 @@ export function Landing({
             </li>
           ))}
         </ol>
+        <div className="landing-shots">
+          <figure className="landing-shot">
+            <img className="landing-shot-img shot-dark" src={cardDark} alt="" width="585" height="1050" />
+            <img className="landing-shot-img shot-light" src={cardLight} alt="" width="585" height="1050" />
+            <figcaption className="landing-shot-cap">{copy.landingShotQuestion}</figcaption>
+          </figure>
+          <figure className="landing-shot">
+            <img className="landing-shot-img shot-dark" src={trailDark} alt="" width="585" height="1050" />
+            <img className="landing-shot-img shot-light" src={trailLight} alt="" width="585" height="1050" />
+            <figcaption className="landing-shot-cap">{copy.landingShotTrail}</figcaption>
+          </figure>
+        </div>
       </section>
 
       <section className="landing-credit">

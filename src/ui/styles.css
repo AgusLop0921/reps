@@ -336,6 +336,53 @@ body::before {
   line-height: 1.6;
 }
 
+/* Two app screenshots illustrating the section — a question and the path. One image per
+   theme, swapped by data-theme so the shot always matches the page. */
+.landing-shots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 2rem);
+  margin-top: clamp(2rem, 5vh, 3rem);
+}
+
+.landing-shot {
+  margin: 0;
+  width: clamp(150px, 42vw, 240px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.landing-shot-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.shot-light {
+  display: none;
+}
+
+:root[data-theme='light'] .shot-dark {
+  display: none;
+}
+
+:root[data-theme='light'] .shot-light {
+  display: block;
+}
+
+.landing-shot-cap {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
 /* Credit: quiet, ruled, legible — the source link (accent) is unmissable, the block is not. */
 .landing-credit {
   display: flex;
