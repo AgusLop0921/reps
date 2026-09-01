@@ -13,43 +13,47 @@ export const copy = {
   // author/name/url/license from sources.ts (ADR-0007), never hardcoded.
   landingNavStart: 'Empezar',
   landingNavHow: 'Cómo funciona',
-  // The scale as a fact, high up — count derived from the data, author from sources.ts.
-  landingScale: (count: number, author: string): string =>
-    `${count} preguntas y respuestas de ${author}. Gratis, en español.`,
-  // Value first (what you do here), then the scroll idea as the why. "de a pocas" — most
-  // lessons are three cards, but some are one; avoid claiming a fixed number.
-  landingLead: 'Practicás React con preguntas reales de entrevista, de a pocas por vez.',
-  landingWhy: 'Ocupa el lugar del scroll: el mismo reflejo, pero esto termina y algo queda.',
-  landingCta: 'Empezar',
+  // Hero eyebrow: the scale as a fact (count derived from the data), then a quieter source line.
+  landingScale: (count: number): string => `${count} preguntas reales de entrevistas de React.`,
+  landingScaleSub: 'Basadas en el contenido de midudev · Gratis · En español.',
+  // The hero's main line and its supporting description.
+  landingLead: 'Entrená React en vez de scrollear.',
+  landingWhy:
+    'Preguntas reales de entrevista, explicaciones y repasos en sesiones de pocos minutos.',
+  landingCta: 'Empezar a practicar',
   // Two notes: with sync available there's a real choice (account or not); without it,
   // there's no account to offer, so only the local-only line is true.
-  landingCtaNote: 'Sin cuenta, sin configuraciones. Tu progreso queda en este navegador.',
+  landingCtaNote: 'Sin cuenta, tu progreso queda en este navegador.',
   landingCtaNoteSync:
-    'Con cuenta, tu progreso te sigue entre dispositivos. Sin cuenta, queda en este navegador.',
+    'Sin cuenta podés empezar ahora. Con cuenta, tu progreso te acompaña en cualquier dispositivo.',
   landingHowEyebrow: 'Cómo funciona',
   landingPoints: [
     {
-      title: 'Lecciones que terminan',
-      body: 'Unas pocas tarjetas nuevas y algún repaso de lo anterior. Al final no hay un "siguiente" infinito: la tanda se termina, y eso es todo.',
+      title: 'Aprendé de a poco',
+      body: 'Cada sesión tiene pocas preguntas. Lo suficiente para avanzar sin convertirlo en otra cosa que dejás para después.',
     },
     {
-      title: 'Camino ordenado',
-      body: 'Un camino lineal, sección por sección. No elegís temas al azar: te deja donde quedaste y sigue desde ahí.',
+      title: 'Seguí donde quedaste',
+      body: 'No tenés que elegir qué estudiar. Reps organiza el recorrido y te lleva a la próxima lección.',
     },
     {
-      title: 'Las preguntas vuelven',
-      body: 'Repaso espaciado: lo que viste reaparece justo antes de que se te olvide, al empezar la lección nueva.',
+      title: 'Recordá de verdad',
+      body: 'Las preguntas vuelven con el tiempo para reforzar lo aprendido justo cuando empezás a olvidarlo.',
     },
   ],
-  // "Cómo funciona": the question row gets a plain description of a lesson; the path row keeps
-  // the numbered points. Eyebrows label each row against its screenshot.
-  landingShotQuestion: 'Una pregunta',
-  landingShotTrail: 'El camino',
-  landingQuestionTitle: 'Explica y pregunta',
+  // "Cómo funciona": the lesson row describes a lesson; the training row keeps the numbered
+  // points. Eyebrows label each row against its screenshot.
+  landingShotQuestion: 'Una lección',
+  landingShotTrail: 'Tu entrenamiento',
+  landingQuestionTitle: 'Una lección. Pocos minutos.',
   landingQuestionBody:
-    'Cada lección toma un tema: te muestra la pregunta con su respuesta, explicada, y después un test corto de opción múltiple.',
-  landingQuestionBody2:
-    'Respondés, ves si acertaste y por qué, y seguís a la siguiente. Sin puntajes ni rachas, solo la pregunta que tenés adelante.',
+    'Primero entendés el concepto con una explicación y ejemplos. Después lo ponés a prueba con preguntas reales de entrevista.',
+  landingQuestionBody2: 'Respondés, entendés por qué y seguís. Sin sesiones eternas.',
+  // Closing section, before the credit. The remate gets typographic weight, not a second hero.
+  landingCloseTitle: 'No necesitás una hora libre.',
+  landingCloseBody:
+    'Cinco minutos esperando el colectivo, tomando un café o antes de arrancar a trabajar alcanzan para hacer una lección.',
+  landingCloseRemate: 'Menos scroll. Una rep más.',
   landingCreditEyebrow: 'Crédito del contenido',
   landingCreditPre: (author: string): string =>
     `Las preguntas y respuestas son de ${author}, del repositorio `,
