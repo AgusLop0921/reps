@@ -1,4 +1,5 @@
 Full license text for each content source, one file per `sourceId`.
 
-TODO: copy the LICENSE from midudev/preguntas-entrevista-react here as
-`midudev-react.txt` (MIT, requires preserving the copyright notice).
+- `midudev-react.txt` — MIT, © 2022 Miguel Ángel Durán
+  ([midudev/preguntas-entrevista-react](https://github.com/midudev/preguntas-entrevista-react)).
+  The MIT terms require preserving this copyright and permission notice.

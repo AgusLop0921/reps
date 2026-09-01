@@ -7,6 +7,7 @@ import {
   lessonAfter,
   nextLesson,
   nodeState,
+  pathQuestionCount,
   sectionCompletion,
 } from './curriculum'
 import { initialProgress } from './scheduler'
@@ -205,6 +206,20 @@ describe('sectionCompletion', () => {
       lesson('b4', 4, [qid(4)]),
     ])
     expect(sectionCompletion(basic, [done('b1'), done('b2')])).toBe(0.5)
+  })
+})
+
+describe('pathQuestionCount', () => {
+  it('counts distinct question ids across every section, without double-counting', () => {
+    const curriculum: Curriculum = {
+      generatedAt: '2026-08-24',
+      sections: [
+        section('basic', [lesson('b1', 1, [qid(1), qid(2)]), lesson('b2', 2, [qid(3)])]),
+        // qid(3) is repeated on purpose — it must be counted once.
+        section('adv', [lesson('a1', 1, [qid(3), qid(4)])]),
+      ],
+    }
+    expect(pathQuestionCount(curriculum)).toBe(4)
   })
 })
 

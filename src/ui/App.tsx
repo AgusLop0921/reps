@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { checksByQuestionId, curriculum, questionsById } from '../content/load'
 import type { Lesson, LessonProgress, Progress, Score, Section } from '../content/schema'
 import { orderedOptions, scoreForCheck } from '../core/checks'
-import { buildLessonDeck, type DeckCard, lessonAfter, nextLesson } from '../core/curriculum'
+import {
+  buildLessonDeck,
+  type DeckCard,
+  lessonAfter,
+  nextLesson,
+  pathQuestionCount,
+} from '../core/curriculum'
 import { SOURCES } from '../content/sources'
 import { advanceFromLanding, type FirstRunStep, initialStep, screenForStep } from '../core/firstRun'
 import { hasOnboarded, markOnboarded } from '../storage/onboarding'
@@ -16,6 +22,9 @@ import { useAuth } from './useAuth'
 import { useProgress } from './useProgress'
 import { useSync } from './useSync'
 import { useTheme } from './useTheme'
+
+/** Questions actually on the path (not the raw import total), for the landing's scale line. */
+const PATH_QUESTION_COUNT = pathQuestionCount(curriculum)
 
 /** A card answered incorrectly, kept so the end screen can resurface its explanation. */
 type MissedCard = { questionId: string; title: string; explanation: string }
@@ -177,7 +186,7 @@ export function App() {
       <main className="landing-shell">
         <Landing
           source={SOURCES['midudev-react']}
-          questionCount={questionsById.size}
+          questionCount={PATH_QUESTION_COUNT}
           syncConfigured={auth.configured}
           theme={theme}
           onSetTheme={setTheme}
@@ -209,7 +218,7 @@ export function App() {
       <main className="landing-shell">
         <Landing
           source={SOURCES['midudev-react']}
-          questionCount={questionsById.size}
+          questionCount={PATH_QUESTION_COUNT}
           syncConfigured={auth.configured}
           theme={theme}
           onSetTheme={setTheme}
