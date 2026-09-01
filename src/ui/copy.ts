@@ -42,9 +42,12 @@ export const copy = {
       body: 'Repaso espaciado: lo que viste reaparece justo antes de que se te olvide, al empezar la lección nueva.',
     },
   ],
-  // Captions for the two app screenshots in the "cómo funciona" section.
+  // "Cómo funciona": the question row gets a plain description of a lesson; the path row keeps
+  // the numbered points. Eyebrows label each row against its screenshot.
   landingShotQuestion: 'Una pregunta',
   landingShotTrail: 'El camino',
+  landingQuestionBody:
+    'Cada lección explica un tema y te hace preguntas sobre eso. Respondés, ves la respuesta, y seguís.',
   landingCreditEyebrow: 'Crédito del contenido',
   landingCreditPre: (author: string): string =>
     `Las preguntas y respuestas son de ${author}, del repositorio `,

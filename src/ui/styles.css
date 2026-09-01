@@ -323,10 +323,26 @@ body::before {
   gap: clamp(1rem, 3vh, 1.8rem);
 }
 
+.landing-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 3vh, 1.8rem);
+}
+
 .landing-point {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
+}
+
+.landing-point-num {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
 }
 
 .landing-point-title {

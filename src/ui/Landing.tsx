@@ -86,7 +86,7 @@ export function Landing({
           <span className="landing-eyebrow">{copy.landingHowEyebrow}</span>
           <span className="landing-eyebrow">{copy.landingHowEyebrowRight}</span>
         </div>
-        {/* A question on the left, its explanation on the right. */}
+        {/* A question on the left, a plain description of a lesson on the right. */}
         <div className="landing-feature">
           <figure className="landing-feature-shot">
             <img className="landing-shot-img shot-dark" src={cardDark} alt="" width="585" height="1050" />
@@ -94,16 +94,11 @@ export function Landing({
           </figure>
           <div className="landing-feature-text">
             <span className="landing-eyebrow">{copy.landingShotQuestion}</span>
-            {[copy.landingPoints[0], copy.landingPoints[2]].map((point) => (
-              <div key={point.title} className="landing-point">
-                <h2 className="landing-point-title">{point.title}</h2>
-                <p className="landing-point-body">{point.body}</p>
-              </div>
-            ))}
+            <p className="landing-point-body">{copy.landingQuestionBody}</p>
           </div>
         </div>
 
-        {/* The path on the right, its explanation on the left. */}
+        {/* The path on the right, the numbered points on the left. */}
         <div className="landing-feature landing-feature-reverse">
           <figure className="landing-feature-shot">
             <img className="landing-shot-img shot-dark" src={trailDark} alt="" width="585" height="1050" />
@@ -111,10 +106,15 @@ export function Landing({
           </figure>
           <div className="landing-feature-text">
             <span className="landing-eyebrow">{copy.landingShotTrail}</span>
-            <div className="landing-point">
-              <h2 className="landing-point-title">{copy.landingPoints[1].title}</h2>
-              <p className="landing-point-body">{copy.landingPoints[1].body}</p>
-            </div>
+            <ol className="landing-points">
+              {copy.landingPoints.map((point, i) => (
+                <li key={point.title} className="landing-point">
+                  <span className="landing-point-num">{String(i + 1).padStart(2, '0')}</span>
+                  <h2 className="landing-point-title">{point.title}</h2>
+                  <p className="landing-point-body">{point.body}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
