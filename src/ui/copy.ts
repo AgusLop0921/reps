@@ -27,7 +27,6 @@ export const copy = {
   landingCtaNoteSync:
     'Con cuenta, tu progreso te sigue entre dispositivos. Sin cuenta, queda en este navegador.',
   landingHowEyebrow: 'Cómo funciona',
-  landingHowEyebrowRight: 'Orden, no algoritmo',
   landingPoints: [
     {
       title: 'Lecciones que terminan',
@@ -42,9 +41,15 @@ export const copy = {
       body: 'Repaso espaciado: lo que viste reaparece justo antes de que se te olvide, al empezar la lección nueva.',
     },
   ],
-  // Captions for the two app screenshots in the "cómo funciona" section.
+  // "Cómo funciona": the question row gets a plain description of a lesson; the path row keeps
+  // the numbered points. Eyebrows label each row against its screenshot.
   landingShotQuestion: 'Una pregunta',
   landingShotTrail: 'El camino',
+  landingQuestionTitle: 'Explica y pregunta',
+  landingQuestionBody:
+    'Cada lección toma un tema: te muestra la pregunta con su respuesta, explicada, y después un test corto de opción múltiple.',
+  landingQuestionBody2:
+    'Respondés, ves si acertaste y por qué, y seguís a la siguiente. Sin puntajes ni rachas, solo la pregunta que tenés adelante.',
   landingCreditEyebrow: 'Crédito del contenido',
   landingCreditPre: (author: string): string =>
     `Las preguntas y respuestas son de ${author}, del repositorio `,

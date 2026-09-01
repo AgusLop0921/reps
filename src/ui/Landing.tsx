@@ -84,28 +84,41 @@ export function Landing({
       <section className="landing-how" id="landing-how">
         <div className="landing-rule">
           <span className="landing-eyebrow">{copy.landingHowEyebrow}</span>
-          <span className="landing-eyebrow">{copy.landingHowEyebrowRight}</span>
         </div>
-        <ol className="landing-points">
-          {copy.landingPoints.map((point, i) => (
-            <li key={point.title} className="landing-point">
-              <span className="landing-point-num">{String(i + 1).padStart(2, '0')}</span>
-              <h2 className="landing-point-title">{point.title}</h2>
-              <p className="landing-point-body">{point.body}</p>
-            </li>
-          ))}
-        </ol>
-        <div className="landing-shots">
-          <figure className="landing-shot">
+        {/* A question on the left, a plain description of a lesson on the right. */}
+        <div className="landing-feature">
+          <figure className="landing-feature-shot">
             <img className="landing-shot-img shot-dark" src={cardDark} alt="" width="585" height="1050" />
             <img className="landing-shot-img shot-light" src={cardLight} alt="" width="585" height="1050" />
-            <figcaption className="landing-shot-cap">{copy.landingShotQuestion}</figcaption>
           </figure>
-          <figure className="landing-shot">
+          <div className="landing-feature-text">
+            <span className="landing-eyebrow">{copy.landingShotQuestion}</span>
+            <div className="landing-point">
+              <h2 className="landing-point-title">{copy.landingQuestionTitle}</h2>
+              <p className="landing-point-body">{copy.landingQuestionBody}</p>
+              <p className="landing-point-body">{copy.landingQuestionBody2}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* The path on the right, the numbered points on the left. */}
+        <div className="landing-feature landing-feature-reverse">
+          <figure className="landing-feature-shot">
             <img className="landing-shot-img shot-dark" src={trailDark} alt="" width="585" height="1050" />
             <img className="landing-shot-img shot-light" src={trailLight} alt="" width="585" height="1050" />
-            <figcaption className="landing-shot-cap">{copy.landingShotTrail}</figcaption>
           </figure>
+          <div className="landing-feature-text">
+            <span className="landing-eyebrow">{copy.landingShotTrail}</span>
+            <ol className="landing-points">
+              {copy.landingPoints.map((point, i) => (
+                <li key={point.title} className="landing-point">
+                  <span className="landing-point-num">{String(i + 1).padStart(2, '0')}</span>
+                  <h2 className="landing-point-title">{point.title}</h2>
+                  <p className="landing-point-body">{point.body}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </section>
 
