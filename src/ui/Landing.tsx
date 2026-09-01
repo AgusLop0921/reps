@@ -62,7 +62,10 @@ export function Landing({
 
       <header className="landing-hero">
         <h1 className="landing-title">{copy.appName}</h1>
-        <p className="landing-scale">{copy.landingScale(questionCount, source.author)}</p>
+        <div className="landing-scale">
+          <p className="landing-scale-main">{copy.landingScale(questionCount)}</p>
+          <p className="landing-scale-sub">{copy.landingScaleSub}</p>
+        </div>
         <div className="landing-hero-body">
           <div className="landing-hero-text">
             <p className="landing-lead">{copy.landingLead}</p>
@@ -120,6 +123,12 @@ export function Landing({
             </ol>
           </div>
         </div>
+      </section>
+
+      <section className="landing-close">
+        <h2 className="landing-close-title">{copy.landingCloseTitle}</h2>
+        <p className="landing-close-body">{copy.landingCloseBody}</p>
+        <p className="landing-close-remate">{copy.landingCloseRemate}</p>
       </section>
 
       <section className="landing-credit">
