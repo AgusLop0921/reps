@@ -18,6 +18,8 @@ import { EndOfLesson } from './EndOfLesson'
 import { Landing } from './Landing'
 import { Onboarding } from './Onboarding'
 import { Path } from './Path'
+import repsIcon from './reps-icon.svg'
+import { ThemeControl } from './ThemeControl'
 import { useAuth } from './useAuth'
 import { useProgress } from './useProgress'
 import { useSync } from './useSync'
@@ -230,7 +232,7 @@ export function App() {
 
   if (activeScreen === 'path') {
     return (
-      <main className="app">
+      <main className="app app-wide">
         <Path
           curriculum={curriculum}
           progress={lessonProgress}
@@ -263,14 +265,14 @@ export function App() {
     <header className="lesson-head">
       <button
         type="button"
-        className="back"
+        className="path-home"
         aria-label={copy.pathBack}
         onClick={() => {
           setNotice(null)
           setScreen('path')
         }}
       >
-        ‹
+        <img className="path-home-icon" src={repsIcon} alt="" width="30" height="30" />
       </button>
       <div className="segments">
         {deck.map((_, k) => {
@@ -282,6 +284,7 @@ export function App() {
       {index < deck.length && (
         <span className="card-count">{copy.cardCount(index + 1, deck.length)}</span>
       )}
+      <ThemeControl theme={theme} onSetTheme={setTheme} />
     </header>
   )
 
