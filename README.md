@@ -24,8 +24,9 @@ A lesson ends, and ending it is the whole point.
 - Each lesson opens with a couple of review cards from earlier lessons — scheduled so
   they land right before you would have forgotten them — then moves on to new material.
 
-The interface is in Spanish, because the source content is in Spanish. All progress
-lives in your browser (IndexedDB). No accounts, no server.
+The interface is in Spanish, because the source content is in Spanish. Progress lives in
+your browser (IndexedDB) by default; with an optional account it syncs across your devices
+(ADR-0020). The content itself always stays client-side — no server holds the questions.
 
 ## Sources
 
@@ -40,7 +41,8 @@ Answers are never edited: errors are reported upstream.
 
 ## Stack
 
-Vite + React + TypeScript, Dexie over IndexedDB, Vitest. Installable PWA. No backend.
+Vite + React + TypeScript, Dexie over IndexedDB, Vitest. Installable PWA. No content
+backend; optional Supabase for cross-device progress sync (ADR-0020), off unless configured.
 
 ## Development
 
@@ -55,7 +57,8 @@ Architecture decisions live in [`docs/adr/`](docs/adr/), working conventions in
 
 ## Roadmap
 
-- [ ] v1 — React path (midudev), lesson runner, unlocking, review cards, local progress
+- [ ] v1 — React path (midudev), lesson runner, unlocking, review cards, local progress,
+      optional cross-device sync (Supabase accounts, ADR-0020)
 - [ ] v1.1 — second content source (JavaScript)
 - [ ] v1.2 — code exercises: "what does this print" and fill-the-gap
 - [ ] v2 — interview simulation: a conversational mock interview at a chosen seniority,
