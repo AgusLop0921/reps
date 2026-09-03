@@ -8,8 +8,8 @@ import { reconcile } from './reconcile'
 import {
   getAllLessonProgress,
   getAllProgress,
-  putLessonProgress,
-  putProgress,
+  pullLessonProgress,
+  pullProgress,
 } from './repository'
 import { supabase } from './supabaseClient'
 
@@ -21,11 +21,39 @@ import { supabase } from './supabaseClient'
  * Security scopes every query to the signed-in user; `user_id` is set on write.
  *
  * Best-effort by design: with no client (local-only build) it is a no-op, and any network
- * failure throws to the caller, which simply retries on the next trigger — local is never
- * left inconsistent because it is written first from already-valid objects.
+ * failure throws to the caller, which simply retries on the next trigger. A pulled row is
+ * applied only if it still beats the current local row (`pullProgress`), so an answer written
+ * during the round trip is never clobbered — local stays consistent even mid-sync.
  */
+
+// Single-flight guard. `online` / `focus` / `visibilitychange` commonly fire together, so
+// several syncNow calls arrive at once; running their read→reconcile→write cycles in parallel
+// would race the same stores. Only one cycle runs at a time. A call that arrives while a cycle
+// is in flight coalesces onto it and requests exactly one follow-up, so a trigger carrying
+// fresh local data the running cycle already snapshotted is flushed on the next cycle rather
+// than lost — without ever overlapping.
+let inFlight: Promise<void> | null = null
+let rerunRequested = false
+
 export async function syncNow(userId: string): Promise<void> {
   if (!supabase) return
+  if (inFlight) {
+    rerunRequested = true
+    return inFlight
+  }
+  inFlight = runCycle(userId)
+  try {
+    await inFlight
+  } finally {
+    inFlight = null
+  }
+  if (rerunRequested) {
+    rerunRequested = false
+    await syncNow(userId)
+  }
+}
+
+async function runCycle(userId: string): Promise<void> {
   await Promise.all([syncProgress(userId), syncLessonProgress(userId)])
 }
 
@@ -42,7 +70,7 @@ async function syncProgress(userId: string): Promise<void> {
   }
 
   const { toPush, toPull } = reconcile(local, remote, (p) => p.questionId)
-  for (const p of toPull) await putProgress(p)
+  for (const p of toPull) await pullProgress(p)
   if (toPush.length > 0) {
     const rows = toPush.map((p) => ({
       user_id: userId,
@@ -73,7 +101,7 @@ async function syncLessonProgress(userId: string): Promise<void> {
   }
 
   const { toPush, toPull } = reconcile(local, remote, (l) => l.lessonId)
-  for (const l of toPull) await putLessonProgress(l)
+  for (const l of toPull) await pullLessonProgress(l)
   if (toPush.length > 0) {
     const rows = toPush.map((l) => ({
       user_id: userId,
