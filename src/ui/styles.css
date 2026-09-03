@@ -221,6 +221,23 @@ body::before {
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 4vh, 2.5rem);
+  position: relative;
+}
+
+/* Decorative constellation behind the hero (ADR-0023). Absolutely positioned so it neither
+   affects the flex layout nor takes input; the hero's real content is lifted above it. */
+.hero-constellation {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.landing-hero > :not(.hero-constellation) {
+  position: relative;
+  z-index: 1;
 }
 
 .landing-title {
