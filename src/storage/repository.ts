@@ -47,6 +47,30 @@ export async function putLessonProgress(lessonProgress: LessonProgress): Promise
   await db.lessonProgress.put(lessonProgress)
 }
 
+/**
+ * Apply a pulled remote row only if it still wins against what IndexedDB holds *now*
+ * (ADR-0020). Reconcile chose this row against a snapshot taken before the network round
+ * trip; an answer written locally during that trip must not be clobbered by an older remote
+ * row. The compare-then-write runs in one transaction, so no local write can slip in between
+ * the read and the put. A row IndexedDB has never seen (no `updatedAt`) always loses to the
+ * remote, matching reconcile's "local missing → pull".
+ */
+export async function pullProgress(remote: Progress): Promise<void> {
+  await db.transaction('rw', db.progress, async () => {
+    const current = await db.progress.get(remote.questionId)
+    const currentAt = current?.updatedAt ?? Number.NEGATIVE_INFINITY
+    if (remote.updatedAt > currentAt) await db.progress.put(remote)
+  })
+}
+
+export async function pullLessonProgress(remote: LessonProgress): Promise<void> {
+  await db.transaction('rw', db.lessonProgress, async () => {
+    const current = await db.lessonProgress.get(remote.lessonId)
+    const currentAt = current?.updatedAt ?? Number.NEGATIVE_INFINITY
+    if (remote.updatedAt > currentAt) await db.lessonProgress.put(remote)
+  })
+}
+
 export async function clearAll(): Promise<void> {
   await db.transaction('rw', db.progress, db.lessonProgress, async () => {
     await db.progress.clear()
