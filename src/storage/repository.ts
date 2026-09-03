@@ -111,6 +111,12 @@ function normalizeExport(raw: unknown): ProgressExport | null {
  * Replace all progress with the contents of an export file. Validated before it touches
  * the database; a malformed or foreign file is rejected whole, never partially applied.
  * The thrown messages are for logs — the UI maps them to Spanish copy (ADR-0008).
+ *
+ * Note: this replaces *local* data only. While signed in, the next sync treats a row this
+ * import dropped (still on the server, now missing locally) as something to pull and
+ * re-downloads it, so restoring a smaller export is re-merged with remote progress — sync
+ * has no deletion signal (no tombstones; see ADR-0020 "Consequences"). Deletions do not
+ * propagate today; only `delete_account`, which wipes the server first, truly removes data.
  */
 export async function importData(json: string): Promise<void> {
   let raw: unknown

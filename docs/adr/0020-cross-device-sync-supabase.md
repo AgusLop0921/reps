@@ -126,3 +126,12 @@ record, behind one button. Not a follow-up, not a support email.
 - **ADR-0013 (BYOK) is unaffected.** The LLM key still goes browser→provider; Supabase syncs
   progress only and is never in the model's path. "No backend" is now false in general, but
   stays true for the interview feature's credentials.
+- **Deletions don't propagate; only account deletion truly removes data.** Last-write-wins
+  reconciliation treats a row present on the server but missing locally as something to pull,
+  so clearing local progress and syncing simply re-downloads it — the server is a resurrection
+  source (restoring a smaller export, then syncing, re-merges the old remote rows). The one
+  exception is `delete_account()`, which wipes the server rows before clearing local, so
+  nothing is left to pull back. Accepted for now (there is no "reset my progress" affordance,
+  and any local wipe stays coupled to a server wipe). A local-only reset would need per-row
+  tombstones to carry a deletion across devices; that is deferred until such a feature exists
+  and gets its own ADR.
