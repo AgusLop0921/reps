@@ -39,7 +39,11 @@ Do not implement these even if they look like an obvious improvement. If you thi
 should change, propose an ADR — do not act on it.
 
 - No feed, no infinite scroll, no recommendation algorithm.
-- No backend, no database, no authentication, no accounts, no cross-device sync.
+- No backend for content or app logic, and no server-side database of questions — the
+  corpus stays static and client-side. The original "no accounts, no cross-device sync"
+  non-goal was superseded under ADR-0020/0021/0022: optional Supabase sync (magic-link or
+  Google accounts, progress only) is off unless configured, and IndexedDB stays the source
+  of truth.
 - No global state library. React state and context are enough.
 - No AI calls in the app at runtime. Interview simulation is v2 and lands under ADR-0013;
   build-time check generation (maintainer's key, output committed) is ADR-0017.
@@ -124,5 +128,6 @@ upstream.
 
 ## Current state
 
-Phase 1: midudev adapter, generated curriculum, lesson runner, unlocking, local progress.
+Phase 1: midudev adapter, generated curriculum, lesson runner, unlocking, local progress,
+and optional Supabase cross-device sync (ADR-0020/0021, off unless configured).
 Roadmap in the README.

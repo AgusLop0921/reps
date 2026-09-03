@@ -15,7 +15,9 @@ runs local-only, exactly as before.
 4. Copy `.env.example` to `.env` and fill in from **Project Settings → API**:
    - `VITE_SUPABASE_URL` — the project URL
    - `VITE_SUPABASE_ANON_KEY` — the public anon key
-5. In your deploy (Cloudflare Pages), set the same two variables as build env vars.
+5. In your deploy set the same two variables as build env vars. This project ships to GitHub
+   Pages (`.github/workflows/deploy.yml`), so add them as repo secrets `VITE_SUPABASE_URL` and
+   `VITE_SUPABASE_ANON_KEY`; leave them unset to deploy local-only.
 
 The `service_role` key is never needed by the app and must never be put in the frontend or
 committed.
