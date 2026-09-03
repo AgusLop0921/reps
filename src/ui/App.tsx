@@ -15,6 +15,7 @@ import { hasOnboarded, markOnboarded } from '../storage/onboarding'
 import { Card } from './Card'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
+import { ErrorBoundary } from './ErrorBoundary'
 import { Landing } from './Landing'
 import { Onboarding } from './Onboarding'
 import { Path } from './Path'
@@ -360,19 +361,27 @@ export function App() {
   return (
     <main className="app">
       {header}
-      <Card
-        key={card.questionId}
-        question={question}
-        check={check}
-        sectionTitle={section.title}
-        lessonOrder={lesson.order}
-        isReview={card.kind === 'review'}
-        reviewCount={reviewCount}
-        picked={picked}
-        onPick={setPicked}
-        onAdvance={advance}
-        advanceLabel={advanceLabel}
-      />
+      <ErrorBoundary
+        resetKey={card.questionId}
+        onReset={() => {
+          setNotice(null)
+          setScreen('path')
+        }}
+      >
+        <Card
+          key={card.questionId}
+          question={question}
+          check={check}
+          sectionTitle={section.title}
+          lessonOrder={lesson.order}
+          isReview={card.kind === 'review'}
+          reviewCount={reviewCount}
+          picked={picked}
+          onPick={setPicked}
+          onAdvance={advance}
+          advanceLabel={advanceLabel}
+        />
+      </ErrorBoundary>
     </main>
   )
 }

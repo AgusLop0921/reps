@@ -130,4 +130,9 @@ export const copy = {
   syncPrivacy: 'Guardamos solo tu progreso: cajas, fechas y posición. Nunca el contenido ni tus respuestas.',
 
   noLesson: 'No hay ninguna lección para mostrar.',
+
+  // Shown when a card fails to render — e.g. malformed markdown in imported content — instead
+  // of a blank screen. The way out is the path, never a dead end.
+  lessonError: 'No pudimos mostrar esta tarjeta.',
+  lessonErrorBack: 'Volver al camino',
 } as const
