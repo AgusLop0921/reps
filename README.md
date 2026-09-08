@@ -35,7 +35,7 @@ Content belongs to its original authors and is used under their licenses.
 | Source | Content | License |
 |---|---|---|
 | [midudev/preguntas-entrevista-react](https://github.com/midudev/preguntas-entrevista-react) | React, Spanish | MIT |
-| [Microsoft Generative AI for Beginners](https://github.com/microsoft/generative-ai-for-beginners) | Registered for AI Engineering; content not imported yet | MIT |
+| [Microsoft Generative AI for Beginners](https://github.com/microsoft/generative-ai-for-beginners) | Spanish lesson documents normalized for review; not published | MIT |
 
 The current AI Engineering seed is small editorial Reps content and is not attributed to
 Microsoft. Sources and learning tracks are separate: a track may eventually combine several
@@ -65,7 +65,8 @@ Architecture decisions live in [`docs/adr/`](docs/adr/), working conventions in
 - [ ] v1 — React path (midudev), lesson runner, unlocking, review cards, local progress,
       optional cross-device sync (Supabase accounts, ADR-0020)
 - [x] Multi-track foundation — React and an editorial AI Engineering seed, isolated progress
-- [ ] AI Engineering source adapter and reviewed curriculum
+- [x] AI Engineering source adapter and normalized source snapshot
+- [ ] AI Engineering reviewed curriculum
 - [ ] v1.2 — code exercises: "what does this print" and fill-the-gap
 - [ ] v2 — interview simulation: a conversational mock interview at a chosen seniority,
       powered by the user's own API key (ADR-0013)

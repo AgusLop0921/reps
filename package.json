@@ -13,6 +13,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "content:import": "tsx scripts/import/index.ts",
+    "content:normalize:microsoft": "tsx scripts/import/normalize-microsoft.ts",
+    "content:check:microsoft": "tsx scripts/import/normalize-microsoft.ts --check",
     "verify": "pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
