@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createContentCatalog, findLesson } from './catalog'
-import { catalog, tracksById } from './load'
+import { catalog, checksByQuestionId, questionsById, tracksById } from './load'
 
 describe('content catalog', () => {
   it('loads the existing React track unchanged', () => {
@@ -14,6 +14,19 @@ describe('content catalog', () => {
     const ai = tracksById.get('ai-engineering')
     expect(ai?.curriculum.sections[0].title).toBe('Fundamentos')
     expect(ai?.curriculum.sections[0].lessons[0].questionIds).toEqual(['a8021d760393'])
+  })
+
+  it('loads every approved React Design Patterns question and check', () => {
+    const track = tracksById.get('react-design-patterns')
+    expect(track?.curriculum.sections).toHaveLength(6)
+
+    const lessons = track?.curriculum.sections.flatMap((section) => section.lessons) ?? []
+    const questionIds = lessons.flatMap((lesson) => lesson.questionIds)
+    expect(lessons).toHaveLength(21)
+    expect(questionIds).toHaveLength(84)
+    expect(new Set(questionIds).size).toBe(84)
+    expect(questionIds.every((questionId) => questionsById.has(questionId))).toBe(true)
+    expect(questionIds.every((questionId) => checksByQuestionId.has(questionId))).toBe(true)
   })
 
   it('resolves lessons only under their owning track', () => {

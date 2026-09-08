@@ -1,0 +1,3297 @@
+{
+  "track": {
+    "id": "react-design-patterns",
+    "title": "React Design Patterns",
+    "description": "Entrená decisiones de arquitectura en React moderno: APIs de componentes, ownership de estado, efectos, composición, async UI y trade-offs reales.",
+    "sourceReferences": [
+      {
+        "sourceId": "reps-manual"
+      }
+    ],
+    "curriculum": {
+      "generatedAt": "2026-09-08T21:03:00.000Z",
+      "sections": [
+        {
+          "id": "react-design-patterns:component-api-design",
+          "title": "Component API Design",
+          "sourceId": "reps-manual",
+          "lessons": [
+            {
+              "id": "react-design-patterns:component-api-design:1",
+              "order": 1,
+              "questionIds": [
+                "508635497c8b",
+                "84b04bd2b517",
+                "c569561361f0",
+                "9d4af6fad40d"
+              ]
+            },
+            {
+              "id": "react-design-patterns:component-api-design:2",
+              "order": 2,
+              "questionIds": [
+                "49641c36c7e5",
+                "7043f0c896e0",
+                "ba100306b566",
+                "cd1933eec1c0"
+              ]
+            },
+            {
+              "id": "react-design-patterns:component-api-design:3",
+              "order": 3,
+              "questionIds": [
+                "a827c62fc54a",
+                "e0df2141deb4",
+                "50d11dcb16b4",
+                "72a89a3551dd"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "react-design-patterns:state-ownership",
+          "title": "State Ownership",
+          "sourceId": "reps-manual",
+          "lessons": [
+            {
+              "id": "react-design-patterns:state-ownership:1",
+              "order": 1,
+              "questionIds": [
+                "55159ec333e9",
+                "cb33fc880cbd",
+                "5809a8860ad0",
+                "5739514f83aa"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:2",
+              "order": 2,
+              "questionIds": [
+                "2afd8d8d90a5",
+                "d64a465e6029",
+                "19f3ea91848f",
+                "7fac30ddbb11"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:3",
+              "order": 3,
+              "questionIds": [
+                "71aafe03d560",
+                "5863bc5333c5",
+                "5e05571d96ab",
+                "b933fed5563e"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:4",
+              "order": 4,
+              "questionIds": [
+                "11d2814fb4f5",
+                "6bd3eab77259",
+                "e6312f9f8ed7",
+                "f7361181b9da"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "react-design-patterns:behavioral-architecture",
+          "title": "Behavioral Architecture",
+          "sourceId": "reps-manual",
+          "lessons": [
+            {
+              "id": "react-design-patterns:behavioral-architecture:1",
+              "order": 1,
+              "questionIds": [
+                "d50d17b12337",
+                "38da20faf401",
+                "f7565752aba3",
+                "165b84afb2f0"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:2",
+              "order": 2,
+              "questionIds": [
+                "b666db63d608",
+                "f2ae11b6ab9e",
+                "8d37a242135f",
+                "ebbaa25ea77d"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:3",
+              "order": 3,
+              "questionIds": [
+                "bc47b690f83a",
+                "e16140d7a00f",
+                "b1ef9a8f5d55",
+                "0fb135349758"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:4",
+              "order": 4,
+              "questionIds": [
+                "4b6e4c700ce9",
+                "4ffef3cf0ad1",
+                "290df4b964c8",
+                "de8364bf6f08"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:5",
+              "order": 5,
+              "questionIds": [
+                "57caa8ec0614",
+                "47041225a75a",
+                "417cb64f6677",
+                "db73257758e3"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "react-design-patterns:flexible-components",
+          "title": "Flexible Components",
+          "sourceId": "reps-manual",
+          "lessons": [
+            {
+              "id": "react-design-patterns:flexible-components:1",
+              "order": 1,
+              "questionIds": [
+                "06b75507fc25",
+                "d38834f65bd0",
+                "c63802440fdf",
+                "c4f4445bf058"
+              ]
+            },
+            {
+              "id": "react-design-patterns:flexible-components:2",
+              "order": 2,
+              "questionIds": [
+                "38e44627f77e",
+                "debc1518dd8a",
+                "9e91da8b653f",
+                "b490217d939b"
+              ]
+            },
+            {
+              "id": "react-design-patterns:flexible-components:3",
+              "order": 3,
+              "questionIds": [
+                "c31fa3163e28",
+                "9525543c7f99",
+                "9fcf62c92c02",
+                "a9b8e112c15c"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "react-design-patterns:async-ui-patterns",
+          "title": "Async UI Patterns",
+          "sourceId": "reps-manual",
+          "lessons": [
+            {
+              "id": "react-design-patterns:async-ui-patterns:1",
+              "order": 1,
+              "questionIds": [
+                "46b1a4e01c1f",
+                "ceb4e9adcdfc",
+                "86c569ef6975",
+                "d03724b7bff8"
+              ]
+            },
+            {
+              "id": "react-design-patterns:async-ui-patterns:2",
+              "order": 2,
+              "questionIds": [
+                "96dc6de8cfed",
+                "a2858627703e",
+                "1e1379e54fdb",
+                "99616ec45af4"
+              ]
+            },
+            {
+              "id": "react-design-patterns:async-ui-patterns:3",
+              "order": 3,
+              "questionIds": [
+                "eff4f9eb69e5",
+                "0df8984f446b",
+                "adea74b20f0b",
+                "a0033d149a28"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "react-design-patterns:senior-design-decisions",
+          "title": "Senior Design Decisions",
+          "sourceId": "reps-manual",
+          "lessons": [
+            {
+              "id": "react-design-patterns:senior-design-decisions:1",
+              "order": 1,
+              "questionIds": [
+                "58638ac17e39",
+                "eef5a806aafb",
+                "e1c624197862",
+                "2650de12a324"
+              ]
+            },
+            {
+              "id": "react-design-patterns:senior-design-decisions:2",
+              "order": 2,
+              "questionIds": [
+                "48305944486d",
+                "c418918419d6",
+                "0a0ff0384173",
+                "451a9db3eff6"
+              ]
+            },
+            {
+              "id": "react-design-patterns:senior-design-decisions:3",
+              "order": 3,
+              "questionIds": [
+                "f61901b69411",
+                "112b5cd36a01",
+                "f26225f46fb1",
+                "24cdba672246"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "questions": [
+    {
+      "id": "508635497c8b",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-composition-over-prop-explosion-config-vs-structure",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Composition over Prop Explosion",
+      "format": "open",
+      "question": "¿Cómo distinguís un componente configurable sano de uno que ya está modelando demasiadas estructuras con props?",
+      "answerMd": "# Cuando la configuración empieza a describir estructura\n\n## Escenario\nUn Card nació con title y subtitle. Con el tiempo agregó showHeader, showDivider, footerActions, compact, collapsible, badge y varias combinaciones inválidas.\n\n## Idea central\nLas props de configuración funcionan bien cuando representan variantes conocidas y acotadas. Empiezan a oler cuando describen regiones estructurales independientes y combinaciones de layout.\n\n## Decisión\nSi el consumidor necesita decidir qué regiones existen y cómo se componen, mové esa responsabilidad a composición explícita. Conservá props para variantes realmente restringidas.\n\n## Trade-off\nLa composición aumenta flexibilidad, pero también expone más superficie de API y traslada más responsabilidad al consumidor.\n\n## Error común\nReemplazar cualquier grupo de props por compound components. Un Button con size, variant, disabled y loading no tiene por qué convertirse en una familia de subcomponentes."
+    },
+    {
+      "id": "84b04bd2b517",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-composition-over-prop-explosion-constrained-variants",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Composition over Prop Explosion",
+      "format": "open",
+      "question": "¿Cuándo conviene mantener una API basada en props en vez de abrir composición?",
+      "answerMd": "# No toda configuración es prop explosion\n\n## Escenario\nUn Button del design system acepta variant='primary|secondary', size='sm|md|lg', disabled y loading. El equipo propone Button.Icon, Button.Label y Button.Spinner para ser 'más composable'.\n\n## Idea central\nUna API restringida puede ser una fortaleza cuando el dominio tiene pocas variantes legítimas y querés garantizar consistencia.\n\n## Decisión\nMantené props cuando expresan opciones semánticas claras y finitas. Abrí composición solo cuando haya una necesidad real de estructura variable.\n\n## Trade-off\nLa API cerrada limita extensibilidad, pero simplifica documentación, testing, accesibilidad y consistencia visual.\n\n## Error común\nConfundir 'más flexible' con 'mejor API'. Cada grado de libertad también aumenta estados posibles."
+    },
+    {
+      "id": "c569561361f0",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-composition-over-prop-explosion-invalid-combinations",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Composition over Prop Explosion",
+      "format": "open",
+      "question": "¿Por qué muchas props booleanas pueden ser un problema incluso si cada una es fácil de entender?",
+      "answerMd": "# Diseñá APIs que reduzcan combinaciones inválidas\n\n## Escenario\nUn Banner recibe success, warning, error, dismissible, sticky, compact y prominent. Algunos estados no deberían coexistir, pero TypeScript permite casi todas las combinaciones.\n\n## Idea central\nEl costo de una API no es la cantidad de props aisladas sino el espacio de estados que permiten en conjunto.\n\n## Decisión\nPreferí una prop discriminante como tone='success|warning|error' cuando los estados son mutuamente excluyentes, y composición cuando las variaciones son estructurales.\n\n## Trade-off\nRestringir estados hace la API menos 'libre', pero también vuelve explícitas las reglas del dominio.\n\n## Error común\nAgregar validaciones en runtime para combinaciones que el propio modelo podría impedir."
+    },
+    {
+      "id": "9d4af6fad40d",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-composition-over-prop-explosion-refactor-modal",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Composition over Prop Explosion",
+      "format": "open",
+      "question": "Un componente tiene demasiadas props estructurales. ¿Qué refactor suele ser más útil que renombrarlas?",
+      "answerMd": "# Refactorá la frontera, no solo los nombres\n\n## Escenario\nModal recibe title, subtitle, renderHeader, renderFooter, footerActions, hideClose, closePosition y bodyPadding. El equipo propone agruparlas en headerOptions y footerOptions.\n\n## Idea central\nAgrupar configuración puede ordenar la firma, pero no cambia quién controla la estructura ni elimina combinaciones inválidas.\n\n## Decisión\nPrimero decidí la frontera de responsabilidad: por ejemplo Modal controla overlay, focus trap y cierre; el consumidor compone Header, Body y Footer.\n\n## Trade-off\nUna API composable puede requerir subcomponentes y contexto interno, y puede ser demasiado abierta para casos simples.\n\n## Error común\nCreer que mover 12 props a dos objetos arregla por sí solo una abstracción equivocada."
+    },
+    {
+      "id": "49641c36c7e5",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-children-as-ioc-empty-state",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Children as Inversion of Control",
+      "format": "open",
+      "question": "¿Qué problema resuelve children cuando un componente empieza a recibir demasiadas props de contenido?",
+      "answerMd": "# Delegá contenido sin delegar todo\n\n## Escenario\nEmptyState recibe icon, title, description, actionLabel y onAction. Un nuevo caso necesita dos botones y un link secundario.\n\n## Idea central\nchildren permite que el consumidor controle el contenido de una región mientras el componente conserva layout, spacing y semántica de contenedor.\n\n## Decisión\nUsá children para invertir control sobre una región cuando las variantes de contenido ya no caben bien en una configuración fija.\n\n## Trade-off\nGanás flexibilidad, pero perdés algunas garantías sobre qué contenido puede aparecer.\n\n## Error común\nAsumir que children significa que el componente ya no debe imponer ninguna estructura ni accesibilidad."
+    },
+    {
+      "id": "7043f0c896e0",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-children-as-ioc-layout-ownership",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Children as Inversion of Control",
+      "format": "open",
+      "question": "¿Quién debería decidir spacing y alineación si el componente usa children para recibir contenido?",
+      "answerMd": "# Separá layout ownership de content ownership\n\n## Escenario\nUn Panel acepta children. Algunos consumidores empiezan a pasar wrappers propios para reproducir padding y gap que antes controlaba Panel.\n\n## Idea central\nInversión de control no significa abandonar todas las garantías. Un componente puede controlar el contenedor y permitir que el consumidor controle el contenido.\n\n## Decisión\nDefiní explícitamente qué parte de la estructura sigue siendo responsabilidad del componente y cuál se delega.\n\n## Trade-off\nCuanto más layout conserva el componente, más consistente es; cuanto más delega, más adaptable es.\n\n## Error común\nDelegar tanto que cada consumidor termina reimplementando las mismas reglas de layout."
+    },
+    {
+      "id": "ba100306b566",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-children-as-ioc-slot-specificity",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Children as Inversion of Control",
+      "format": "open",
+      "question": "¿Cuándo un solo children empieza a ser demasiado ambiguo?",
+      "answerMd": "# Un único children no siempre alcanza\n\n## Escenario\nUn PageShell necesita header, sidebar, main y footer. Con un único children, el consumidor debe introducir wrappers y convenciones implícitas para indicar qué es cada región.\n\n## Idea central\nLa inversión de control también necesita semántica. Varias regiones distintas pueden justificar slots explícitos o compound components.\n\n## Decisión\nSi las regiones tienen responsabilidades diferentes, preferí una API que las nombre en vez de depender de orden o wrappers mágicos.\n\n## Trade-off\nLos slots explícitos hacen la API más verbosa, pero también más legible y validable.\n\n## Error común\nForzar todo dentro de children porque 'composition is better', aunque el árbol ya no comunique intención."
+    },
+    {
+      "id": "cd1933eec1c0",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-children-as-ioc-not-default",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Children as Inversion of Control",
+      "format": "open",
+      "question": "¿Por qué una prop como label puede ser mejor que children en algunos componentes?",
+      "answerMd": "# No uses children como dogma\n\n## Escenario\nUn Tag solo muestra una etiqueta de texto y un ícono opcional. El equipo propone reemplazar label por children para 'hacerlo genérico'.\n\n## Idea central\nLa flexibilidad útil debe corresponder al dominio. Si el contrato real es texto corto, una prop tipada puede comunicar mejor esa restricción.\n\n## Decisión\nUsá children cuando la región necesita composición real, no solo para eliminar una prop.\n\n## Trade-off\nUna API más restringida puede ser menos extensible, pero más fácil de entender y mantener.\n\n## Error común\nAbrir composición antes de tener un caso real y después intentar recuperar restricciones por documentación."
+    },
+    {
+      "id": "a827c62fc54a",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-compound-components-tabs",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Compound Components",
+      "format": "open",
+      "question": "¿Qué problema resuelve un compound component en un Tabs?",
+      "answerMd": "# Cuando varias piezas forman un solo comportamiento\n\n## Escenario\nUna API basada en arrays debe soportar label, icon, disabled, badge, customTrigger y contenido. Cada nueva variante amplía la configuración.\n\n## Idea central\nCompound components permiten que varias piezas colaboren bajo un mismo contrato público mientras comparten coordinación interna.\n\n## Decisión\nPara widgets con estructura rica y piezas relacionadas, una API como Tabs.List, Tabs.Trigger y Tabs.Content puede expresar mejor la composición.\n\n## Trade-off\nLa API gana expresividad, pero suma más componentes, reglas de nesting y coordinación interna.\n\n## Error común\nUsar compound components para cualquier componente con dos hijos, aunque no exista comportamiento coordinado."
+    },
+    {
+      "id": "e0df2141deb4",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-compound-components-context-is-implementation",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Compound Components",
+      "format": "open",
+      "question": "¿Por qué no conviene definir compound components simplemente como 'componentes que usan Context'?",
+      "answerMd": "# Context puede implementar el patrón, pero no es el patrón\n\n## Escenario\nTabs.List y Tabs.Trigger leen un contexto interno, pero otro equipo implementa un compound component pasando props clonadas entre hijos.\n\n## Idea central\nEl patrón es la API pública de piezas que colaboran; Context es solo una técnica de implementación frecuente.\n\n## Decisión\nEvaluá compound components por el contrato que ofrecen al consumidor, no por si internamente usan Context.\n\n## Trade-off\nContext simplifica coordinación profunda, pero también introduce dependencia implícita del provider.\n\n## Error común\nConfundir mecanismo interno con diseño de API."
+    },
+    {
+      "id": "50d11dcb16b4",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-compound-components-order-and-nesting",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Compound Components",
+      "format": "open",
+      "question": "¿Qué riesgo aparece cuando una API compound permite nesting arbitrario?",
+      "answerMd": "# La composición también necesita invariantes\n\n## Escenario\nMenu.Trigger funciona dentro o fuera de Menu, Menu.Item puede aparecer dentro de cualquier wrapper y algunos árboles dejan de tener el provider necesario.\n\n## Idea central\nUna API composable sigue necesitando invariantes claras: qué piezas requieren un ancestro, qué orden es válido y qué semántica debe preservarse.\n\n## Decisión\nDiseñá errores tempranos y documentación explícita para nesting inválido; no asumas que JSX flexible es autoexplicativo.\n\n## Trade-off\nMás libertad de nesting facilita extensiones, pero aumenta estados inválidos y debugging.\n\n## Error común\nOcultar errores de contexto devolviendo null silenciosamente."
+    },
+    {
+      "id": "72a89a3551dd",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-compound-components-vs-options-array",
+      "sourceSection": "Component API Design",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Compound Components",
+      "format": "open",
+      "question": "¿Un Select siempre debería aceptar children en vez de options?",
+      "answerMd": "# Elegí entre data-driven y compositional\n\n## Escenario\nUn Select de administración solo necesita label, value y disabled. Otro Select de marketplace necesita íconos, descripciones y acciones por opción.\n\n## Idea central\nNo hay una única API correcta: una lista data-driven es excelente cuando el dominio es homogéneo; composición es mejor cuando el contenido requiere estructura variable.\n\n## Decisión\nElegí según cuánto querés restringir el dominio y cuánto markup necesita controlar el consumidor.\n\n## Trade-off\nData-driven simplifica serialización y consistencia; composición soporta casos ricos pero complica contratos.\n\n## Error común\nConvertir una preferencia de estilo en regla universal."
+    },
+    {
+      "id": "55159ec333e9",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-state-ownership-accordion",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Put State Where It Belongs",
+      "format": "open",
+      "question": "¿Dónde debería vivir el estado cuando dos hermanos deben coordinarse?",
+      "answerMd": "# Subí el estado solo hasta donde hace falta coordinar\n\n## Escenario\nCada AccordionPanel tiene su propio isOpen. El producto cambia la regla: solo un panel puede estar abierto a la vez.\n\n## Idea central\nEl estado debe vivir tan bajo como sea posible, pero suficientemente alto como para coordinar a todos los consumidores que dependen de él.\n\n## Decisión\nMové activeId al ancestro común del Accordion. No hace falta Context ni un store global si la coordinación es local.\n\n## Trade-off\nLevantar estado aumenta el alcance de los re-renders y acopla a los hijos al controlador, pero habilita una única fuente de verdad.\n\n## Error común\nSaltar directamente de estado local a estado global.\n\n## Para profundizar\n- [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)\n- [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)"
+    },
+    {
+      "id": "cb33fc880cbd",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-state-ownership-independent-inputs",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Put State Where It Belongs",
+      "format": "open",
+      "question": "¿Dos inputs hermanos siempre necesitan estado en el padre?",
+      "answerMd": "# No levantes estado sin una necesidad compartida\n\n## Escenario\nFirstNameInput y NicknameInput no se afectan entre sí y ninguna otra parte del formulario necesita leerlos hasta submit.\n\n## Idea central\nLa proximidad del estado reduce acoplamiento. Compartir árbol no implica compartir ownership.\n\n## Decisión\nMantené estado local si cada componente puede cumplir su responsabilidad sin coordinación externa.\n\n## Trade-off\nEstado local simplifica aislamiento, pero puede complicar un submit centralizado si luego necesitás leer todos los valores.\n\n## Error común\nLevantar todo al primer ancestro por consistencia, aunque no exista necesidad.\n\n## Para profundizar\n- [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)\n- [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)"
+    },
+    {
+      "id": "5809a8860ad0",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-state-ownership-date-range",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Put State Where It Belongs",
+      "format": "open",
+      "question": "¿Por qué startDate y endDate suelen pertenecer a un dueño común?",
+      "answerMd": "# Modelá invariantes donde puedan hacerse cumplir\n\n## Escenario\nDos DatePicker separados permiten elegir un endDate anterior a startDate. Cada uno valida solo su propio valor.\n\n## Idea central\nSi existe una invariante entre valores, el dueño que puede observar ambos es el lugar natural para modelarla.\n\n## Decisión\nUbicá el estado del rango donde puedan aplicarse reglas entre inicio y fin, y pasá a los pickers valores y callbacks apropiados.\n\n## Trade-off\nCentralizar facilita invariantes, pero hace los componentes más controlados y dependientes del padre.\n\n## Error común\nDuplicar la validación en cada hijo sin una fuente común de verdad.\n\n## Para profundizar\n- [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)\n- [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)"
+    },
+    {
+      "id": "5739514f83aa",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-state-ownership-global-store",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Put State Where It Belongs",
+      "format": "open",
+      "question": "¿Qué señal indica que un estado probablemente no pertenece a un store global?",
+      "answerMd": "# Global no significa conveniente\n\n## Escenario\nUn tooltip guarda isOpen en el store de la app porque 'así cualquier componente puede acceder'. Nadie fuera del tooltip lo necesita.\n\n## Idea central\nEl alcance del estado debería reflejar el alcance real de sus consumidores.\n\n## Decisión\nSi el estado es efímero y local a una interacción, mantenelo cerca de esa interacción salvo un requisito concreto.\n\n## Trade-off\nLos stores globales facilitan acceso transversal, pero agregan coupling, suscripciones y costo mental.\n\n## Error común\nUsar accesibilidad técnica como justificación de ownership: 'puede leerse desde cualquier lado, entonces debería vivir global'."
+    },
+    {
+      "id": "2afd8d8d90a5",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-controlled-vs-uncontrolled-dialog",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Controlled vs Uncontrolled",
+      "format": "open",
+      "question": "¿Qué cambia realmente entre defaultOpen y open/onOpenChange?",
+      "answerMd": "# Ownership explícito en la API\n\n## Escenario\nDialog puede gestionar su apertura internamente o recibirla del consumidor.\n\n## Idea central\nUncontrolled significa que el componente posee el estado inicializado por default*. Controlled significa que el consumidor posee el valor actual y recibe eventos para actualizarlo.\n\n## Decisión\nOfrecé modo controlled cuando el consumidor necesita coordinar el estado con otras partes de la aplicación.\n\n## Trade-off\nSoportar ambos modos aumenta flexibilidad, pero también duplica caminos semánticos y casos de testing.\n\n## Error común\nPensar que controlled es automáticamente más 'senior' o correcto."
+    },
+    {
+      "id": "d64a465e6029",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-controlled-vs-uncontrolled-default-value",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Controlled vs Uncontrolled",
+      "format": "open",
+      "question": "¿Por qué cambiar defaultValue después del mount no debería esperarse que recontrole el componente?",
+      "answerMd": "# defaultValue no es value\n\n## Escenario\nUn Input interno usa defaultValue='A'. El padre cambia defaultValue a 'B' esperando que el texto actual se reemplace.\n\n## Idea central\nLas props default* inicializan estado uncontrolled; no representan el valor actual.\n\n## Decisión\nSi el padre debe controlar cambios posteriores, usá value/onChange. Si no, tratá defaultValue como valor inicial.\n\n## Trade-off\nControlled da sincronización externa; uncontrolled reduce wiring para casos simples.\n\n## Error común\nUsar defaultValue como si fuera una prop controlada diferida."
+    },
+    {
+      "id": "19f3ea91848f",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-controlled-vs-uncontrolled-dual-mode",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Controlled vs Uncontrolled",
+      "format": "open",
+      "question": "¿Qué detalle debe definirse al soportar controlled y uncontrolled en el mismo componente?",
+      "answerMd": "# Dos modos implican una política\n\n## Escenario\nUn Select acepta value, defaultValue y onValueChange, pero el equipo no definió qué ocurre si value pasa de undefined a un valor durante la vida del componente.\n\n## Idea central\nUn componente dual-mode necesita reglas claras sobre fuente de verdad, transiciones de modo y callbacks.\n\n## Decisión\nDefiní si el modo se fija al mount y advertí cambios de controlled a uncontrolled o viceversa.\n\n## Trade-off\nLa API es cómoda para distintos consumidores, pero la implementación y testing son más complejos.\n\n## Error común\nAgregar value y defaultValue sin especificar precedencia ni cambios de modo."
+    },
+    {
+      "id": "7fac30ddbb11",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-controlled-vs-uncontrolled-when-simple",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Controlled vs Uncontrolled",
+      "format": "open",
+      "question": "¿Cuándo un componente uncontrolled puede ser la mejor opción?",
+      "answerMd": "# No controles lo que no necesitás coordinar\n\n## Escenario\nUn Disclosure simple solo necesita abrirse y cerrarse localmente; ningún otro componente depende de ese estado.\n\n## Idea central\nControl externo tiene costo de wiring. Si no existe coordinación, persistencia o derivación externa, ownership interno puede ser suficiente.\n\n## Decisión\nPreferí uncontrolled para interacciones encapsuladas cuando el consumidor solo necesita un valor inicial y quizá eventos informativos.\n\n## Trade-off\nEl componente es más simple de consumir, pero el padre tiene menos control directo.\n\n## Error común\nHacer controlled por defecto solo porque parece más explícito."
+    },
+    {
+      "id": "71aafe03d560",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-state-design-derived-full-name",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Design State, Don’t Accumulate It",
+      "format": "open",
+      "question": "¿Por qué fullName no debería ser estado si depende solo de firstName y lastName?",
+      "answerMd": "# No guardes lo que podés derivar\n\n## Escenario\nEl formulario guarda firstName, lastName y fullName y usa un Effect para mantenerlos sincronizados.\n\n## Idea central\nCada copia de información crea una obligación de sincronización y la posibilidad de divergencia.\n\n## Decisión\nDerivá fullName durante render. Guardá como estado solo las fuentes de verdad.\n\n## Trade-off\nDerivar puede repetir una computación, pero para cálculos simples el costo es despreciable y el modelo es más robusto.\n\n## Error común\nIntroducir estado y Effects para valores baratos y completamente derivados.\n\n## Para profundizar\n- [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)\n- [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)"
+    },
+    {
+      "id": "5863bc5333c5",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-state-design-status-union",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Design State, Don’t Accumulate It",
+      "format": "open",
+      "question": "¿Qué problema tiene modelar request state con isLoading, hasError e isSuccess independientes?",
+      "answerMd": "# Hacé difíciles los estados imposibles\n\n## Escenario\nNada impide que isLoading y isSuccess sean true al mismo tiempo.\n\n## Idea central\nLa forma del estado debe representar las invariantes del dominio.\n\n## Decisión\nUsá un estado discriminado como status='idle|loading|success|error' cuando los estados son mutuamente excluyentes.\n\n## Trade-off\nUna discriminante es menos flexible, precisamente porque elimina combinaciones inválidas.\n\n## Error común\nConfiar en disciplina humana para mantener booleanos correlacionados.\n\n## Para profundizar\n- [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)\n- [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)"
+    },
+    {
+      "id": "5e05571d96ab",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-state-design-selected-id",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Design State, Don’t Accumulate It",
+      "format": "open",
+      "question": "¿Qué riesgo aparece al guardar selectedItem además de items?",
+      "answerMd": "# Guardá identidad, no una copia\n\n## Escenario\nitems se actualiza desde el servidor, pero selectedItem conserva una copia vieja del objeto.\n\n## Idea central\nDuplicar entidades derivables crea inconsistencias. La identidad suele ser una mejor pieza de estado que una copia completa.\n\n## Decisión\nGuardá selectedId y derivá selectedItem desde items cuando el objeto pertenece a esa colección.\n\n## Trade-off\nDerivar requiere buscar en la colección; para listas enormes puede necesitar una estructura indexada, pero el principio de fuente única sigue siendo válido.\n\n## Error común\nResolver staleness agregando más Effects de sincronización.\n\n## Para profundizar\n- [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)\n- [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)"
+    },
+    {
+      "id": "b933fed5563e",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-state-design-reset-by-model",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Design State, Don’t Accumulate It",
+      "format": "open",
+      "question": "¿Qué preguntás antes de agregar otro useState para una nueva bandera?",
+      "answerMd": "# A veces el problema es el modelo, no el setter\n\n## Escenario\nUn wizard ya tiene isEditing, isSaving, isComplete, hasError, isDirty y canContinue. Una nueva regla pide isReviewing.\n\n## Idea central\nMás setters pueden ser síntoma de que los estados reales y transiciones no están modelados como concepto.\n\n## Decisión\nRevisá si las banderas representan estados mutuamente excluyentes o derivables y rediseñá antes de acumular otra.\n\n## Trade-off\nUn modelo más explícito puede requerir refactor y más tipos, pero reduce combinaciones incoherentes.\n\n## Error común\nAgregar una bandera por cada requisito sin revisar relaciones."
+    },
+    {
+      "id": "11d2814fb4f5",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-identity-keys-user-form",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Identity, Keys & State Reset",
+      "format": "open",
+      "question": "¿Cuándo usar key para resetear estado local es más correcto que un Effect?",
+      "answerMd": "# key también expresa identidad\n\n## Escenario\nUserForm inicializa draft desde user. Al seleccionar otro usuario, el producto quiere tratarlo como una instancia nueva del formulario.\n\n## Idea central\nReact preserva estado por posición en el árbol. Cambiar key le dice que la identidad conceptual cambió y que debe crear una nueva instancia.\n\n## Decisión\nUsá key cuando el nuevo dato representa una entidad distinta cuyo estado local no debe conservarse.\n\n## Trade-off\nResetear con key descarta todo el estado del subárbol, lo cual puede ser demasiado agresivo si algunas partes deben persistir.\n\n## Error común\nUsar Effect para copiar props a estado solo para simular una identidad nueva.\n\n## Para profundizar\n- [Preserving and Resetting State](https://react.dev/learn/preserving-and-resetting-state)"
+    },
+    {
+      "id": "6bd3eab77259",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-identity-keys-not-every-prop",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Identity, Keys & State Reset",
+      "format": "open",
+      "question": "¿Por qué key={JSON.stringify(props)} suele ser una mala idea?",
+      "answerMd": "# No conviertas cada cambio de prop en una nueva identidad\n\n## Escenario\nUn editor pierde selección, focus y draft cada vez que cambia cualquier prop porque su key incluye todo el objeto.\n\n## Idea central\nIdentity reset debe corresponder a una entidad conceptual distinta, no a cualquier actualización.\n\n## Decisión\nElegí una key estable que represente la identidad real, como documentId, cuando efectivamente querés una nueva instancia.\n\n## Trade-off\nUna key más estable preserva estado útil; una key más granular resetea más agresivamente.\n\n## Error común\nUsar key como botón universal para solucionar cualquier sincronización."
+    },
+    {
+      "id": "e6312f9f8ed7",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-identity-keys-list-reordering",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Identity, Keys & State Reset",
+      "format": "open",
+      "question": "¿Qué problema aparece al usar el índice como key en una lista editable que puede reordenarse?",
+      "answerMd": "# Identity importa también al reordenar\n\n## Escenario\nCada Row mantiene input local. Al mover elementos, el estado parece saltar a otra fila.\n\n## Idea central\nReact asocia estado a la identidad representada por key. El índice representa posición, no la entidad, cuando el orden puede cambiar.\n\n## Decisión\nUsá un id estable de la entidad cuando las filas se insertan, eliminan o reordenan.\n\n## Trade-off\nIDs estables requieren que el dominio tenga identidad persistente, pero preservan correctamente estado entre movimientos.\n\n## Error común\nTratar key solo como forma de silenciar el warning de listas."
+    },
+    {
+      "id": "f7361181b9da",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-identity-keys-reset-partial",
+      "sourceSection": "State Ownership",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Identity, Keys & State Reset",
+      "format": "open",
+      "question": "¿Qué hacés si al cambiar productId querés resetear quantity pero preservar el panel expandido?",
+      "answerMd": "# Reset total y reset parcial son decisiones distintas\n\n## Escenario\nEl equipo propone key={productId} en todo ProductEditor, pero eso también resetea UI local que debería permanecer.\n\n## Idea central\nkey resetea el subárbol completo donde se aplica. A veces la identidad nueva solo afecta una parte del estado.\n\n## Decisión\nColocá la key en el subárbol que realmente representa la nueva entidad o modelá explícitamente el reset parcial.\n\n## Trade-off\nUna frontera de key más pequeña exige diseñar mejor el árbol, pero preserva estado no relacionado.\n\n## Error común\nAplicar key demasiado arriba y aceptar resets colaterales."
+    },
+    {
+      "id": "d50d17b12337",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-custom-hooks-concrete-behavior",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Custom Hooks as Behavioral APIs",
+      "format": "open",
+      "question": "¿Qué diferencia un buen custom hook de un wrapper de lifecycle?",
+      "answerMd": "# Extraé comportamiento, no líneas\n\n## Escenario\nEl proyecto tiene useEffectOnce, useDidUpdate y useMount. Nadie entiende qué comportamiento de negocio representa cada llamada sin leer su callback.\n\n## Idea central\nUn custom hook fuerte encapsula una capacidad o sincronización concreta y nombrable, como useChatRoom o useOnlineStatus.\n\n## Decisión\nExtraé cuando podés nombrar el comportamiento y ocultar detalles de coordinación, no solo porque un bloque tiene varias líneas.\n\n## Trade-off\nHooks concretos son menos genéricos, pero comunican intención y permiten evolucionar la implementación sin tocar consumidores.\n\n## Error común\nConvertir cada Effect repetido en un hook genérico de lifecycle.\n\n## Para profundizar\n- [Reusing Logic with Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)"
+    },
+    {
+      "id": "38da20faf401",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-custom-hooks-share-logic-not-state",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Custom Hooks as Behavioral APIs",
+      "format": "open",
+      "question": "Si dos componentes llaman useCounter(), ¿comparten el mismo count?",
+      "answerMd": "# Compartir lógica no comparte instancia de estado\n\n## Escenario\nAmbos usan el mismo custom hook que internamente llama useState(0).\n\n## Idea central\nCada llamada a un custom hook obtiene su propio estado, igual que si los hooks internos estuvieran escritos directamente en cada componente.\n\n## Decisión\nSi necesitás una única instancia compartida, la solución requiere ownership compartido, Context o un external store; no alcanza con reutilizar el hook.\n\n## Trade-off\nEstado independiente mejora encapsulación; estado compartido requiere una frontera explícita.\n\n## Error común\nPensar que extraer useState a un hook convierte mágicamente el estado en singleton.\n\n## Para profundizar\n- [Reusing Logic with Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)"
+    },
+    {
+      "id": "f7565752aba3",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-custom-hooks-external-store",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Custom Hooks as Behavioral APIs",
+      "format": "open",
+      "question": "¿Por qué una suscripción a un store externo puede no ser un buen caso para useEffect + useState manual?",
+      "answerMd": "# Preferí la primitive que modela el problema\n\n## Escenario\nUn hook escucha navigator.onLine o un store externo y copia el valor a state mediante Effect.\n\n## Idea central\nReact ofrece useSyncExternalStore para integrar fuentes externas con semántica de suscripción consistente.\n\n## Decisión\nCuando el problema es específicamente leer y suscribirse a un store externo, usá la primitive diseñada para eso dentro de tu custom hook.\n\n## Trade-off\nLa API dedicada requiere entender snapshots y suscripción, pero evita reimplementar detalles de consistencia.\n\n## Error común\nTratar useEffect como primitive universal para cualquier sincronización imaginable.\n\n## Para profundizar\n- [useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore)"
+    },
+    {
+      "id": "165b84afb2f0",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-custom-hooks-api-shape",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Custom Hooks as Behavioral APIs",
+      "format": "open",
+      "question": "¿Qué señal indica que un custom hook está filtrando demasiado detalle de implementación?",
+      "answerMd": "# La API del hook también es arquitectura\n\n## Escenario\nuseUpload devuelve setInternalQueue, retryTimerRef, abortControllerRef y dispatch además de startUpload y cancelUpload.\n\n## Idea central\nUn hook debería exponer las capacidades que el consumidor necesita, no todos los mecanismos usados internamente.\n\n## Decisión\nDiseñá una API orientada a acciones y estado relevante: status, progress, startUpload, cancelUpload.\n\n## Trade-off\nEncapsular reduce flexibilidad para casos excepcionales, pero protege invariantes y permite cambiar implementación.\n\n## Error común\nExponer refs y setters internos por si 'algún día hacen falta'."
+    },
+    {
+      "id": "b666db63d608",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-reducers-complex-transitions-signal",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Reducers for Complex Transitions",
+      "format": "open",
+      "question": "¿Qué señal favorece useReducer por encima de varios useState?",
+      "answerMd": "# La complejidad está en las transiciones\n\n## Escenario\nUn editor tiene pocos valores, pero muchos handlers deben actualizarlos juntos según reglas distintas y aparecen bugs por updates incompletos.\n\n## Idea central\nReducers ayudan cuando la complejidad proviene de cómo cambia el estado ante eventos, no simplemente de cuántos campos existen.\n\n## Decisión\nUsá reducer cuando querés centralizar transiciones relacionadas y hacer explícitos los eventos que las disparan.\n\n## Trade-off\nUn reducer agrega indirection y boilerplate; para estado simple puede ser peor que setters directos.\n\n## Error común\nElegir useReducer solo porque hay más de tres campos.\n\n## Para profundizar\n- [Extracting State Logic into a Reducer](https://react.dev/learn/extracting-state-logic-into-a-reducer)"
+    },
+    {
+      "id": "f2ae11b6ab9e",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-reducers-actions-describe-events",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Reducers for Complex Transitions",
+      "format": "open",
+      "question": "¿Qué action comunica mejor intención: setSelectedId o item_deleted?",
+      "answerMd": "# Las actions deberían contar qué pasó\n\n## Escenario\nAl borrar un item hay que removerlo, actualizar selección y limpiar un draft relacionado.\n\n## Idea central\nUna action semántica describe el evento; el reducer decide todas las consecuencias coherentes para el estado.\n\n## Decisión\nPreferí actions como item_deleted o form_submitted cuando varias actualizaciones derivan del mismo evento.\n\n## Trade-off\nActions semánticas acoplan el reducer al lenguaje del dominio, pero mejoran trazabilidad y consistencia.\n\n## Error común\nCrear una action por setter y terminar con un reducer que solo replica useState.\n\n## Para profundizar\n- [Extracting State Logic into a Reducer](https://react.dev/learn/extracting-state-logic-into-a-reducer)"
+    },
+    {
+      "id": "8d37a242135f",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-reducers-pure",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Reducers for Complex Transitions",
+      "format": "open",
+      "question": "¿Por qué no conviene llamar fetch dentro de un reducer?",
+      "answerMd": "# El reducer decide estado, no ejecuta efectos\n\n## Escenario\nUna action save_clicked intenta hacer await api.save() dentro del reducer antes de devolver el nuevo estado.\n\n## Idea central\nReducers deben ser puros: dada la misma entrada, producen el mismo estado sin efectos externos.\n\n## Decisión\nEjecutá IO fuera del reducer y despachá eventos que representen resultados como save_succeeded o save_failed.\n\n## Trade-off\nSeparar efectos agrega pasos, pero mantiene las transiciones deterministas y testeables.\n\n## Error común\nConvertir el reducer en un controlador imperativo de toda la aplicación.\n\n## Para profundizar\n- [Extracting State Logic into a Reducer](https://react.dev/learn/extracting-state-logic-into-a-reducer)"
+    },
+    {
+      "id": "ebbaa25ea77d",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-reducers-not-global-store",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Reducers for Complex Transitions",
+      "format": "open",
+      "question": "¿Usar useReducer significa que el estado debe ir a Context?",
+      "answerMd": "# Reducer no implica global\n\n## Escenario\nUn complejo editor local usa useReducer. Alguien propone moverlo a AppContext porque 'si ya es reducer, es global'.\n\n## Idea central\nReducer define cómo cambia el estado; ownership define dónde vive. Son decisiones distintas.\n\n## Decisión\nMantené el reducer local si sus consumidores son locales. Solo compartilo más arriba cuando exista una necesidad de alcance.\n\n## Trade-off\nCombinar reducer con Context puede ser útil, pero aumenta el alcance y los re-renders potenciales.\n\n## Error común\nConfundir técnica de actualización con ubicación del estado."
+    },
+    {
+      "id": "bc47b690f83a",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-context-boundary-theme",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Context Is a Boundary, Not a Store",
+      "format": "open",
+      "question": "¿Qué hace que Theme sea un buen candidato para Context?",
+      "answerMd": "# Context resuelve dependencia de subárbol\n\n## Escenario\nMuchos componentes profundos necesitan el mismo tema y pasarlo por cada capa agrega props que esas capas no usan.\n\n## Idea central\nContext permite que un valor esté disponible dentro de una frontera de subárbol sin prop drilling a través de intermediarios.\n\n## Decisión\nUsalo para dependencias legítimamente compartidas por un subárbol, como theme, locale o servicios de una feature.\n\n## Trade-off\nContext simplifica acceso, pero vuelve la dependencia menos visible en las props y puede ampliar re-renders.\n\n## Error común\nDefinir Context como sinónimo de estado global.\n\n## Para profundizar\n- [createContext](https://react.dev/reference/react/createContext)"
+    },
+    {
+      "id": "e16140d7a00f",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-context-boundary-giant-app-context",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Context Is a Boundary, Not a Store",
+      "format": "open",
+      "question": "¿Qué problema tiene AppContext con user, cart, notifications, products, filters, modal y theme?",
+      "answerMd": "# Un provider gigante es una frontera borrosa\n\n## Escenario\nComponentes que solo necesitan theme quedan acoplados a un contexto que cambia por muchas razones no relacionadas.\n\n## Idea central\nUna frontera útil agrupa dependencias que cambian juntas o pertenecen al mismo dominio.\n\n## Decisión\nSepará contextos por responsabilidad y mantené ownership del estado donde corresponde.\n\n## Trade-off\nMás providers pueden parecer verbosos, pero hacen dependencias y frecuencia de cambio más explícitas.\n\n## Error común\nConsolidar contextos solo para reducir líneas de JSX."
+    },
+    {
+      "id": "b1ef9a8f5d55",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-context-boundary-composition-first",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Context Is a Boundary, Not a Store",
+      "format": "open",
+      "question": "¿Cuándo conviene probar composition antes de Context?",
+      "answerMd": "# A veces composition elimina prop drilling sin Context\n\n## Escenario\nPage pasa user por cinco wrappers solo para que UserMenu lo reciba. Los wrappers no necesitan user.\n\n## Idea central\nPodés pasar el componente o región ya compuesta desde arriba y evitar que las capas intermedias conozcan el dato.\n\n## Decisión\nAntes de crear un Context, preguntá si invertir control de la estructura resuelve la dependencia de forma más explícita.\n\n## Trade-off\nComposition mantiene dependencias visibles pero puede ser incómoda si muchos descendientes dispersos necesitan el mismo valor.\n\n## Error común\nCrear Context cada vez que una prop atraviesa dos niveles."
+    },
+    {
+      "id": "0fb135349758",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-context-boundary-provider-syntax",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Context Is a Boundary, Not a Store",
+      "format": "open",
+      "question": "React 19 permite renderizar <SomeContext value={...}>. ¿Eso cambia cuándo conviene usar Context?",
+      "answerMd": "# La API moderna no cambia la decisión arquitectónica\n\n## Escenario\nEl equipo interpreta la sintaxis más corta como señal de que Context debería usarse más ampliamente.\n\n## Idea central\nLa sintaxis del provider cambió, pero los trade-offs de dependencia, ownership y re-render siguen existiendo.\n\n## Decisión\nElegí Context por el problema de distribución de dependencias, no por ergonomía sintáctica.\n\n## Trade-off\nLa sintaxis moderna reduce ruido, pero no elimina costos de una frontera mal diseñada.\n\n## Error común\nConfundir una mejora de API con una recomendación arquitectónica universal.\n\n## Para profundizar\n- [createContext](https://react.dev/reference/react/createContext)"
+    },
+    {
+      "id": "4b6e4c700ce9",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-effects-derived-state",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "You Probably Don’t Need That Effect",
+      "format": "open",
+      "question": "¿Por qué calcular fullName en un Effect suele ser peor que hacerlo durante render?",
+      "answerMd": "# Derivación no es sincronización\n\n## Escenario\nfirstName y lastName son estado. Un Effect actualiza fullName cada vez que cambian.\n\n## Idea central\nSi un valor depende exclusivamente de props/state actuales, es derivación interna, no sincronización con un sistema externo.\n\n## Decisión\nCalculalo durante render. Reservá Effect para mantener React sincronizado con algo externo al árbol declarativo.\n\n## Trade-off\nDerivar durante render puede recalcular, pero evita renders extra, estado duplicado y desfases.\n\n## Error común\nUsar Effect como mecanismo general de 'cuando X cambia, hacé Y' aunque Y sea solo otra derivación de React.\n\n## Para profundizar\n- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)\n- [Separating Events from Effects](https://react.dev/learn/separating-events-from-effects)"
+    },
+    {
+      "id": "4ffef3cf0ad1",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-effects-event-handler",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "You Probably Don’t Need That Effect",
+      "format": "open",
+      "question": "¿Por qué un POST disparado por click no debería modelarse como un Effect que observa shouldSubmit?",
+      "answerMd": "# Los eventos pertenecen al flujo del evento\n\n## Escenario\nhandleClick hace setShouldSubmit(true) y un Effect observa ese booleano para enviar la compra.\n\n## Idea central\nLa causa es una interacción concreta del usuario. Mantener la lógica en el handler hace explícita la causalidad.\n\n## Decisión\nEjecutá la acción en el event handler o primitive de Action correspondiente, no a través de estado intermedio solo para activar un Effect.\n\n## Trade-off\nUn handler queda acoplado a la interacción; un Effect es adecuado cuando la sincronización debe ocurrir porque el componente está presente o un valor reactivo define una conexión.\n\n## Error común\nConvertir eventos en flags para luego observarlos.\n\n## Para profundizar\n- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)\n- [Separating Events from Effects](https://react.dev/learn/separating-events-from-effects)"
+    },
+    {
+      "id": "290df4b964c8",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-effects-external-system",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "You Probably Don’t Need That Effect",
+      "format": "open",
+      "question": "¿Cuál es un caso legítimo de Effect?",
+      "answerMd": "# Un Effect sí puede ser exactamente lo correcto\n\n## Escenario\nChatRoom debe conectarse a un WebSocket mientras roomId esté activo y desconectarse cuando cambie o se desmonte.\n\n## Idea central\nUna conexión externa tiene lifecycle independiente de React y debe sincronizarse con el estado actual de la UI.\n\n## Decisión\nUsá Effect para crear y limpiar la conexión basada en las dependencias que realmente determinan esa sincronización.\n\n## Trade-off\nEffects requieren cleanup y dependencias correctas; la sincronización externa tiene costo real y puede repetirse.\n\n## Error común\nEnseñar 'no uses Effects' en vez de enseñar cuál es su dominio.\n\n## Para profundizar\n- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)\n- [Separating Events from Effects](https://react.dev/learn/separating-events-from-effects)"
+    },
+    {
+      "id": "de8364bf6f08",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-effects-reset-state",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "You Probably Don’t Need That Effect",
+      "format": "open",
+      "question": "¿Qué alternativa conviene evaluar antes de un Effect que resetea veinte campos cuando cambia userId?",
+      "answerMd": "# Resetear estado puede ser un problema de identidad\n\n## Escenario\nEl formulario representa una entidad completamente distinta y ningún draft debe preservarse.\n\n## Idea central\nSi el cambio representa una nueva identidad conceptual, una key puede expresar el reset del subárbol de forma declarativa.\n\n## Decisión\nUsá key cuando querés una nueva instancia completa; usá actualización explícita si solo una parte del estado debe cambiar.\n\n## Trade-off\nkey resetea todo el subárbol, mientras un reset manual puede ser más selectivo.\n\n## Error común\nUsar Effects como sistema de reset por defecto.\n\n## Para profundizar\n- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)\n- [Separating Events from Effects](https://react.dev/learn/separating-events-from-effects)"
+    },
+    {
+      "id": "57caa8ec0614",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-effect-events-websocket-theme",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Effect Events",
+      "format": "open",
+      "question": "¿Qué problema resuelve useEffectEvent en una conexión que depende de roomId pero usa el theme actual al notificar?",
+      "answerMd": "# Leé valores actuales sin reiniciar sincronización\n\n## Escenario\nAgregar theme a dependencias hace que cambiar tema desconecte y reconecte el chat, aunque la conexión no depende semánticamente del tema.\n\n## Idea central\nEffect Event permite separar lógica no reactiva que necesita leer valores actuales de la parte reactiva que define cuándo sincronizar.\n\n## Decisión\nMantené roomId como dependencia de la conexión y mové la notificación que lee theme a un Effect Event.\n\n## Trade-off\nLa lógica queda mejor separada, pero useEffectEvent no debe usarse para esconder dependencias que sí afectan la sincronización.\n\n## Error común\nUsarlo como escape del linter cada vez que una dependencia molesta.\n\n## Para profundizar\n- [useEffectEvent](https://react.dev/reference/react/useEffectEvent)"
+    },
+    {
+      "id": "47041225a75a",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-effect-events-not-dependency-hiding",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Effect Events",
+      "format": "open",
+      "question": "¿Cuándo NO deberías mover una lectura a useEffectEvent?",
+      "answerMd": "# No escondas dependencias reales\n\n## Escenario\nLa URL del servidor cambia y la conexión debe migrar al nuevo endpoint. El equipo quiere leer serverUrl dentro de Effect Event para evitar una reconexión.\n\n## Idea central\nSi un valor cambia la propia sincronización, es reactivo para ese Effect y debe permanecer como dependencia.\n\n## Decisión\nConservá serverUrl y roomId en las dependencias de la conexión.\n\n## Trade-off\nRe-sincronizar tiene costo, pero es semánticamente necesario cuando cambia el sistema externo objetivo.\n\n## Error común\nUsar Effect Event para hacer callar exhaustive-deps sin revisar causalidad.\n\n## Para profundizar\n- [useEffectEvent](https://react.dev/reference/react/useEffectEvent)"
+    },
+    {
+      "id": "417cb64f6677",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-effect-events-latest-values",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Effect Events",
+      "format": "open",
+      "question": "¿Qué ventaja aporta un Effect Event en callbacks registrados por un Effect?",
+      "answerMd": "# El callback ve el estado comprometido más reciente\n\n## Escenario\nUn connection.on('connected') debe mostrar el carrito actual en un mensaje, pero no debería re-registrar la conexión cada vez que cambia el carrito.\n\n## Idea central\nEffect Events pueden leer props/state actuales cuando son invocados sin convertir esas lecturas en triggers de la sincronización principal.\n\n## Decisión\nUsalos para comportamiento event-like que ocurre dentro de un Effect y necesita valores actuales.\n\n## Trade-off\nSeparar reactividad y lectura actual mejora precisión, pero introduce una primitive nueva que el equipo debe entender.\n\n## Error común\nReemplazar cualquier callback normal por Effect Event, incluso fuera de Effects.\n\n## Para profundizar\n- [useEffectEvent](https://react.dev/reference/react/useEffectEvent)"
+    },
+    {
+      "id": "db73257758e3",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-effect-events-separate-reactivity",
+      "sourceSection": "Behavioral Architecture",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Effect Events",
+      "format": "open",
+      "question": "¿Qué pregunta ayuda a decidir entre dependencia y Effect Event?",
+      "answerMd": "# Diseñá la frontera reactiva\n\n## Escenario\nUn Effect lee roomId, locale y soundVolume. Solo roomId define qué suscripción existe; locale y volume cambian cómo responder a eventos recibidos.\n\n## Idea central\nLa pregunta clave es: ¿si cambia este valor, debo re-sincronizar el sistema externo o solo usar su valor actual cuando ocurra algo?\n\n## Decisión\nDejá roomId como dependencia y evaluá locale/volume como lógica no reactiva si no cambian la suscripción.\n\n## Trade-off\nUna frontera reactiva más precisa evita trabajo innecesario, pero exige modelar bien la semántica.\n\n## Error común\nDecidir dependencias por ensayo y error hasta que el linter quede verde.\n\n## Para profundizar\n- [useEffectEvent](https://react.dev/reference/react/useEffectEvent)"
+    },
+    {
+      "id": "06b75507fc25",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-headless-components-behavior-vs-presentation",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Headless Components",
+      "format": "open",
+      "question": "¿Cuándo una abstracción headless aporta valor real?",
+      "answerMd": "# Separá comportamiento complejo de presentación variable\n\n## Escenario\nTres productos necesitan el mismo combobox accesible con teclado, focus y selección, pero cada uno tiene markup y estilo muy distintos.\n\n## Idea central\nCuando el comportamiento es complejo y estable pero la presentación varía mucho, una capa headless permite reutilizar semántica sin imponer visuales.\n\n## Decisión\nEncapsulá interacción, estado y accesibilidad; dejá que el consumidor componga la UI.\n\n## Trade-off\nGanás flexibilidad visual, pero el consumidor debe ensamblar más piezas correctamente.\n\n## Error común\nUsar headless como sinónimo de 'mejor arquitectura' incluso cuando todos los consumidores deberían verse igual."
+    },
+    {
+      "id": "d38834f65bd0",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-headless-components-accessibility-contract",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Headless Components",
+      "format": "open",
+      "question": "¿Qué riesgo existe si un hook headless devuelve props que el consumidor puede ignorar?",
+      "answerMd": "# Headless no significa sin contrato\n\n## Escenario\nuseListBox devuelve roles, handlers y ids necesarios para teclado y accesibilidad, pero el consumidor copia solo className.\n\n## Idea central\nLas piezas headless suelen depender de que el consumidor aplique correctamente props y semántica.\n\n## Decisión\nDiseñá la API para que el camino correcto sea obvio y documentá qué props deben propagarse.\n\n## Trade-off\nMás libertad facilita integración con distintos DOM, pero aumenta posibilidad de romper accesibilidad.\n\n## Error común\nCreer que el comportamiento sigue siendo accesible aunque se descarten handlers o atributos."
+    },
+    {
+      "id": "c63802440fdf",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-headless-components-not-always",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Headless Components",
+      "format": "open",
+      "question": "¿Cuándo un componente visual de alto nivel es mejor que un hook headless?",
+      "answerMd": "# Styled puede ser la decisión correcta\n\n## Escenario\nUna organización quiere que DatePicker sea idéntico en todas las aplicaciones y no permite variar estructura ni estilos fuera de tokens aprobados.\n\n## Idea central\nSi consistencia visual y de comportamiento es parte central del producto, una abstracción más cerrada puede reducir errores.\n\n## Decisión\nEntregá un componente styled con variantes acotadas cuando no exista valor en permitir composición arbitraria.\n\n## Trade-off\nPerdés libertad para casos especiales, pero simplificás adopción, QA y gobernanza.\n\n## Error común\nAsociar headless con senior y styled con básico."
+    },
+    {
+      "id": "c4f4445bf058",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-headless-components-api-level",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Headless Components",
+      "format": "open",
+      "question": "¿Qué diferencia una API headless madura de simplemente devolver todo el estado interno?",
+      "answerMd": "# No expongas internals como si fueran primitives\n\n## Escenario\nuseCombobox retorna state, dispatch, refs internas, timers y mapas de ids para que el consumidor 'tenga flexibilidad'.\n\n## Idea central\nHeadless significa separar presentación, no abandonar encapsulación. La API debe seguir representando capacidades y contratos.\n\n## Decisión\nExponé handlers/props/estado necesarios para componer la UI, no mecanismos internos que permiten romper invariantes.\n\n## Trade-off\nEncapsular limita hacks puntuales, pero protege evolución y consistencia.\n\n## Error común\nConfundir flexibilidad con acceso irrestricto al motor interno."
+    },
+    {
+      "id": "38e44627f77e",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-slots-aschild-trigger-link",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Slots, asChild & Polymorphism",
+      "format": "open",
+      "question": "¿Qué resuelve asChild en un Trigger?",
+      "answerMd": "# Componé comportamiento sobre otro elemento\n\n## Escenario\nTooltip.Trigger renderiza un button por defecto, pero un caso necesita que el elemento interactivo real sea un link existente.\n\n## Idea central\nasChild permite aplicar comportamiento y props del primitive al hijo en vez de agregar otro wrapper DOM.\n\n## Decisión\nUsalo cuando el consumidor necesita cambiar el elemento subyacente preservando el contrato de interacción.\n\n## Trade-off\nEvita wrappers y habilita composición, pero transfiere responsabilidad sobre semántica, props y refs.\n\n## Error común\nExponer asChild por moda aunque nunca haya un caso de polimorfismo real.\n\n## Para profundizar\n- [Radix Composition](https://www.radix-ui.com/primitives/docs/guides/composition)\n- [Radix Slot](https://www.radix-ui.com/primitives/docs/utilities/slot)"
+    },
+    {
+      "id": "debc1518dd8a",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-slots-aschild-spread-props",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Slots, asChild & Polymorphism",
+      "format": "open",
+      "question": "¿Por qué un MyButton que solo usa children puede romper asChild?",
+      "answerMd": "# El hijo debe aceptar lo que recibe\n\n## Escenario\nEl primitive intenta inyectar onClick, aria-* y otros props, pero MyButton no hace spread de props al button real.\n\n## Idea central\nLa composición funciona solo si el hijo propaga las props que el primitive necesita.\n\n## Decisión\nDiseñá componentes leaf para aceptar y forwardear los props relevantes al nodo subyacente.\n\n## Trade-off\nProp spreading aumenta compatibilidad, pero también exige cuidado con precedencia y props no válidas.\n\n## Error común\nConsumir solo las props conocidas y descartar silenciosamente handlers/ARIA inyectados.\n\n## Para profundizar\n- [Radix Composition](https://www.radix-ui.com/primitives/docs/guides/composition)\n- [Radix Slot](https://www.radix-ui.com/primitives/docs/utilities/slot)"
+    },
+    {
+      "id": "9e91da8b653f",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-slots-aschild-accessibility",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Slots, asChild & Polymorphism",
+      "format": "open",
+      "question": "¿Qué riesgo tiene usar asChild sobre un div como trigger clickable?",
+      "answerMd": "# Polimorfismo no preserva semántica automáticamente\n\n## Escenario\nEl div recibe click handlers, pero no necesariamente focus, role ni comportamiento de teclado equivalente a un button.\n\n## Idea central\nCambiar el elemento subyacente también cambia sus capacidades semánticas nativas.\n\n## Decisión\nEl consumidor debe elegir un elemento apropiado o restaurar correctamente la semántica requerida.\n\n## Trade-off\nLa libertad de elemento permite integraciones potentes, pero puede degradar accesibilidad con facilidad.\n\n## Error común\nPensar que clonar props convierte cualquier elemento en un control accesible.\n\n## Para profundizar\n- [Radix Composition](https://www.radix-ui.com/primitives/docs/guides/composition)\n- [Radix Slot](https://www.radix-ui.com/primitives/docs/utilities/slot)"
+    },
+    {
+      "id": "b490217d939b",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-slots-aschild-event-precedence",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Slots, asChild & Polymorphism",
+      "format": "open",
+      "question": "¿Por qué la precedencia de event handlers importa en un Slot?",
+      "answerMd": "# La composición necesita reglas de merge\n\n## Escenario\nEl child y el primitive definen onClick. Uno necesita poder prevenir el comportamiento del otro.\n\n## Idea central\nAl fusionar props hay decisiones semánticas: qué handler corre primero, cómo se respeta preventDefault y qué valor gana en conflictos.\n\n## Decisión\nDocumentá y testeá las reglas de merge; no las dejes como accidente de implementación.\n\n## Trade-off\nReglas previsibles facilitan composición, pero añaden complejidad interna y casos de borde.\n\n## Error común\nAsumir que {...primitiveProps, ...childProps} resuelve correctamente todos los eventos.\n\n## Para profundizar\n- [Radix Composition](https://www.radix-ui.com/primitives/docs/guides/composition)\n- [Radix Slot](https://www.radix-ui.com/primitives/docs/utilities/slot)"
+    },
+    {
+      "id": "c31fa3163e28",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-refs-focus",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Refs Are Escape Hatches",
+      "format": "open",
+      "question": "¿Cuál es un caso natural para un ref?",
+      "answerMd": "# Usá refs para capacidades inherentemente imperativas\n\n## Escenario\nAl presionar '/', la aplicación debe enfocar un input de búsqueda ya renderizado.\n\n## Idea central\nFocus, selection, scroll y reproducción multimedia son capacidades del DOM que se expresan naturalmente de forma imperativa.\n\n## Decisión\nUsá un ref para invocar focus() sobre el elemento.\n\n## Trade-off\nEl ref crea un canal fuera del flujo declarativo, pero aquí modela una capacidad realmente imperativa.\n\n## Error común\nEvitar refs a toda costa y crear estado artificial para acciones del DOM.\n\n## Para profundizar\n- [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle)"
+    },
+    {
+      "id": "9525543c7f99",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-refs-declarative-modal",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Refs Are Escape Hatches",
+      "format": "open",
+      "question": "¿Por qué modalRef.current.open() puede ser peor que <Modal open={open}>?",
+      "answerMd": "# No conviertas estado de aplicación en comandos\n\n## Escenario\nLa apertura del modal afecta otras decisiones de UI y debe coordinarse con routing y estado de la página.\n\n## Idea central\nSi un valor representa estado de aplicación, props y state mantienen la fuente de verdad visible y declarativa.\n\n## Decisión\nPreferí open/onOpenChange y reservá comandos imperativos para capacidades que no se modelan bien como estado.\n\n## Trade-off\nLa API declarativa requiere ownership explícito; la imperativa puede ser práctica en integraciones aisladas.\n\n## Error común\nExponer open(), close(), setTitle() y setVariant() porque parece más 'simple'.\n\n## Para profundizar\n- [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle)"
+    },
+    {
+      "id": "9fcf62c92c02",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-refs-imperative-handle",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Refs Are Escape Hatches",
+      "format": "open",
+      "question": "¿Por qué useImperativeHandle puede ser mejor que entregar el nodo DOM completo?",
+      "answerMd": "# Exponé una capacidad mínima\n\n## Escenario\nUn SearchBox solo necesita ofrecer focus() a su padre, pero el ref actual permite también manipular cualquier propiedad del input.\n\n## Idea central\nUna interfaz imperativa pequeña limita acoplamiento y protege detalles internos.\n\n## Decisión\nExponé solo capacidades necesarias, como focus(), en vez de toda la implementación.\n\n## Trade-off\nLa encapsulación reduce flexibilidad para hacks, pero permite cambiar el DOM interno sin romper consumidores.\n\n## Error común\nEntregar el nodo completo 'por si acaso'.\n\n## Para profundizar\n- [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle)"
+    },
+    {
+      "id": "a9b8e112c15c",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-refs-react19-ref-prop",
+      "sourceSection": "Flexible Components",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Refs Are Escape Hatches",
+      "format": "open",
+      "question": "React 19 permite recibir ref como prop en function components. ¿Qué implica arquitectónicamente?",
+      "answerMd": "# La ergonomía de ref cambió, el trade-off no\n\n## Escenario\nEl equipo concluye que, como forwardRef ya no es necesario en nuevos componentes, debería exponer refs en todas las APIs.\n\n## Idea central\nLa nueva ergonomía reduce ceremonia, pero ref sigue siendo un escape hatch y debe justificarse por una capacidad imperativa real.\n\n## Decisión\nAprovechá la sintaxis moderna cuando necesitás ref, sin convertirlo en mecanismo de control principal.\n\n## Trade-off\nMenos boilerplate facilita composición, pero también puede tentar a exponer canales imperativos innecesarios.\n\n## Error común\nConfundir una API más cómoda con una recomendación de usar refs más seguido.\n\n## Para profundizar\n- [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle)"
+    },
+    {
+      "id": "46b1a4e01c1f",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-actions-pending-lifecycle",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Actions & Pending State",
+      "format": "open",
+      "question": "¿Qué aporta useActionState frente a coordinar varios flags manuales?",
+      "answerMd": "# Una mutación tiene un lifecycle de interacción\n\n## Escenario\nUn formulario repite loading, error y result en muchas mutaciones y cada handler implementa su propio protocolo.\n\n## Idea central\nuseActionState modela estado asociado a una Action y expone pending como parte del mismo flujo.\n\n## Decisión\nUsalo cuando la mutación y su resultado forman una interacción que se beneficia de una primitive dedicada.\n\n## Trade-off\nReduce coordinación manual, pero no reemplaza todos los async handlers simples.\n\n## Error común\nMigrar cualquier Promise a useActionState sin evaluar si simplifica algo.\n\n## Para profundizar\n- [useActionState](https://react.dev/reference/react/useActionState)\n- [useOptimistic](https://react.dev/reference/react/useOptimistic)"
+    },
+    {
+      "id": "ceb4e9adcdfc",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-actions-pending-simple-handler",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Actions & Pending State",
+      "format": "open",
+      "question": "¿Cuándo un async event handler puede seguir siendo suficiente?",
+      "answerMd": "# No toda mutación necesita una abstracción nueva\n\n## Escenario\nUn botón interno dispara una tarea y solo necesita deshabilitarse localmente durante unos milisegundos; no hay resultado complejo ni composición con formularios.\n\n## Idea central\nLa primitive correcta es la que reduce complejidad real. Un handler simple puede ser más legible que introducir una abstracción innecesaria.\n\n## Decisión\nUsá Actions cuando aporten un modelo mejor de la interacción, no por novedad.\n\n## Trade-off\nMantener handlers simples evita ceremony, pero puede volverse inconsistente si el patrón se repite extensamente.\n\n## Error común\nAdoptar APIs nuevas por default sin comparar costo.\n\n## Para profundizar\n- [useActionState](https://react.dev/reference/react/useActionState)\n- [useOptimistic](https://react.dev/reference/react/useOptimistic)"
+    },
+    {
+      "id": "86c569ef6975",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-actions-pending-error-state",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Actions & Pending State",
+      "format": "open",
+      "question": "¿Qué debería decidir una API de Action además de pending?",
+      "answerMd": "# Error es parte del contrato de la interacción\n\n## Escenario\nUn submit puede fallar por validación, red o conflicto del servidor. El componente solo maneja isPending y muestra un alert genérico.\n\n## Idea central\nEl estado resultante de una mutación puede necesitar representar errores recuperables y feedback útil para el usuario.\n\n## Decisión\nDiseñá el resultado de la Action según qué decisiones necesita tomar la UI después del intento.\n\n## Trade-off\nUn resultado estructurado mejora UX y testabilidad, pero agrega modelado y tipos.\n\n## Error común\nReducir toda mutación a loading=true/false.\n\n## Para profundizar\n- [useActionState](https://react.dev/reference/react/useActionState)\n- [useOptimistic](https://react.dev/reference/react/useOptimistic)"
+    },
+    {
+      "id": "d03724b7bff8",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-actions-pending-concurrency",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Actions & Pending State",
+      "format": "open",
+      "question": "¿Por qué un único isLoading global puede ser una mala abstracción?",
+      "answerMd": "# Pensá qué interacción está pendiente\n\n## Escenario\nDos botones guardan secciones independientes. Al iniciar uno, ambos quedan deshabilitados porque comparten loading global.\n\n## Idea central\nPending debe pertenecer a la frontera de interacción que realmente está en curso.\n\n## Decisión\nModelá pending por Action o por operación cuando las mutaciones pueden ser independientes.\n\n## Trade-off\nEstados más granulares requieren más instancias, pero evitan bloquear UI no relacionada.\n\n## Error común\nCentralizar todo loading solo para tener una variable."
+    },
+    {
+      "id": "96dc6de8cfed",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-optimistic-ui-like",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Optimistic UI Is a Product Decision",
+      "format": "open",
+      "question": "¿Por qué un Like es buen candidato para optimistic UI?",
+      "answerMd": "# Optimismo cuando equivocarse cuesta poco\n\n## Escenario\nEl usuario espera feedback inmediato, la operación suele tener alta probabilidad de éxito y puede revertirse si falla.\n\n## Idea central\nOptimistic UI mejora percepción de velocidad cuando el resultado probable es seguro de anticipar y reversible.\n\n## Decisión\nMostrá el estado esperado inmediatamente y definí rollback o error si el servidor rechaza.\n\n## Trade-off\nLa UI se siente instantánea, pero durante un breve período puede mostrar un estado que todavía no fue confirmado.\n\n## Error común\nAplicar optimistic UI a cualquier operación porque parece más rápida.\n\n## Para profundizar\n- [useActionState](https://react.dev/reference/react/useActionState)\n- [useOptimistic](https://react.dev/reference/react/useOptimistic)"
+    },
+    {
+      "id": "a2858627703e",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-optimistic-ui-high-stakes",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Optimistic UI Is a Product Decision",
+      "format": "open",
+      "question": "¿Por qué una transferencia no debería mostrarse como completada antes de confirmación?",
+      "answerMd": "# No mientas sobre garantías importantes\n\n## Escenario\nLa UI podría inducir al usuario a creer que una acción irreversible o sensible ya ocurrió.\n\n## Idea central\nLa decisión optimista depende del costo de estar equivocado, no solo de latencia técnica.\n\n## Decisión\nPara operaciones de alto riesgo, diferenciá claramente pending de success confirmado.\n\n## Trade-off\nEsperar confirmación puede sentirse más lento, pero preserva confianza y precisión.\n\n## Error común\nUsar la misma política optimista para likes y operaciones financieras.\n\n## Para profundizar\n- [useActionState](https://react.dev/reference/react/useActionState)\n- [useOptimistic](https://react.dev/reference/react/useOptimistic)"
+    },
+    {
+      "id": "1e1379e54fdb",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-optimistic-ui-rollback",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Optimistic UI Is a Product Decision",
+      "format": "open",
+      "question": "¿Qué pregunta debe responder una feature optimista antes de implementarse?",
+      "answerMd": "# Diseñá el fallo antes del happy path\n\n## Escenario\nUna lista permite reordenar items inmediatamente, pero el equipo no decidió qué hacer si el servidor rechaza el nuevo orden.\n\n## Idea central\nLa implementación optimista necesita una estrategia de reconciliación: rollback, retry, merge o feedback.\n\n## Decisión\nDefiní el estado confirmado y cómo volver a él o reconciliarlo cuando falla la operación.\n\n## Trade-off\nRollback puede sorprender si el usuario siguió interactuando; merge puede ser más complejo.\n\n## Error común\nImplementar la animación optimista y dejar el error para después.\n\n## Para profundizar\n- [useActionState](https://react.dev/reference/react/useActionState)\n- [useOptimistic](https://react.dev/reference/react/useOptimistic)"
+    },
+    {
+      "id": "99616ec45af4",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-optimistic-ui-pending-vs-confirmed",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Optimistic UI Is a Product Decision",
+      "format": "open",
+      "question": "¿Cómo debería pensar la UI un comentario agregado optimísticamente?",
+      "answerMd": "# Optimistic no significa confirmado\n\n## Escenario\nEl comentario aparece al instante mientras la request sigue en curso.\n\n## Idea central\nLa UI puede mostrar un estado provisional distinto del estado confirmado por el servidor.\n\n## Decisión\nRepresentá visual o lógicamente que el item está pending cuando esa distinción importa.\n\n## Trade-off\nMostrar provisionalidad mejora honestidad, pero puede añadir ruido visual.\n\n## Error común\nTratar la copia optimista como si ya fuera verdad de servidor y olvidar reconciliar ids o timestamps."
+    },
+    {
+      "id": "eff4f9eb69e5",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-async-boundaries-reveal-together",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Async Boundaries, Not Loading Flags Everywhere",
+      "format": "open",
+      "question": "¿Qué pregunta arquitectónica es más útil que 'dónde pongo el spinner'?",
+      "answerMd": "# Una boundary define qué se revela junto\n\n## Escenario\nAccountSummary y ActivityFeed forman una unidad visual y deberían aparecer juntas, mientras Recommendations puede llegar después.\n\n## Idea central\nSuspense boundaries estructuran qué partes pueden esperar o revelarse de forma independiente.\n\n## Decisión\nAgrupá contenido que debe revelar junto bajo una boundary y separá lo que puede progresar por su cuenta.\n\n## Trade-off\nBoundaries grandes bloquean más UI; boundaries pequeñas pueden producir demasiados saltos visuales.\n\n## Error común\nPoner un Suspense alrededor de cada componente sin pensar la experiencia.\n\n## Para profundizar\n- [Suspense](https://react.dev/reference/react/Suspense)"
+    },
+    {
+      "id": "0df8984f446b",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-async-boundaries-popcorn-ui",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Async Boundaries, Not Loading Flags Everywhere",
+      "format": "open",
+      "question": "¿Qué problema produce una página con diez skeletons independientes que aparecen en momentos distintos?",
+      "answerMd": "# Demasiadas boundaries también cuestan\n\n## Escenario\nLa interfaz cambia continuamente mientras cada fragmento resuelve por separado.\n\n## Idea central\nGranularidad excesiva puede generar popcorn UI y una experiencia visual inestable.\n\n## Decisión\nCombiná elementos que conceptualmente forman una unidad y reservá boundaries independientes para partes que de verdad pueden progresar separadas.\n\n## Trade-off\nMenos boundaries reducen fragmentación, pero pueden retrasar contenido que ya estaba listo.\n\n## Error común\nAsumir que más streaming siempre produce mejor UX.\n\n## Para profundizar\n- [Suspense](https://react.dev/reference/react/Suspense)"
+    },
+    {
+      "id": "adea74b20f0b",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-async-boundaries-transition",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Async Boundaries, Not Loading Flags Everywhere",
+      "format": "open",
+      "question": "¿Por qué una tab transition puede preferir mantener contenido previo en vez de reemplazarlo inmediatamente por un spinner?",
+      "answerMd": "# No borres UI útil demasiado pronto\n\n## Escenario\nEl usuario cambia de tab y la nueva data tarda poco. Quitar todo el contenido actual genera un flash innecesario.\n\n## Idea central\nTransitions permiten tratar algunas actualizaciones como no urgentes para mantener UI útil mientras se prepara la siguiente vista.\n\n## Decisión\nUsá una transición cuando preservar el contenido actual durante la preparación mejora continuidad.\n\n## Trade-off\nLa UI puede mostrar contenido anterior durante un momento y necesita feedback sutil de pending.\n\n## Error común\nConvertir cualquier demora en un full-screen spinner.\n\n## Para profundizar\n- [useTransition](https://react.dev/reference/react/useTransition)\n- [Suspense](https://react.dev/reference/react/Suspense)"
+    },
+    {
+      "id": "a0033d149a28",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-async-boundaries-framework-data",
+      "sourceSection": "Async UI Patterns",
+      "tech": "react",
+      "lang": "es",
+      "level": "advanced",
+      "topic": "Async Boundaries, Not Loading Flags Everywhere",
+      "format": "open",
+      "question": "¿Por qué no conviene enseñar Suspense como 'meté cualquier fetch en render'?",
+      "answerMd": "# Suspense no es un fetch wrapper universal\n\n## Escenario\nUn equipo intenta crear Promises nuevas en cada render sin cache y espera que Suspense gestione todo automáticamente.\n\n## Idea central\nSuspense necesita una fuente compatible y estable; frameworks y librerías suelen gestionar caching y coordinación de datos.\n\n## Decisión\nDiseñá boundaries alrededor de una estrategia de datos compatible en vez de inventar Promises inestables por componente.\n\n## Trade-off\nFramework integration reduce plumbing, pero agrega convenciones y dependencia del stack.\n\n## Error común\nTratar Suspense como sustituto directo de cualquier loading boolean sin considerar cómo se obtiene y cachea el recurso.\n\n## Para profundizar\n- [Suspense](https://react.dev/reference/react/Suspense)"
+    },
+    {
+      "id": "58638ac17e39",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-compiler-memoization-new-code",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "React Compiler Changes Memoization",
+      "format": "open",
+      "question": "¿Cómo cambia React Compiler el consejo para nuevo código?",
+      "answerMd": "# Memoize por necesidad, no por reflejo\n\n## Escenario\nUna guía interna obliga a envolver cada callback en useCallback y cada cálculo en useMemo antes de medir.\n\n## Idea central\nReact Compiler puede aplicar memoización automática a componentes y hooks, reduciendo la necesidad de memoización manual sistemática.\n\n## Decisión\nEscribí código claro y confiá en el Compiler para la mayoría de los casos; usá memoización manual cuando necesitás control preciso.\n\n## Trade-off\nDependés de la configuración y capacidad del Compiler, y algunos casos aún justifican control explícito.\n\n## Error común\nConvertir useMemo/useCallback en ritual de estilo.\n\n## Para profundizar\n- [React Compiler](https://react.dev/learn/react-compiler)\n- [React Compiler introduction](https://react.dev/learn/react-compiler/introduction)"
+    },
+    {
+      "id": "eef5a806aafb",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-compiler-memoization-existing-code",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "React Compiler Changes Memoization",
+      "format": "open",
+      "question": "¿Qué conviene hacer con useMemo/useCallback existentes al habilitar Compiler?",
+      "answerMd": "# No borres optimizaciones existentes a ciegas\n\n## Escenario\nEl equipo propone una codemod que elimina toda memoización manual en un solo commit.\n\n## Idea central\nReact advierte que remover memoización existente puede cambiar output del Compiler y comportamiento de performance; debe hacerse con cuidado.\n\n## Decisión\nDejá la memoización existente o removela incrementalmente con tests y mediciones.\n\n## Trade-off\nMantenerla puede dejar código redundante; eliminarla requiere trabajo de validación.\n\n## Error común\nAsumir que Compiler vuelve automáticamente inútil todo código de memoización previo.\n\n## Para profundizar\n- [React Compiler](https://react.dev/learn/react-compiler)\n- [React Compiler introduction](https://react.dev/learn/react-compiler/introduction)"
+    },
+    {
+      "id": "e1c624197862",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-compiler-memoization-escape-hatch",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "React Compiler Changes Memoization",
+      "format": "open",
+      "question": "¿Cuándo puede seguir siendo útil useMemo/useCallback con Compiler?",
+      "answerMd": "# Manual memoization sigue teniendo un rol\n\n## Escenario\nUn valor memoizado se usa como dependencia de un Effect y necesitás controlar explícitamente cuándo cambia su identidad.\n\n## Idea central\nLas APIs manuales siguen disponibles como escape hatch para casos donde la identidad o cache necesita semántica precisa.\n\n## Decisión\nUsalas cuando la estabilidad tiene un propósito concreto, no para perseguir re-renders imaginarios.\n\n## Trade-off\nEl control explícito añade dependencias que pueden quedar incorrectas o dificultar lectura.\n\n## Error común\nDecir que useMemo está 'deprecated' porque existe Compiler.\n\n## Para profundizar\n- [React Compiler](https://react.dev/learn/react-compiler)\n- [React Compiler introduction](https://react.dev/learn/react-compiler/introduction)"
+    },
+    {
+      "id": "2650de12a324",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-compiler-memoization-measure",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "React Compiler Changes Memoization",
+      "format": "open",
+      "question": "¿Qué problema hay en exponer una prop memoizeResults en un componente público?",
+      "answerMd": "# Performance sigue requiriendo evidencia\n\n## Escenario\nProductPicker permite al consumidor activar memoización interna sin que pueda conocer realmente el perfil de render ni la estrategia del componente.\n\n## Idea central\nDecisiones de performance internas suelen pertenecer a la implementación, no a la API de producto.\n\n## Decisión\nMedí el cuello real y optimizá dentro de la frontera que posee esa información.\n\n## Trade-off\nOcultar performance reduce control del consumidor, pero evita filtrar detalles frágiles de implementación.\n\n## Error común\nHacer que los consumidores configuren optimizaciones internas por intuición.\n\n## Para profundizar\n- [React Compiler](https://react.dev/learn/react-compiler)\n- [React Compiler introduction](https://react.dev/learn/react-compiler/introduction)"
+    },
+    {
+      "id": "48305944486d",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-premature-abstractions-similarity",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "Avoid Premature Abstractions",
+      "format": "open",
+      "question": "¿Por qué dos componentes visualmente parecidos no deberían abstraerse inmediatamente?",
+      "answerMd": "# Similitud no siempre significa mismo concepto\n\n## Escenario\nUserCard y CompanyCard comparten borde, imagen y metadata hoy, pero representan dominios que evolucionarán por razones distintas.\n\n## Idea central\nLa abstracción correcta agrupa conocimiento que cambia junto, no solo líneas parecidas.\n\n## Decisión\nEsperá a entender qué parte es estable y compartida antes de crear una API genérica.\n\n## Trade-off\nAceptar duplicación temporal cuesta código repetido, pero evita coupling especulativo.\n\n## Error común\nAplicar DRY como eliminación mecánica de sintaxis similar."
+    },
+    {
+      "id": "c418918419d6",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-premature-abstractions-three-examples",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "Avoid Premature Abstractions",
+      "format": "open",
+      "question": "¿Por qué varios ejemplos reales ayudan antes de diseñar una abstracción?",
+      "answerMd": "# Necesitás evidencia del patrón\n\n## Escenario\nCon un solo caso, el equipo generaliza una API llena de options. El segundo caso invalida varias suposiciones.\n\n## Idea central\nLas abstracciones tempranas suelen codificar detalles accidentales del primer caso como si fueran reglas generales.\n\n## Decisión\nObservá varios usos y extraé la parte que permanece estable.\n\n## Trade-off\nEsperar retrasa reutilización, pero mejora la probabilidad de encontrar la frontera correcta.\n\n## Error común\nDiseñar una API general para necesidades hipotéticas."
+    },
+    {
+      "id": "0a0ff0384173",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-premature-abstractions-api-cost",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "Avoid Premature Abstractions",
+      "format": "open",
+      "question": "¿Qué señal indica que una abstracción dejó de pagar su costo?",
+      "answerMd": "# La abstracción tiene que ser más barata que la duplicación\n\n## Escenario\nEntityCard necesita companyLayout, compactUserMode, hideMetadataForTeam y varios render* para cubrir casos divergentes.\n\n## Idea central\nUna abstracción puede acumular excepciones hasta ser más compleja que mantener implementaciones separadas.\n\n## Decisión\nReevaluá la frontera cuando cada nuevo consumidor agrega flags específicos de su identidad.\n\n## Trade-off\nDividir puede duplicar algo de código, pero recupera claridad y evolución independiente.\n\n## Error común\nMantener una abstracción solo porque eliminarla 'rompe DRY'."
+    },
+    {
+      "id": "451a9db3eff6",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-premature-abstractions-local-duplication",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "Avoid Premature Abstractions",
+      "format": "open",
+      "question": "¿Cuándo es razonable aceptar duplicación?",
+      "answerMd": "# Duplicación local puede ser una inversión\n\n## Escenario\nDos features nuevas comparten unas pocas líneas, pero todavía no sabemos si su comportamiento convergerá o divergerá.\n\n## Idea central\nLa duplicación temporal compra información: permite que cada caso evolucione hasta revelar el patrón real.\n\n## Decisión\nDuplicá conscientemente si extraer ahora obliga a inventar opciones o semántica no probada.\n\n## Trade-off\nEl riesgo es olvidar consolidar cuando el patrón finalmente se vuelve estable.\n\n## Error común\nTratar toda duplicación como deuda urgente."
+    },
+    {
+      "id": "f61901b69411",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-legacy-patterns-hoc",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "Legacy Pattern Literacy",
+      "format": "open",
+      "question": "¿Qué hacés al encontrar withAuth(ProfilePage) en una base madura?",
+      "answerMd": "# Entendé el problema antes de migrar el patrón\n\n## Escenario\nLa HOC agrega permisos, redirect y métricas. El equipo quiere reemplazarla por hooks solo porque HOCs son 'viejas'.\n\n## Idea central\nHOCs resolvieron composición y reutilización reales. La decisión de migrar depende del costo actual y del beneficio de una alternativa.\n\n## Decisión\nEntendé responsabilidades, coupling y tests; migrá donde hooks o una frontera distinta simplifiquen de verdad.\n\n## Trade-off\nMantener HOCs evita riesgo de migración; reemplazarlas puede mejorar composición y tipado en algunos casos.\n\n## Error común\nReescribir por edad del patrón sin un objetivo medible."
+    },
+    {
+      "id": "112b5cd36a01",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-legacy-patterns-render-props",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "Legacy Pattern Literacy",
+      "format": "open",
+      "question": "¿Por qué una render prop no es automáticamente un anti-pattern?",
+      "answerMd": "# Render props siguen siendo una forma de invertir control\n\n## Escenario\nUn componente necesita entregar estado y comportamiento al consumidor para que decida el markup.\n\n## Idea central\nRender props expresan una forma válida de composición basada en función; hooks suelen ser más ergonómicos para reutilizar lógica, pero no invalidan el patrón.\n\n## Decisión\nPreferí la API que mejor encaje con la frontera y el código existente.\n\n## Trade-off\nRender props añaden nesting y funciones inline; hooks pueden simplificar composición entre múltiples fuentes.\n\n## Error común\nClasificar patrones como buenos o malos fuera de contexto."
+    },
+    {
+      "id": "f26225f46fb1",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-legacy-patterns-incremental-migration",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "Legacy Pattern Literacy",
+      "format": "open",
+      "question": "¿Cómo abordar 70 HOCs en una aplicación estable?",
+      "answerMd": "# Migrá donde el valor supere el riesgo\n\n## Escenario\nAlgunas son simples wrappers, otras contienen autorización crítica y otras casi no cambian.\n\n## Idea central\nLas migraciones arquitectónicas deberían priorizar hotspots donde la alternativa reduce complejidad o desbloquea cambios.\n\n## Decisión\nClasificá por impacto, coverage y fricción; migrá incrementalmente con tests.\n\n## Trade-off\nLa coexistencia temporal de patrones aumenta heterogeneidad, pero reduce riesgo de big bang.\n\n## Error común\nConvertir la migración en objetivo por sí misma."
+    },
+    {
+      "id": "24cdba672246",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-legacy-patterns-pattern-tools",
+      "sourceSection": "Senior Design Decisions",
+      "tech": "react",
+      "lang": "es",
+      "level": "expert",
+      "topic": "Legacy Pattern Literacy",
+      "format": "open",
+      "question": "¿Qué respuesta muestra mejor criterio senior ante un patrón desconocido?",
+      "answerMd": "# Los patrones son herramientas, no credenciales\n\n## Escenario\nEn code review aparece una técnica que no coincide con la preferencia personal del reviewer.\n\n## Idea central\nLa evaluación madura pregunta qué problema resuelve, qué invariantes protege, qué costos introduce y si existe una alternativa mejor en ese contexto.\n\n## Decisión\nCriticá decisiones por trade-offs observables, no por etiquetas de moda.\n\n## Trade-off\nEsto requiere más análisis que aplicar reglas simples, pero produce decisiones transferibles a stacks y versiones nuevas.\n\n## Error común\nUsar 'modern React' como argumento suficiente sin explicar por qué una alternativa mejora el sistema."
+    }
+  ],
+  "checks": [
+    {
+      "questionId": "508635497c8b",
+      "stem": "Un Modal acumula customHeader, hideHeader, headerIcon, headerActions y renderHeader. ¿Qué señal es la más importante?",
+      "options": [
+        {
+          "text": "Las props ya están describiendo estructura y conviene evaluar composición.",
+          "correct": true
+        },
+        {
+          "text": "Agregar más booleanos para cubrir combinaciones faltantes.",
+          "correct": false
+        },
+        {
+          "text": "Mover todas las props a Context.",
+          "correct": false
+        },
+        {
+          "text": "Memoizar el Modal antes de cambiar su API.",
+          "correct": false
+        }
+      ],
+      "explanation": "El problema principal no es performance sino que la API de configuración está codificando regiones y combinaciones estructurales."
+    },
+    {
+      "questionId": "84b04bd2b517",
+      "stem": "¿Qué componente es mejor candidato para seguir configurado por props?",
+      "options": [
+        {
+          "text": "Un Button con variantes y tamaños acotados.",
+          "correct": true
+        },
+        {
+          "text": "Un Dialog cuyo header puede contener layouts arbitrarios.",
+          "correct": false
+        },
+        {
+          "text": "Un Toolbar donde cada producto necesita acciones distintas.",
+          "correct": false
+        },
+        {
+          "text": "Un Card con regiones opcionales y anidadas.",
+          "correct": false
+        }
+      ],
+      "explanation": "Button suele tener un conjunto pequeño de variantes válidas; convertir cada parte en composición puede agregar complejidad sin beneficio."
+    },
+    {
+      "questionId": "c569561361f0",
+      "stem": "¿Cuál refactor reduce mejor estados imposibles para success, warning y error?",
+      "options": [
+        {
+          "text": "Reemplazarlos por una única prop tone con variantes mutuamente excluyentes.",
+          "correct": true
+        },
+        {
+          "text": "Mantener los tres booleanos y documentar que solo uno debe ser true.",
+          "correct": false
+        },
+        {
+          "text": "Guardar el estado visual en useEffect.",
+          "correct": false
+        },
+        {
+          "text": "Pasar los booleanos por Context.",
+          "correct": false
+        }
+      ],
+      "explanation": "Una sola discriminante representa directamente la regla de que el banner tiene un único tono."
+    },
+    {
+      "questionId": "9d4af6fad40d",
+      "stem": "¿Qué cambio ataca la raíz del problema?",
+      "options": [
+        {
+          "text": "Redefinir qué estructura controla Modal y qué estructura compone el consumidor.",
+          "correct": true
+        },
+        {
+          "text": "Mover todas las props a un objeto options.",
+          "correct": false
+        },
+        {
+          "text": "Cambiar booleanos por strings sin revisar responsabilidades.",
+          "correct": false
+        },
+        {
+          "text": "Agregar React.memo al Modal.",
+          "correct": false
+        }
+      ],
+      "explanation": "El problema es de frontera de API; reorganizar la misma configuración no redefine responsabilidades."
+    },
+    {
+      "questionId": "49641c36c7e5",
+      "stem": "¿Qué ventaja principal aporta children en este EmptyState?",
+      "options": [
+        {
+          "text": "Permite variar la estructura interna sin agregar una prop por cada caso.",
+          "correct": true
+        },
+        {
+          "text": "Evita todos los re-renders.",
+          "correct": false
+        },
+        {
+          "text": "Hace innecesarios los props de estilo.",
+          "correct": false
+        },
+        {
+          "text": "Convierte automáticamente el componente en headless.",
+          "correct": false
+        }
+      ],
+      "explanation": "children delega estructura de contenido al consumidor y evita expandir una API de configuración sin límite."
+    },
+    {
+      "questionId": "7043f0c896e0",
+      "stem": "Si Panel debe garantizar padding consistente pero permitir contenido arbitrario, ¿qué diseño encaja mejor?",
+      "options": [
+        {
+          "text": "Panel conserva su contenedor y renderiza children dentro.",
+          "correct": true
+        },
+        {
+          "text": "Panel devuelve children sin ningún wrapper.",
+          "correct": false
+        },
+        {
+          "text": "Cada consumidor recibe una prop paddingRequired.",
+          "correct": false
+        },
+        {
+          "text": "Panel guarda el contenido en estado.",
+          "correct": false
+        }
+      ],
+      "explanation": "El componente puede conservar el contrato visual del contenedor mientras delega qué contenido ocupa la región."
+    },
+    {
+      "questionId": "ba100306b566",
+      "stem": "¿Cuál es una señal de que conviene pasar de un children genérico a regiones explícitas?",
+      "options": [
+        {
+          "text": "El consumidor necesita convenciones implícitas para distinguir varias zonas con responsabilidades diferentes.",
+          "correct": true
+        },
+        {
+          "text": "El componente tiene exactamente un hijo.",
+          "correct": false
+        },
+        {
+          "text": "El componente usa TypeScript.",
+          "correct": false
+        },
+        {
+          "text": "El contenido incluye texto.",
+          "correct": false
+        }
+      ],
+      "explanation": "Cuando distintas regiones tienen semántica propia, nombrarlas suele mejorar claridad y contratos."
+    },
+    {
+      "questionId": "cd1933eec1c0",
+      "stem": "¿Qué pregunta conviene hacer antes de reemplazar label por children?",
+      "options": [
+        {
+          "text": "¿Existe una necesidad real de contenido estructuralmente variable?",
+          "correct": true
+        },
+        {
+          "text": "¿Podemos reducir una línea de TypeScript?",
+          "correct": false
+        },
+        {
+          "text": "¿React recomienda children en todos los componentes?",
+          "correct": false
+        },
+        {
+          "text": "¿Podemos evitar escribir tests?",
+          "correct": false
+        }
+      ],
+      "explanation": "La decisión depende de la variabilidad del dominio, no de una preferencia universal por children."
+    },
+    {
+      "questionId": "a827c62fc54a",
+      "stem": "¿Qué componente es un candidato fuerte para compound components?",
+      "options": [
+        {
+          "text": "Tabs con triggers y panels que comparten selección y accesibilidad.",
+          "correct": true
+        },
+        {
+          "text": "Un Badge con color y tamaño.",
+          "correct": false
+        },
+        {
+          "text": "Un Divider horizontal o vertical.",
+          "correct": false
+        },
+        {
+          "text": "Un Text con weight y size.",
+          "correct": false
+        }
+      ],
+      "explanation": "Tabs tiene piezas semánticamente relacionadas que deben coordinar estado, ids y accesibilidad."
+    },
+    {
+      "questionId": "e0df2141deb4",
+      "stem": "¿Qué define mejor a un compound component?",
+      "options": [
+        {
+          "text": "Un conjunto de componentes públicos que colaboran como partes de una misma abstracción.",
+          "correct": true
+        },
+        {
+          "text": "Cualquier componente que llama useContext.",
+          "correct": false
+        },
+        {
+          "text": "Cualquier componente que usa children.",
+          "correct": false
+        },
+        {
+          "text": "Un componente que siempre renderiza varios div.",
+          "correct": false
+        }
+      ],
+      "explanation": "La esencia está en la relación pública entre piezas, no en una implementación específica."
+    },
+    {
+      "questionId": "50d11dcb16b4",
+      "stem": "¿Cuál es una buena respuesta ante un Menu.Item usado fuera de Menu?",
+      "options": [
+        {
+          "text": "Fallarlo de forma clara en desarrollo con un mensaje que explique el contrato.",
+          "correct": true
+        },
+        {
+          "text": "Renderizarlo sin comportamiento y no avisar.",
+          "correct": false
+        },
+        {
+          "text": "Crear automáticamente un Menu global.",
+          "correct": false
+        },
+        {
+          "text": "Mover todo el menú a un singleton.",
+          "correct": false
+        }
+      ],
+      "explanation": "Las invariantes de composición deben ser visibles; fallar temprano evita bugs difíciles de diagnosticar."
+    },
+    {
+      "questionId": "72a89a3551dd",
+      "stem": "Para un Select interno con opciones homogéneas y serializables, ¿qué opción puede ser perfectamente válida?",
+      "options": [
+        {
+          "text": "Una prop options tipada y restringida.",
+          "correct": true
+        },
+        {
+          "text": "Compound components son obligatorios.",
+          "correct": false
+        },
+        {
+          "text": "Guardar cada opción en Context global.",
+          "correct": false
+        },
+        {
+          "text": "Render props para cada etiqueta simple.",
+          "correct": false
+        }
+      ],
+      "explanation": "Si las opciones son homogéneas, una API data-driven puede ser más simple y suficiente."
+    },
+    {
+      "questionId": "55159ec333e9",
+      "stem": "Dos paneles hermanos deben garantizar que solo uno esté abierto. ¿Dónde conviene ubicar el estado?",
+      "options": [
+        {
+          "text": "En su ancestro común más cercano.",
+          "correct": true
+        },
+        {
+          "text": "En cada panel por separado y sincronizarlos con Effects.",
+          "correct": false
+        },
+        {
+          "text": "En un store global de la aplicación.",
+          "correct": false
+        },
+        {
+          "text": "En localStorage.",
+          "correct": false
+        }
+      ],
+      "explanation": "El ancestro común es la frontera mínima que puede coordinar ambos paneles."
+    },
+    {
+      "questionId": "cb33fc880cbd",
+      "stem": "¿Qué justifica levantar el estado de dos componentes hermanos?",
+      "options": [
+        {
+          "text": "Que una regla o consumidor común necesite coordinar o leer ambos valores.",
+          "correct": true
+        },
+        {
+          "text": "Que estén renderizados uno al lado del otro.",
+          "correct": false
+        },
+        {
+          "text": "Que usen el mismo tipo de input.",
+          "correct": false
+        },
+        {
+          "text": "Que ambos tengan useState.",
+          "correct": false
+        }
+      ],
+      "explanation": "La ubicación se decide por dependencias y coordinación, no por cercanía visual."
+    },
+    {
+      "questionId": "5809a8860ad0",
+      "stem": "¿Cuál es la razón principal para que un DateRange controle ambas fechas?",
+      "options": [
+        {
+          "text": "Necesita hacer cumplir una regla que relaciona los dos valores.",
+          "correct": true
+        },
+        {
+          "text": "Porque todos los inputs deben ser controlados.",
+          "correct": false
+        },
+        {
+          "text": "Porque Context siempre es mejor.",
+          "correct": false
+        },
+        {
+          "text": "Porque useState no funciona en componentes hijos.",
+          "correct": false
+        }
+      ],
+      "explanation": "La invariante start <= end requiere un dueño que conozca ambos valores."
+    },
+    {
+      "questionId": "5739514f83aa",
+      "stem": "¿Qué estado es mejor candidato a permanecer local?",
+      "options": [
+        {
+          "text": "El hover/open state de un tooltip usado por un único componente.",
+          "correct": true
+        },
+        {
+          "text": "La sesión autenticada usada en toda la aplicación.",
+          "correct": false
+        },
+        {
+          "text": "El locale compartido por toda la app.",
+          "correct": false
+        },
+        {
+          "text": "Un feature flag consumido por varias rutas.",
+          "correct": false
+        }
+      ],
+      "explanation": "El estado efímero de un tooltip normalmente no necesita alcance global."
+    },
+    {
+      "questionId": "2afd8d8d90a5",
+      "stem": "¿Qué API representa un Dialog controlado?",
+      "options": [
+        {
+          "text": "open={isOpen} junto con onOpenChange={setIsOpen}.",
+          "correct": true
+        },
+        {
+          "text": "defaultOpen={true} sin callback.",
+          "correct": false
+        },
+        {
+          "text": "Un ref con open() como único mecanismo.",
+          "correct": false
+        },
+        {
+          "text": "Un Effect que observa el DOM.",
+          "correct": false
+        }
+      ],
+      "explanation": "En modo controlled el valor actual vive fuera del componente y el componente emite cambios."
+    },
+    {
+      "questionId": "d64a465e6029",
+      "stem": "¿Qué prop debe cambiar el padre si necesita imponer el valor actual del input?",
+      "options": [
+        {
+          "text": "value.",
+          "correct": true
+        },
+        {
+          "text": "defaultValue.",
+          "correct": false
+        },
+        {
+          "text": "key en cada tecla.",
+          "correct": false
+        },
+        {
+          "text": "placeholder.",
+          "correct": false
+        }
+      ],
+      "explanation": "value expresa el estado actual controlado; defaultValue solo inicializa el estado interno."
+    },
+    {
+      "questionId": "19f3ea91848f",
+      "stem": "¿Cuál es un riesgo real de soportar ambos modos?",
+      "options": [
+        {
+          "text": "Ambigüedad sobre quién es la fuente de verdad si el modo cambia.",
+          "correct": true
+        },
+        {
+          "text": "React deja de soportar eventos.",
+          "correct": false
+        },
+        {
+          "text": "El componente no puede tener children.",
+          "correct": false
+        },
+        {
+          "text": "TypeScript no puede tipar strings.",
+          "correct": false
+        }
+      ],
+      "explanation": "Controlled/uncontrolled es una decisión de ownership; cambiarla sin política crea estados inconsistentes."
+    },
+    {
+      "questionId": "7fac30ddbb11",
+      "stem": "¿Qué caso favorece un Disclosure uncontrolled?",
+      "options": [
+        {
+          "text": "Su estado solo afecta su propio contenido y no necesita sincronizarse con nada externo.",
+          "correct": true
+        },
+        {
+          "text": "Otra toolbar debe abrirlo y cerrarlo.",
+          "correct": false
+        },
+        {
+          "text": "La URL debe reflejar si está abierto.",
+          "correct": false
+        },
+        {
+          "text": "La selección debe persistir en un store.",
+          "correct": false
+        }
+      ],
+      "explanation": "Sin consumidores externos del estado, ownership interno reduce complejidad."
+    },
+    {
+      "questionId": "71aafe03d560",
+      "stem": "¿Cuál es el mejor modelo para fullName?",
+      "options": [
+        {
+          "text": "Calcularlo desde firstName y lastName durante render.",
+          "correct": true
+        },
+        {
+          "text": "Guardarlo en useState y actualizarlo con useEffect.",
+          "correct": false
+        },
+        {
+          "text": "Persistirlo por separado en Context.",
+          "correct": false
+        },
+        {
+          "text": "Memoizarlo siempre aunque sea concatenación.",
+          "correct": false
+        }
+      ],
+      "explanation": "fullName no es información independiente; duplicarlo crea sincronización innecesaria."
+    },
+    {
+      "questionId": "5863bc5333c5",
+      "stem": "¿Qué modelo evita mejor combinaciones imposibles?",
+      "options": [
+        {
+          "text": "Un único status con variantes mutuamente excluyentes.",
+          "correct": true
+        },
+        {
+          "text": "Tres booleanos independientes.",
+          "correct": false
+        },
+        {
+          "text": "Tres refs independientes.",
+          "correct": false
+        },
+        {
+          "text": "Tres Context providers.",
+          "correct": false
+        }
+      ],
+      "explanation": "La discriminante codifica la invariante directamente en el modelo."
+    },
+    {
+      "questionId": "5e05571d96ab",
+      "stem": "¿Qué estado suele ser más estable para una selección de una lista?",
+      "options": [
+        {
+          "text": "selectedId.",
+          "correct": true
+        },
+        {
+          "text": "Una copia completa del objeto seleccionado.",
+          "correct": false
+        },
+        {
+          "text": "selectedItem y selectedId siempre juntos.",
+          "correct": false
+        },
+        {
+          "text": "Un booleano selected en cada componente renderizado.",
+          "correct": false
+        }
+      ],
+      "explanation": "La identidad evita duplicar datos que ya existen en la colección."
+    },
+    {
+      "questionId": "b933fed5563e",
+      "stem": "¿Cuál es la mejor primera reacción ante otra bandera correlacionada?",
+      "options": [
+        {
+          "text": "Revisar si el dominio debería modelarse con estados o transiciones explícitas.",
+          "correct": true
+        },
+        {
+          "text": "Agregarla y sincronizarla con un Effect.",
+          "correct": false
+        },
+        {
+          "text": "Mover todas las banderas a localStorage.",
+          "correct": false
+        },
+        {
+          "text": "Memoizar todos los setters.",
+          "correct": false
+        }
+      ],
+      "explanation": "Cuando las banderas están correlacionadas, el problema suele estar en la representación del estado."
+    },
+    {
+      "questionId": "11d2814fb4f5",
+      "stem": "Seleccionar otro userId debe reiniciar todo el draft local. ¿Qué herramienta expresa mejor esa identidad nueva?",
+      "options": [
+        {
+          "text": "Renderizar UserForm con key={userId}.",
+          "correct": true
+        },
+        {
+          "text": "Un Effect que llama a varios setters.",
+          "correct": false
+        },
+        {
+          "text": "React.memo.",
+          "correct": false
+        },
+        {
+          "text": "useCallback.",
+          "correct": false
+        }
+      ],
+      "explanation": "Cambiar key recrea la instancia y resetea su estado local de forma declarativa."
+    },
+    {
+      "questionId": "6bd3eab77259",
+      "stem": "¿Qué debería representar idealmente una key usada para resetear?",
+      "options": [
+        {
+          "text": "La identidad conceptual de la instancia.",
+          "correct": true
+        },
+        {
+          "text": "Todas las props serializadas.",
+          "correct": false
+        },
+        {
+          "text": "La hora actual.",
+          "correct": false
+        },
+        {
+          "text": "Un número aleatorio en cada render.",
+          "correct": false
+        }
+      ],
+      "explanation": "Una key inestable destruye estado en cada render y elimina la capacidad de preservar interacción."
+    },
+    {
+      "questionId": "e6312f9f8ed7",
+      "stem": "En una lista reordenable de tareas con estado local por fila, ¿qué key conviene?",
+      "options": [
+        {
+          "text": "task.id.",
+          "correct": true
+        },
+        {
+          "text": "El índice actual.",
+          "correct": false
+        },
+        {
+          "text": "Math.random().",
+          "correct": false
+        },
+        {
+          "text": "La longitud del texto.",
+          "correct": false
+        }
+      ],
+      "explanation": "task.id sigue a la entidad aunque cambie su posición."
+    },
+    {
+      "questionId": "f7361181b9da",
+      "stem": "¿Cuál es el mejor uso de key si solo una subparte debe reiniciarse?",
+      "options": [
+        {
+          "text": "Aplicarla en la subparte cuya identidad cambió.",
+          "correct": true
+        },
+        {
+          "text": "Aplicarla al root de la aplicación.",
+          "correct": false
+        },
+        {
+          "text": "Generar una key aleatoria cada render.",
+          "correct": false
+        },
+        {
+          "text": "Evitar key y duplicar todo el estado.",
+          "correct": false
+        }
+      ],
+      "explanation": "La frontera de identidad debe alinearse con la parte del árbol cuyo estado debe descartarse."
+    },
+    {
+      "questionId": "d50d17b12337",
+      "stem": "¿Cuál nombre expresa mejor una API de comportamiento?",
+      "options": [
+        {
+          "text": "useOnlineStatus.",
+          "correct": true
+        },
+        {
+          "text": "useEffectOnce.",
+          "correct": false
+        },
+        {
+          "text": "useRunCode.",
+          "correct": false
+        },
+        {
+          "text": "useLifecycle.",
+          "correct": false
+        }
+      ],
+      "explanation": "useOnlineStatus dice qué capacidad ofrece; los nombres de lifecycle solo describen cuándo ejecuta código."
+    },
+    {
+      "questionId": "38da20faf401",
+      "stem": "Dos componentes llaman el mismo custom hook con useState interno. ¿Qué ocurre?",
+      "options": [
+        {
+          "text": "Cada llamada mantiene su propio estado.",
+          "correct": true
+        },
+        {
+          "text": "Comparten automáticamente la misma instancia.",
+          "correct": false
+        },
+        {
+          "text": "React lo mueve a Context.",
+          "correct": false
+        },
+        {
+          "text": "El segundo componente sobrescribe al primero.",
+          "correct": false
+        }
+      ],
+      "explanation": "Los custom hooks reutilizan lógica, no una instancia de estado."
+    },
+    {
+      "questionId": "f7565752aba3",
+      "stem": "¿Qué primitive está diseñada para leer y suscribirse a un store externo?",
+      "options": [
+        {
+          "text": "useSyncExternalStore.",
+          "correct": true
+        },
+        {
+          "text": "useMemo.",
+          "correct": false
+        },
+        {
+          "text": "useImperativeHandle.",
+          "correct": false
+        },
+        {
+          "text": "useId.",
+          "correct": false
+        }
+      ],
+      "explanation": "useSyncExternalStore modela explícitamente la relación con una fuente externa suscribible."
+    },
+    {
+      "questionId": "165b84afb2f0",
+      "stem": "¿Qué retorno es más coherente para un hook de upload?",
+      "options": [
+        {
+          "text": "status, progress, startUpload y cancelUpload.",
+          "correct": true
+        },
+        {
+          "text": "Todos los refs y setters internos.",
+          "correct": false
+        },
+        {
+          "text": "El reducer completo para que el consumidor lo modifique.",
+          "correct": false
+        },
+        {
+          "text": "Una referencia al componente padre.",
+          "correct": false
+        }
+      ],
+      "explanation": "La API debe representar capacidades del dominio, no detalles internos."
+    },
+    {
+      "questionId": "b666db63d608",
+      "stem": "¿Qué problema justifica mejor un reducer?",
+      "options": [
+        {
+          "text": "Muchas transiciones relacionadas son difíciles de mantener consistentes entre handlers.",
+          "correct": true
+        },
+        {
+          "text": "El componente tiene exactamente cuatro useState.",
+          "correct": false
+        },
+        {
+          "text": "Querés evitar escribir callbacks.",
+          "correct": false
+        },
+        {
+          "text": "Necesitás compartir estado global.",
+          "correct": false
+        }
+      ],
+      "explanation": "La fuerza del reducer está en centralizar reglas de transición, no en un número mágico de campos."
+    },
+    {
+      "questionId": "f2ae11b6ab9e",
+      "stem": "¿Qué action modela mejor un borrado con varias consecuencias?",
+      "options": [
+        {
+          "text": "item_deleted.",
+          "correct": true
+        },
+        {
+          "text": "setItems.",
+          "correct": false
+        },
+        {
+          "text": "setSelectedId.",
+          "correct": false
+        },
+        {
+          "text": "setDraft.",
+          "correct": false
+        }
+      ],
+      "explanation": "item_deleted representa el evento único y permite que el reducer aplique todas sus consecuencias."
+    },
+    {
+      "questionId": "8d37a242135f",
+      "stem": "¿Dónde debería ejecutarse una petición de red?",
+      "options": [
+        {
+          "text": "Fuera del reducer; luego se despacha el resultado.",
+          "correct": true
+        },
+        {
+          "text": "Dentro del reducer antes del return.",
+          "correct": false
+        },
+        {
+          "text": "Dentro de JSON.stringify del estado.",
+          "correct": false
+        },
+        {
+          "text": "En el initializer de useReducer cada render.",
+          "correct": false
+        }
+      ],
+      "explanation": "La pureza del reducer permite razonar y testear transiciones sin dependencias externas."
+    },
+    {
+      "questionId": "ebbaa25ea77d",
+      "stem": "Un reducer de un wizard usado en una sola pantalla debería vivir dónde?",
+      "options": [
+        {
+          "text": "En la frontera más local que cubra a sus consumidores.",
+          "correct": true
+        },
+        {
+          "text": "Siempre en el root global.",
+          "correct": false
+        },
+        {
+          "text": "Siempre en localStorage.",
+          "correct": false
+        },
+        {
+          "text": "Siempre en un singleton.",
+          "correct": false
+        }
+      ],
+      "explanation": "useReducer no cambia la regla de ownership: el estado debe vivir donde lo requieren sus consumidores."
+    },
+    {
+      "questionId": "bc47b690f83a",
+      "stem": "¿Qué problema resuelve Context de forma directa?",
+      "options": [
+        {
+          "text": "Compartir una dependencia con componentes profundos dentro de una frontera.",
+          "correct": true
+        },
+        {
+          "text": "Evitar cualquier re-render.",
+          "correct": false
+        },
+        {
+          "text": "Persistir datos en el servidor.",
+          "correct": false
+        },
+        {
+          "text": "Reemplazar reducers.",
+          "correct": false
+        }
+      ],
+      "explanation": "Context es un mecanismo de distribución dentro de un árbol, no una base de datos ni un store completo."
+    },
+    {
+      "questionId": "e16140d7a00f",
+      "stem": "¿Cuál es la señal principal de un AppContext demasiado amplio?",
+      "options": [
+        {
+          "text": "Contiene dominios que cambian por razones independientes y tienen consumidores distintos.",
+          "correct": true
+        },
+        {
+          "text": "Tiene más de una propiedad.",
+          "correct": false
+        },
+        {
+          "text": "Usa TypeScript.",
+          "correct": false
+        },
+        {
+          "text": "Está cerca del root.",
+          "correct": false
+        }
+      ],
+      "explanation": "La cohesión de la frontera importa más que el número de valores."
+    },
+    {
+      "questionId": "b1ef9a8f5d55",
+      "stem": "Si un único descendiente profundo necesita user y el ancestro controla el layout, ¿qué alternativa vale evaluar primero?",
+      "options": [
+        {
+          "text": "Pasar la región ya compuesta mediante children o slots.",
+          "correct": true
+        },
+        {
+          "text": "Crear un store global inmediatamente.",
+          "correct": false
+        },
+        {
+          "text": "Copiar user a estado en cada nivel.",
+          "correct": false
+        },
+        {
+          "text": "Usar un Effect por wrapper.",
+          "correct": false
+        }
+      ],
+      "explanation": "Composition puede evitar prop drilling cuando la dependencia existe solo para construir una región del árbol."
+    },
+    {
+      "questionId": "0fb135349758",
+      "stem": "¿Qué cambió con el provider de Context en React 19?",
+      "options": [
+        {
+          "text": "La ergonomía de renderizado; no la necesidad de diseñar bien la frontera.",
+          "correct": true
+        },
+        {
+          "text": "Context dejó de provocar re-renders.",
+          "correct": false
+        },
+        {
+          "text": "Context reemplazó todos los stores.",
+          "correct": false
+        },
+        {
+          "text": "Todos los estados deberían migrar a Context.",
+          "correct": false
+        }
+      ],
+      "explanation": "La nueva sintaxis no altera el rol conceptual de Context."
+    },
+    {
+      "questionId": "4b6e4c700ce9",
+      "stem": "¿Qué reemplaza mejor un Effect que mantiene fullName?",
+      "options": [
+        {
+          "text": "const fullName = `${firstName} ${lastName}` durante render.",
+          "correct": true
+        },
+        {
+          "text": "Otro Effect más específico.",
+          "correct": false
+        },
+        {
+          "text": "Un ref mutable.",
+          "correct": false
+        },
+        {
+          "text": "Context.",
+          "correct": false
+        }
+      ],
+      "explanation": "fullName es un valor derivado de estado ya existente."
+    },
+    {
+      "questionId": "4ffef3cf0ad1",
+      "stem": "¿Dónde debería iniciarse una compra causada por un click?",
+      "options": [
+        {
+          "text": "En el flujo del evento o Action asociado al click.",
+          "correct": true
+        },
+        {
+          "text": "En un Effect que observa un booleano temporal.",
+          "correct": false
+        },
+        {
+          "text": "En render.",
+          "correct": false
+        },
+        {
+          "text": "En useMemo.",
+          "correct": false
+        }
+      ],
+      "explanation": "La lógica debe permanecer cerca de su causa: la interacción del usuario."
+    },
+    {
+      "questionId": "290df4b964c8",
+      "stem": "¿Cuál caso es más apropiado para useEffect?",
+      "options": [
+        {
+          "text": "Conectar y desconectar un WebSocket según roomId.",
+          "correct": true
+        },
+        {
+          "text": "Concatenar firstName y lastName.",
+          "correct": false
+        },
+        {
+          "text": "Calcular filteredItems.",
+          "correct": false
+        },
+        {
+          "text": "Responder a un click de Save.",
+          "correct": false
+        }
+      ],
+      "explanation": "WebSocket es un sistema externo cuyo lifecycle debe sincronizarse con el componente."
+    },
+    {
+      "questionId": "de8364bf6f08",
+      "stem": "Si todo el estado local corresponde a un userId distinto, ¿qué conviene evaluar?",
+      "options": [
+        {
+          "text": "Cambiar la key de la instancia.",
+          "correct": true
+        },
+        {
+          "text": "Agregar un Effect por cada campo.",
+          "correct": false
+        },
+        {
+          "text": "Mover los campos a variables globales.",
+          "correct": false
+        },
+        {
+          "text": "Memoizar los setters.",
+          "correct": false
+        }
+      ],
+      "explanation": "Una nueva key expresa una nueva identidad y descarta el estado asociado a la instancia anterior."
+    },
+    {
+      "questionId": "57caa8ec0614",
+      "stem": "¿Qué valor debería provocar reconexión si la conexión solo depende del room actual?",
+      "options": [
+        {
+          "text": "roomId.",
+          "correct": true
+        },
+        {
+          "text": "theme, aunque solo cambia el texto de la notificación.",
+          "correct": false
+        },
+        {
+          "text": "El timestamp de la última renderización.",
+          "correct": false
+        },
+        {
+          "text": "Cualquier prop leída dentro del callback.",
+          "correct": false
+        }
+      ],
+      "explanation": "La dependencia debe representar qué cambia la sincronización, no todo valor leído por lógica secundaria."
+    },
+    {
+      "questionId": "47041225a75a",
+      "stem": "¿Qué valor debe seguir siendo dependencia de la conexión?",
+      "options": [
+        {
+          "text": "serverUrl si define el endpoint conectado.",
+          "correct": true
+        },
+        {
+          "text": "Un color usado solo por una notificación.",
+          "correct": false
+        },
+        {
+          "text": "Un texto de logging no reactivo.",
+          "correct": false
+        },
+        {
+          "text": "Un contador leído solo al reportar.",
+          "correct": false
+        }
+      ],
+      "explanation": "serverUrl cambia el recurso externo con el que se sincroniza el Effect."
+    },
+    {
+      "questionId": "417cb64f6677",
+      "stem": "¿Cuál es el caso de uso correcto?",
+      "options": [
+        {
+          "text": "Un callback invocado desde una sincronización externa que necesita leer valores actuales sin redefinir cuándo sincronizar.",
+          "correct": true
+        },
+        {
+          "text": "Un onClick común de un botón.",
+          "correct": false
+        },
+        {
+          "text": "Una función pura de formato.",
+          "correct": false
+        },
+        {
+          "text": "Un reducer.",
+          "correct": false
+        }
+      ],
+      "explanation": "Effect Events están diseñados para lógica no reactiva asociada a Effects."
+    },
+    {
+      "questionId": "db73257758e3",
+      "stem": "¿Qué criterio define una dependencia reactiva?",
+      "options": [
+        {
+          "text": "Que su cambio deba provocar una nueva sincronización.",
+          "correct": true
+        },
+        {
+          "text": "Que aparezca en cualquier función del archivo.",
+          "correct": false
+        },
+        {
+          "text": "Que sea una string.",
+          "correct": false
+        },
+        {
+          "text": "Que venga de props.",
+          "correct": false
+        }
+      ],
+      "explanation": "La reactividad debe corresponder al ciclo de sincronización real."
+    },
+    {
+      "questionId": "06b75507fc25",
+      "stem": "¿Qué escenario favorece una abstracción headless?",
+      "options": [
+        {
+          "text": "Comportamiento complejo compartido con presentaciones significativamente distintas.",
+          "correct": true
+        },
+        {
+          "text": "Un botón que debe verse idéntico en toda la app.",
+          "correct": false
+        },
+        {
+          "text": "Un divider con dos orientaciones.",
+          "correct": false
+        },
+        {
+          "text": "Un badge con tres tonos.",
+          "correct": false
+        }
+      ],
+      "explanation": "Headless maximiza reutilización del comportamiento cuando la apariencia no puede fijarse de forma única."
+    },
+    {
+      "questionId": "d38834f65bd0",
+      "stem": "¿Cuál es la principal responsabilidad extra del consumidor de una API headless?",
+      "options": [
+        {
+          "text": "Preservar las props y semántica requeridas por el comportamiento.",
+          "correct": true
+        },
+        {
+          "text": "Evitar TypeScript.",
+          "correct": false
+        },
+        {
+          "text": "Crear un store global.",
+          "correct": false
+        },
+        {
+          "text": "Usar CSS-in-JS.",
+          "correct": false
+        }
+      ],
+      "explanation": "La capa headless no puede garantizar comportamiento si el consumidor ignora el contrato que expone."
+    },
+    {
+      "questionId": "c63802440fdf",
+      "stem": "¿Qué favorece un componente styled cerrado?",
+      "options": [
+        {
+          "text": "El requisito de consistencia fuerte entre todos los consumidores.",
+          "correct": true
+        },
+        {
+          "text": "La necesidad de DOM totalmente distinto por producto.",
+          "correct": false
+        },
+        {
+          "text": "Múltiples sistemas visuales incompatibles.",
+          "correct": false
+        },
+        {
+          "text": "Consumidores que necesitan reemplazar toda la presentación.",
+          "correct": false
+        }
+      ],
+      "explanation": "Cuando la variación visual no es deseada, abrirla agrega costo sin beneficio."
+    },
+    {
+      "questionId": "c4f4445bf058",
+      "stem": "¿Qué debería priorizar una API headless?",
+      "options": [
+        {
+          "text": "Capacidades composables con invariantes protegidas.",
+          "correct": true
+        },
+        {
+          "text": "Exponer todos los refs internos.",
+          "correct": false
+        },
+        {
+          "text": "Permitir mutar el reducer desde afuera.",
+          "correct": false
+        },
+        {
+          "text": "Eliminar cualquier contrato de nesting.",
+          "correct": false
+        }
+      ],
+      "explanation": "Una API headless sigue siendo una abstracción; solo separa presentación de comportamiento."
+    },
+    {
+      "questionId": "38e44627f77e",
+      "stem": "¿Qué problema resuelve mejor asChild?",
+      "options": [
+        {
+          "text": "Reutilizar el comportamiento del primitive sobre un elemento hijo distinto.",
+          "correct": true
+        },
+        {
+          "text": "Memoizar automáticamente el hijo.",
+          "correct": false
+        },
+        {
+          "text": "Compartir estado global.",
+          "correct": false
+        },
+        {
+          "text": "Serializar props.",
+          "correct": false
+        }
+      ],
+      "explanation": "asChild cambia quién aporta el elemento DOM sin perder el comportamiento del primitive."
+    },
+    {
+      "questionId": "debc1518dd8a",
+      "stem": "¿Qué implementación es más compatible con asChild?",
+      "options": [
+        {
+          "text": "Un componente que propaga props al elemento DOM subyacente.",
+          "correct": true
+        },
+        {
+          "text": "Uno que solo renderiza children.",
+          "correct": false
+        },
+        {
+          "text": "Uno que elimina todos los event handlers.",
+          "correct": false
+        },
+        {
+          "text": "Uno que reemplaza aria-* por valores fijos.",
+          "correct": false
+        }
+      ],
+      "explanation": "El primitive necesita que sus props lleguen al elemento interactivo real."
+    },
+    {
+      "questionId": "9e91da8b653f",
+      "stem": "¿Qué debe evaluarse al reemplazar un button por otro elemento?",
+      "options": [
+        {
+          "text": "Semántica, foco y soporte de teclado del elemento resultante.",
+          "correct": true
+        },
+        {
+          "text": "Solo el color CSS.",
+          "correct": false
+        },
+        {
+          "text": "Solo el nombre del componente.",
+          "correct": false
+        },
+        {
+          "text": "Solo si compila TypeScript.",
+          "correct": false
+        }
+      ],
+      "explanation": "El comportamiento nativo del elemento forma parte del contrato accesible."
+    },
+    {
+      "questionId": "b490217d939b",
+      "stem": "¿Qué necesita una API basada en Slot para ser predecible?",
+      "options": [
+        {
+          "text": "Reglas explícitas de cómo se fusionan props y handlers.",
+          "correct": true
+        },
+        {
+          "text": "Handlers aleatorios.",
+          "correct": false
+        },
+        {
+          "text": "Un store global.",
+          "correct": false
+        },
+        {
+          "text": "Una key distinta en cada render.",
+          "correct": false
+        }
+      ],
+      "explanation": "La composición de props es parte del contrato público, especialmente para eventos."
+    },
+    {
+      "questionId": "c31fa3163e28",
+      "stem": "¿Qué acción justifica mejor un ref?",
+      "options": [
+        {
+          "text": "Enfocar un input existente.",
+          "correct": true
+        },
+        {
+          "text": "Definir el color del botón.",
+          "correct": false
+        },
+        {
+          "text": "Decidir si una prop está activa.",
+          "correct": false
+        },
+        {
+          "text": "Derivar un nombre completo.",
+          "correct": false
+        }
+      ],
+      "explanation": "focus() es una operación imperativa del DOM y un ref es una frontera apropiada."
+    },
+    {
+      "questionId": "9525543c7f99",
+      "stem": "¿Qué API favorece coordinación con el resto de la UI?",
+      "options": [
+        {
+          "text": "Una prop open controlada y onOpenChange.",
+          "correct": true
+        },
+        {
+          "text": "Solo métodos imperativos en un ref.",
+          "correct": false
+        },
+        {
+          "text": "Mutar el DOM directamente.",
+          "correct": false
+        },
+        {
+          "text": "Guardar el modal en una variable global.",
+          "correct": false
+        }
+      ],
+      "explanation": "El estado controlado puede participar naturalmente en render y coordinación con otras piezas."
+    },
+    {
+      "questionId": "9fcf62c92c02",
+      "stem": "¿Qué API imperativa es más encapsulada?",
+      "options": [
+        {
+          "text": "Un handle con focus() únicamente.",
+          "correct": true
+        },
+        {
+          "text": "El HTMLElement completo.",
+          "correct": false
+        },
+        {
+          "text": "Todos los refs internos.",
+          "correct": false
+        },
+        {
+          "text": "El objeto de estado mutable.",
+          "correct": false
+        }
+      ],
+      "explanation": "Una superficie mínima preserva capacidad sin exponer detalles que el consumidor no necesita."
+    },
+    {
+      "questionId": "a9b8e112c15c",
+      "stem": "¿Qué cambia con ref como prop en React 19?",
+      "options": [
+        {
+          "text": "La forma de recibirlo, no el criterio para decidir si debería existir.",
+          "correct": true
+        },
+        {
+          "text": "Refs dejan de ser imperativos.",
+          "correct": false
+        },
+        {
+          "text": "Refs reemplazan props.",
+          "correct": false
+        },
+        {
+          "text": "Todos los componentes deben exponer uno.",
+          "correct": false
+        }
+      ],
+      "explanation": "La ergonomía es distinta; la responsabilidad arquitectónica permanece."
+    },
+    {
+      "questionId": "46b1a4e01c1f",
+      "stem": "¿Qué problema resuelve mejor useActionState?",
+      "options": [
+        {
+          "text": "Modelar el estado resultante y pending de una Action.",
+          "correct": true
+        },
+        {
+          "text": "Memoizar cualquier cálculo.",
+          "correct": false
+        },
+        {
+          "text": "Crear un Context global.",
+          "correct": false
+        },
+        {
+          "text": "Reemplazar fetch.",
+          "correct": false
+        }
+      ],
+      "explanation": "La primitive organiza el lifecycle de una Action, no el transporte de red en sí."
+    },
+    {
+      "questionId": "ceb4e9adcdfc",
+      "stem": "¿Qué criterio debería guiar useActionState?",
+      "options": [
+        {
+          "text": "Si mejora el modelo y reduce coordinación de la interacción.",
+          "correct": true
+        },
+        {
+          "text": "Que la función sea async.",
+          "correct": false
+        },
+        {
+          "text": "Que el componente tenga JSX.",
+          "correct": false
+        },
+        {
+          "text": "Que exista una Promise.",
+          "correct": false
+        }
+      ],
+      "explanation": "Ser async no convierte automáticamente una operación en un caso ideal para useActionState."
+    },
+    {
+      "questionId": "86c569ef6975",
+      "stem": "¿Qué debería modelar una interacción de submit robusta?",
+      "options": [
+        {
+          "text": "Pending y el resultado relevante, incluidos errores recuperables.",
+          "correct": true
+        },
+        {
+          "text": "Solo un spinner.",
+          "correct": false
+        },
+        {
+          "text": "Solo el status HTTP crudo en el DOM.",
+          "correct": false
+        },
+        {
+          "text": "Un booleano global para todas las mutaciones.",
+          "correct": false
+        }
+      ],
+      "explanation": "La UI necesita más que saber si terminó; necesita comprender qué resultado ocurrió."
+    },
+    {
+      "questionId": "d03724b7bff8",
+      "stem": "Dos mutaciones independientes pueden ejecutarse en paralelo. ¿Qué modelo es mejor?",
+      "options": [
+        {
+          "text": "Pending separado por interacción.",
+          "correct": true
+        },
+        {
+          "text": "Un loading global único.",
+          "correct": false
+        },
+        {
+          "text": "Deshabilitar toda la aplicación.",
+          "correct": false
+        },
+        {
+          "text": "Ignorar pending.",
+          "correct": false
+        }
+      ],
+      "explanation": "La granularidad del estado debe coincidir con la granularidad real de las operaciones."
+    },
+    {
+      "questionId": "96dc6de8cfed",
+      "stem": "¿Qué operación es mejor candidata?",
+      "options": [
+        {
+          "text": "Marcar un post como favorito.",
+          "correct": true
+        },
+        {
+          "text": "Confirmar una transferencia bancaria completada.",
+          "correct": false
+        },
+        {
+          "text": "Garantizar una reserva limitada.",
+          "correct": false
+        },
+        {
+          "text": "Conceder permisos de producción.",
+          "correct": false
+        }
+      ],
+      "explanation": "Favorito es frecuente, reversible y de bajo costo si la predicción falla."
+    },
+    {
+      "questionId": "a2858627703e",
+      "stem": "¿Qué factor pesa más al decidir optimistic UI?",
+      "options": [
+        {
+          "text": "El costo y reversibilidad de mostrar un resultado incorrecto.",
+          "correct": true
+        },
+        {
+          "text": "Que la API use JSON.",
+          "correct": false
+        },
+        {
+          "text": "Que el componente tenga useState.",
+          "correct": false
+        },
+        {
+          "text": "Que el request tarde más de 100 ms.",
+          "correct": false
+        }
+      ],
+      "explanation": "La decisión es de producto: probabilidad, reversibilidad y costo de error."
+    },
+    {
+      "questionId": "1e1379e54fdb",
+      "stem": "¿Qué es imprescindible en optimistic UI?",
+      "options": [
+        {
+          "text": "Una estrategia explícita para fallo y reconciliación.",
+          "correct": true
+        },
+        {
+          "text": "Un spinner global.",
+          "correct": false
+        },
+        {
+          "text": "Desactivar todos los botones.",
+          "correct": false
+        },
+        {
+          "text": "Guardar siempre en localStorage.",
+          "correct": false
+        }
+      ],
+      "explanation": "Optimismo sin plan de fallo deja a la UI sin una forma coherente de recuperar verdad."
+    },
+    {
+      "questionId": "99616ec45af4",
+      "stem": "¿Qué distinción puede ser útil en un item optimista?",
+      "options": [
+        {
+          "text": "Provisional/pending frente a confirmado.",
+          "correct": true
+        },
+        {
+          "text": "CSS frente a JavaScript.",
+          "correct": false
+        },
+        {
+          "text": "Client frente a browser.",
+          "correct": false
+        },
+        {
+          "text": "Hook frente a component.",
+          "correct": false
+        }
+      ],
+      "explanation": "La UI necesita reconciliar el estado anticipado con la respuesta definitiva."
+    },
+    {
+      "questionId": "eff4f9eb69e5",
+      "stem": "¿Qué debería guiar la ubicación de una Suspense boundary?",
+      "options": [
+        {
+          "text": "Qué contenido debería revelar junto para el usuario.",
+          "correct": true
+        },
+        {
+          "text": "El número de líneas del componente.",
+          "correct": false
+        },
+        {
+          "text": "La carpeta del archivo.",
+          "correct": false
+        },
+        {
+          "text": "Si usa TypeScript.",
+          "correct": false
+        }
+      ],
+      "explanation": "La boundary es una decisión de experiencia y dependencia, no solo un detalle de loading."
+    },
+    {
+      "questionId": "0df8984f446b",
+      "stem": "¿Cuál es una señal de exceso de boundaries?",
+      "options": [
+        {
+          "text": "La página revela pequeños fragmentos descoordinados y cambia constantemente.",
+          "correct": true
+        },
+        {
+          "text": "Hay un único skeleton coherente.",
+          "correct": false
+        },
+        {
+          "text": "Dos regiones independientes cargan por separado.",
+          "correct": false
+        },
+        {
+          "text": "Una boundary contiene varios componentes relacionados.",
+          "correct": false
+        }
+      ],
+      "explanation": "La granularidad debe optimizar la experiencia, no maximizar el número de boundaries."
+    },
+    {
+      "questionId": "adea74b20f0b",
+      "stem": "¿Qué busca una transición en este caso?",
+      "options": [
+        {
+          "text": "Mantener una experiencia útil mientras se prepara una actualización no urgente.",
+          "correct": true
+        },
+        {
+          "text": "Evitar cualquier request.",
+          "correct": false
+        },
+        {
+          "text": "Persistir datos automáticamente.",
+          "correct": false
+        },
+        {
+          "text": "Reemplazar Suspense por Context.",
+          "correct": false
+        }
+      ],
+      "explanation": "Transitions ayudan a evitar esconder contenido útil ante actualizaciones que pueden esperar."
+    },
+    {
+      "questionId": "a0033d149a28",
+      "stem": "¿Qué debe existir además de una boundary para suspender datos de forma robusta?",
+      "options": [
+        {
+          "text": "Una fuente de datos compatible y una estrategia de caching/coordinación.",
+          "correct": true
+        },
+        {
+          "text": "Un Math.random en render.",
+          "correct": false
+        },
+        {
+          "text": "Un Promise nuevo en cada render.",
+          "correct": false
+        },
+        {
+          "text": "Un ref global mutable.",
+          "correct": false
+        }
+      ],
+      "explanation": "La boundary define experiencia; la capa de datos debe proveer recursos estables y compatibles."
+    },
+    {
+      "questionId": "58638ac17e39",
+      "stem": "En un proyecto nuevo con React Compiler habilitado, ¿qué heurística es mejor?",
+      "options": [
+        {
+          "text": "Confiar en el Compiler por defecto y usar memoización manual cuando haya una necesidad concreta.",
+          "correct": true
+        },
+        {
+          "text": "Envolver toda función en useCallback.",
+          "correct": false
+        },
+        {
+          "text": "Eliminar cualquier memoización existente sin probar.",
+          "correct": false
+        },
+        {
+          "text": "Usar React.memo en todos los componentes.",
+          "correct": false
+        }
+      ],
+      "explanation": "La guía actual de React recomienda depender del Compiler para nuevo código y reservar APIs manuales para control preciso."
+    },
+    {
+      "questionId": "eef5a806aafb",
+      "stem": "¿Cuál estrategia es más segura al migrar?",
+      "options": [
+        {
+          "text": "Mantener o remover memoización de forma incremental con tests y mediciones.",
+          "correct": true
+        },
+        {
+          "text": "Eliminarla toda automáticamente.",
+          "correct": false
+        },
+        {
+          "text": "Desactivar todos los tests.",
+          "correct": false
+        },
+        {
+          "text": "Agregar más useCallback antes de medir.",
+          "correct": false
+        }
+      ],
+      "explanation": "La adopción incremental preserva comportamiento y permite validar cada cambio."
+    },
+    {
+      "questionId": "e1c624197862",
+      "stem": "¿Qué afirmación es correcta?",
+      "options": [
+        {
+          "text": "useMemo/useCallback siguen siendo válidos cuando necesitás control preciso.",
+          "correct": true
+        },
+        {
+          "text": "Están prohibidos con Compiler.",
+          "correct": false
+        },
+        {
+          "text": "Son obligatorios con Compiler.",
+          "correct": false
+        },
+        {
+          "text": "Solo funcionan en React 18.",
+          "correct": false
+        }
+      ],
+      "explanation": "Compiler reduce la necesidad de uso manual, pero no elimina los escape hatches."
+    },
+    {
+      "questionId": "2650de12a324",
+      "stem": "¿Qué huele mal en memoizeResults como prop pública?",
+      "options": [
+        {
+          "text": "Filtra una decisión de implementación y obliga al consumidor a adivinar performance interna.",
+          "correct": true
+        },
+        {
+          "text": "La prop es booleana.",
+          "correct": false
+        },
+        {
+          "text": "El nombre está en inglés.",
+          "correct": false
+        },
+        {
+          "text": "React no permite props de performance.",
+          "correct": false
+        }
+      ],
+      "explanation": "La frontera que conoce el costo real debería poseer la optimización."
+    },
+    {
+      "questionId": "48305944486d",
+      "stem": "¿Qué pregunta es más útil antes de extraer EntityCard?",
+      "options": [
+        {
+          "text": "¿Estos componentes cambian por las mismas razones?",
+          "correct": true
+        },
+        {
+          "text": "¿Tienen el mismo número de líneas?",
+          "correct": false
+        },
+        {
+          "text": "¿Usan ambos div?",
+          "correct": false
+        },
+        {
+          "text": "¿Sus archivos están en la misma carpeta?",
+          "correct": false
+        }
+      ],
+      "explanation": "Cambiar por las mismas razones es una señal mucho más fuerte de abstracción compartida que la similitud visual."
+    },
+    {
+      "questionId": "c418918419d6",
+      "stem": "¿Qué aporta esperar más ejemplos?",
+      "options": [
+        {
+          "text": "Permite distinguir invariantes reales de detalles accidentales.",
+          "correct": true
+        },
+        {
+          "text": "Garantiza cero bugs.",
+          "correct": false
+        },
+        {
+          "text": "Evita escribir tests.",
+          "correct": false
+        },
+        {
+          "text": "Hace innecesario TypeScript.",
+          "correct": false
+        }
+      ],
+      "explanation": "Más casos revelan qué dimensiones realmente varían y cuáles son parte del concepto compartido."
+    },
+    {
+      "questionId": "0a0ff0384173",
+      "stem": "¿Qué señal sugiere separar una abstracción?",
+      "options": [
+        {
+          "text": "Cada consumidor requiere excepciones y flags específicos de su dominio.",
+          "correct": true
+        },
+        {
+          "text": "Tiene un prop.",
+          "correct": false
+        },
+        {
+          "text": "Usa children.",
+          "correct": false
+        },
+        {
+          "text": "Tiene tests.",
+          "correct": false
+        }
+      ],
+      "explanation": "Las excepciones crecientes indican que los casos ya no comparten una frontera estable."
+    },
+    {
+      "questionId": "451a9db3eff6",
+      "stem": "¿Qué puede justificar duplicar temporalmente?",
+      "options": [
+        {
+          "text": "Evitar una abstracción especulativa mientras el dominio todavía está cambiando.",
+          "correct": true
+        },
+        {
+          "text": "No saber crear funciones.",
+          "correct": false
+        },
+        {
+          "text": "No querer escribir tipos.",
+          "correct": false
+        },
+        {
+          "text": "Evitar code review.",
+          "correct": false
+        }
+      ],
+      "explanation": "La duplicación puede ser el costo menor cuando todavía falta información para diseñar una abstracción correcta."
+    },
+    {
+      "questionId": "f61901b69411",
+      "stem": "¿Cuál es el primer paso correcto?",
+      "options": [
+        {
+          "text": "Entender qué responsabilidad encapsula la HOC y qué costo genera hoy.",
+          "correct": true
+        },
+        {
+          "text": "Reescribir todas las HOCs inmediatamente.",
+          "correct": false
+        },
+        {
+          "text": "Agregar useMemo dentro de cada una.",
+          "correct": false
+        },
+        {
+          "text": "Moverlas a Context global.",
+          "correct": false
+        }
+      ],
+      "explanation": "La evaluación debe empezar por el problema y costo actuales, no por la fecha del patrón."
+    },
+    {
+      "questionId": "112b5cd36a01",
+      "stem": "¿Qué afirmación es más correcta?",
+      "options": [
+        {
+          "text": "Render props pueden seguir siendo una API legítima aunque hooks sean comunes para reutilizar lógica.",
+          "correct": true
+        },
+        {
+          "text": "Render props dejaron de funcionar en React 19.",
+          "correct": false
+        },
+        {
+          "text": "Toda render prop debe migrarse.",
+          "correct": false
+        },
+        {
+          "text": "Render props son siempre más rápidas.",
+          "correct": false
+        }
+      ],
+      "explanation": "El patrón sigue siendo funcional; la decisión es de ergonomía, composición y mantenimiento."
+    },
+    {
+      "questionId": "f26225f46fb1",
+      "stem": "¿Qué estrategia es más razonable?",
+      "options": [
+        {
+          "text": "Priorizar HOCs que generan problemas reales y migrarlas de forma incremental.",
+          "correct": true
+        },
+        {
+          "text": "Bloquear features hasta reescribir las 70.",
+          "correct": false
+        },
+        {
+          "text": "Cambiar todas con regex.",
+          "correct": false
+        },
+        {
+          "text": "Duplicar cada HOC con un hook aunque nadie lo use.",
+          "correct": false
+        }
+      ],
+      "explanation": "La migración debe pagar un beneficio concreto y preservar comportamiento."
+    },
+    {
+      "questionId": "24cdba672246",
+      "stem": "¿Qué pregunta debería venir primero?",
+      "options": [
+        {
+          "text": "¿Qué problema resuelve este patrón y qué trade-offs introduce aquí?",
+          "correct": true
+        },
+        {
+          "text": "¿Está de moda?",
+          "correct": false
+        },
+        {
+          "text": "¿Lo usa mi librería favorita?",
+          "correct": false
+        },
+        {
+          "text": "¿Tiene menos caracteres?",
+          "correct": false
+        }
+      ],
+      "explanation": "El criterio senior se basa en problemas y trade-offs, no en pertenecer a un catálogo de patrones."
+    }
+  ]
+}
