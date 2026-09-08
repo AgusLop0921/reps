@@ -48,3 +48,4 @@ change contracts.
 | [0021](0021-first-run-account-choice.md) | A one-time first-run account choice | Amended by 0022 |
 | [0022](0022-open-to-the-home-not-the-lesson.md) | Open to the home, not straight into a lesson | Accepted |
 | [0023](0023-source-driven-multi-track-content.md) | Source-driven multi-track content architecture | Accepted |
+| [0024](0024-normalized-source-documents.md) | Normalize approved source documents before curriculum generation | Accepted |

@@ -136,5 +136,6 @@ AI generator; generated candidates require grounding, validation, and review (AD
 
 Multi-track foundation: the generated midudev React curriculum plus a tiny editorial AI
 Engineering seed, track-isolated local progress, and optional Supabase cross-device sync
-(ADR-0020/0021/0023, off unless configured). Generic ingestion remains documentation only.
+(ADR-0020/0021/0023, off unless configured). Microsoft's Spanish lessons have a pinned,
+normalized, non-runtime snapshot under ADR-0024; no Microsoft curriculum is published yet.
 Roadmap in the README.

@@ -6,6 +6,13 @@ Living document: how the system looks today. The *why* lives in [`docs/adr/`](ad
 
 ```
 approved sources (repositories today; more source types later)
+        │
+        ├── multi-document source normalization (build time, outside runtime)
+        │        │
+        │        ▼
+        │   scripts/import/generated/       provenance-rich documents for later review
+        │                                  never loaded as published curriculum
+        │
         │  pnpm content:import   (build time, offline)
         ▼
 scripts/import/sources/*.ts      one adapter per source
@@ -45,9 +52,11 @@ model. A track references one or more `Source` records, but source identity neve
 track identity. Questions retain fine-grained attribution through `sourceId` and slug. The
 catalog rejects unresolved and duplicate references at startup.
 
-The runtime consumes only this canonical Reps model. Future repository, documentation,
-course, web, or upload adapters normalize outside the runtime and publish validated catalog
-artifacts after grounding and human review. See ADR-0023.
+The runtime consumes only this canonical Reps model. Multi-document sources can first emit
+validated `NormalizedDocument` snapshots outside the runtime. The Microsoft snapshot is
+revision-pinned under `scripts/import/generated/`; it is not a curriculum and nothing in
+`src/content/load.ts` imports it. Grounding, human review, and publication remain separate
+stages. See ADR-0023 and ADR-0024.
 
 ## The two progress models
 
@@ -92,8 +101,9 @@ every component.
 
 ## What is missing
 
-The source-ingestion and generation stages described in ADR-0023 are architectural only.
-AI Engineering currently has one editorial seed lesson, not an imported curriculum.
+Microsoft's Spanish lesson documents are normalized with provenance, but analysis,
+grounded generation, review, and publication are not implemented. AI Engineering still has
+one editorial seed lesson, not an imported curriculum.
 
 Interview simulation (ADR-0013) is v2 and shares only the corpus — it does not touch the
 path, the scheduler or either progress model.
