@@ -8,7 +8,7 @@ import {
 } from './model-output'
 
 export const ANTHROPIC_ANALYSIS_MODEL = 'claude-opus-4-8'
-export const ANALYSIS_PROMPT_VERSION = 'grounded-source-analysis-v1'
+export const ANALYSIS_PROMPT_VERSION = 'grounded-source-analysis-v3'
 export const ANALYZER_VERSION = '1'
 
 const responseSchema = z.object({
@@ -24,6 +24,16 @@ const EXTRACTION_SYSTEM = [
   'Every claim must have one or more exact, contiguous excerpts copied from the document.',
   'Keep excerpts short (500 characters maximum) and copy heading text exactly; use an empty',
   'heading only when the excerpt is outside every named Markdown section.',
+  'For heading, return only the display text: omit Markdown heading markers and surrounding',
+  'whitespace. For example, from `### Heading`, return `Heading`, not `### Heading`.',
+  'CONTENT is raw Markdown. Evidence excerpts are checked as literal substrings, not rendered',
+  'text: preserve every character exactly, including Markdown punctuation, link URLs, backticks,',
+  'underscores, and whitespace. Before returning each excerpt, verify that it occurs verbatim in',
+  'CONTENT. Prefer a short supporting excerpt without Markdown syntax. Use Markdown syntax only',
+  'when no plain-text excerpt supports the claim, and then copy it verbatim. For example, from',
+  '`[Label](https://example.test) explica X`, valid excerpts are `explica X` or the full raw',
+  'Markdown string; `Label explica X` is invalid. Never render, simplify, normalize, or repair',
+  'source Markdown.',
   'Details may only be source-supported examples or distinctions.',
   'Use unknown when difficulty is not clearly supported. Omit weak or speculative concepts.',
 ].join('\n')
@@ -89,15 +99,26 @@ export class AnthropicSourceAnalyzer implements SourceAnalyzer {
     }
 
     for (let attempt = 0; attempt < 5; attempt++) {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-          'x-api-key': this.apiKey,
-        },
-        body: JSON.stringify(body),
-      })
+      let response: Response
+      try {
+        response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'anthropic-version': '2023-06-01',
+            'content-type': 'application/json',
+            'x-api-key': this.apiKey,
+          },
+          body: JSON.stringify(body),
+        })
+      } catch (error) {
+        if (attempt < 4) {
+          await sleep((2 ** attempt) * 1000)
+          continue
+        }
+        throw new Error(
+          `Anthropic network request failed after ${attempt + 1} attempts: ${String(error)}`,
+        )
+      }
       if (response.ok) return this.parseResponse(await response.json())
       if ((response.status === 429 || response.status >= 500) && attempt < 4) {
         const seconds = Number(response.headers.get('retry-after')) || 2 ** attempt
