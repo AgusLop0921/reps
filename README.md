@@ -53,7 +53,8 @@ backend; optional Supabase for cross-device progress sync (ADR-0020), off unless
 
 ```bash
 pnpm install
-pnpm content:import   # fetch sources and generate the curriculum
+pnpm content:import             # fetch sources and generate the curriculum
+pnpm content:analyze:microsoft # generate grounded, non-runtime analysis (requires key)
 pnpm dev
 ```
 
@@ -66,6 +67,7 @@ Architecture decisions live in [`docs/adr/`](docs/adr/), working conventions in
       optional cross-device sync (Supabase accounts, ADR-0020)
 - [x] Multi-track foundation — React and an editorial AI Engineering seed, isolated progress
 - [x] AI Engineering source adapter and normalized source snapshot
+- [x] Grounded source-analysis contracts and tooling (review artifact pending a live run)
 - [ ] AI Engineering reviewed curriculum
 - [ ] v1.2 — code exercises: "what does this print" and fill-the-gap
 - [ ] v2 — interview simulation: a conversational mock interview at a chosen seniority,

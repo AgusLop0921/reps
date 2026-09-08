@@ -20,14 +20,18 @@ material unchanged or labels separately reviewed editorial material with a manua
 - **Pinned revision:** `645f932514e9f22f688c8feb3e49a7a7f2eb6f1b`
 - **Adapter:** `scripts/import/sources/microsoft-generative-ai-for-beginners.ts`
 - **Normalized artifact:** `scripts/import/generated/microsoft-generative-ai-for-beginners.es.json`
-- **Status:** Spanish lessons 01–21 are normalized for future review; none are published in
-  the runtime curriculum
+- **Analysis command:** `pnpm content:analyze:microsoft` (maintainer-provided
+  `ANTHROPIC_API_KEY`)
+- **Status:** Spanish lessons 01–21 are normalized and grounded-analysis tooling is available;
+  none are published in the runtime curriculum
 
 The approved input set excludes lesson 00 (course setup), English originals, other
 translations, code, notebooks, images, presentations, and repository documentation. Run
 `pnpm content:check:microsoft` to verify the pinned revision and allowlist, or
 `pnpm content:normalize:microsoft` to reproduce the normalized artifact. Normalization does
-not generate or publish questions, checks, lessons, or a track.
+not generate or publish questions, checks, lessons, or a track. Analysis output, when
+generated and reviewed, is revision-scoped below `scripts/import/generated/analysis/` and is
+also excluded from runtime publication.
 
 ## reps-manual
 

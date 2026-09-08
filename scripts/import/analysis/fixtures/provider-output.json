@@ -1,0 +1,66 @@
+{
+  "extractions": {
+    "aaaaaaaaaaaa": {
+      "documentId": "aaaaaaaaaaaa",
+      "concepts": [
+        {
+          "name": "Componentes",
+          "summary": "Las interfaces se construyen con componentes.",
+          "difficultyHint": "introductory",
+          "evidence": [{ "heading": "Componentes", "excerpt": "Las interfaces usan componentes." }],
+          "details": []
+        }
+      ]
+    },
+    "bbbbbbbbbbbb": {
+      "documentId": "bbbbbbbbbbbb",
+      "concepts": [
+        {
+          "name": "Estado",
+          "summary": "El estado representa datos que cambian.",
+          "difficultyHint": "introductory",
+          "evidence": [{ "heading": "Estado", "excerpt": "El estado cambia con la interacción." }],
+          "details": [
+            {
+              "kind": "distinction",
+              "summary": "El estado es distinto de las propiedades.",
+              "evidence": [{ "heading": "Estado", "excerpt": "Las propiedades llegan desde fuera." }]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "consolidation": {
+    "concepts": [
+      {
+        "name": "Estado",
+        "summary": "El estado representa datos que cambian.",
+        "difficultyHint": "introductory",
+        "evidence": [{ "documentId": "bbbbbbbbbbbb", "heading": "Estado", "excerpt": "El estado cambia con la interacción." }],
+        "details": [
+          {
+            "kind": "distinction",
+            "summary": "El estado es distinto de las propiedades.",
+            "evidence": [{ "documentId": "bbbbbbbbbbbb", "heading": "Estado", "excerpt": "Las propiedades llegan desde fuera." }]
+          }
+        ]
+      },
+      {
+        "name": "Componentes",
+        "summary": "Las interfaces se construyen con componentes.",
+        "difficultyHint": "introductory",
+        "evidence": [{ "documentId": "aaaaaaaaaaaa", "heading": "Componentes", "excerpt": "Las interfaces usan componentes." }],
+        "details": []
+      }
+    ],
+    "relationships": [
+      {
+        "type": "related_to",
+        "fromConceptName": "Componentes",
+        "toConceptName": "Estado",
+        "evidence": [{ "documentId": "bbbbbbbbbbbb", "heading": "Estado", "excerpt": "El estado cambia con la interacción." }]
+      }
+    ]
+  }
+}

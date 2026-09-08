@@ -53,10 +53,11 @@ track identity. Questions retain fine-grained attribution through `sourceId` and
 catalog rejects unresolved and duplicate references at startup.
 
 The runtime consumes only this canonical Reps model. Multi-document sources can first emit
-validated `NormalizedDocument` snapshots outside the runtime. The Microsoft snapshot is
-revision-pinned under `scripts/import/generated/`; it is not a curriculum and nothing in
-`src/content/load.ts` imports it. Grounding, human review, and publication remain separate
-stages. See ADR-0023 and ADR-0024.
+validated `NormalizedDocument` snapshots outside the runtime, then provider-neutral,
+evidence-grounded `SourceAnalysis` artifacts. The Microsoft snapshot and any analysis output
+are revision-pinned under `scripts/import/generated/`; neither is a curriculum and nothing in
+`src/content/load.ts` imports them. Human review and publication remain separate stages. See
+ADR-0023, ADR-0024, and ADR-0025.
 
 ## The two progress models
 
@@ -101,9 +102,10 @@ every component.
 
 ## What is missing
 
-Microsoft's Spanish lesson documents are normalized with provenance, but analysis,
-grounded generation, review, and publication are not implemented. AI Engineering still has
-one editorial seed lesson, not an imported curriculum.
+Microsoft's Spanish lesson documents are normalized with provenance and have a grounded
+analysis command. A reviewed analysis artifact, curriculum generation, review, and
+publication are not yet complete. AI Engineering still has one editorial seed lesson, not an
+imported curriculum.
 
 Interview simulation (ADR-0013) is v2 and shares only the corpus — it does not touch the
 path, the scheduler or either progress model.
