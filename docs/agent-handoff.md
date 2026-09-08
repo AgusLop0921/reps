@@ -14,8 +14,9 @@ relationships, exact evidence, and coverage without generating or publishing cur
 
 ## Current status
 
-The grounded source-analysis feature is implemented and committed. A live Microsoft analysis
-was not run because `ANTHROPIC_API_KEY` is unavailable; no analysis artifact was invented.
+The grounded source-analysis feature is implemented and committed. PR #32 is open. A live
+Microsoft analysis was not run because `ANTHROPIC_API_KEY` is unavailable; no analysis
+artifact was invented.
 
 ## Latest implementation commit
 
