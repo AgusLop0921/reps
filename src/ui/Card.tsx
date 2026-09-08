@@ -53,10 +53,13 @@ export function Card({
 
         {source && (
           <footer className="attribution">
-            {copy.sourcePrefix}{' '}
-            <a href={source.url} target="_blank" rel="noreferrer noopener">
-              {source.name}
-            </a>{' '}
+            {copy.sourcePrefix} {source.url ? (
+              <a href={source.url} target="_blank" rel="noreferrer noopener">
+                {source.name}
+              </a>
+            ) : (
+              source.name
+            )}{' '}
             · {source.license}
           </footer>
         )}

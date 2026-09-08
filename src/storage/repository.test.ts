@@ -8,6 +8,8 @@ import {
   exportData,
   getAllLessonProgress,
   getAllProgress,
+  getLessonProgressForTrack,
+  getProgressForTrack,
   importData,
   putLessonProgress,
   putProgress,
@@ -17,6 +19,7 @@ const NOW = Date.UTC(2026, 7, 24, 12, 0, 0)
 const qid = (n: number) => String(n).padStart(12, 'q')
 
 const progress = (questionId: string): Progress => ({
+  trackId: 'react',
   questionId,
   box: 2,
   dueAt: NOW,
@@ -25,6 +28,7 @@ const progress = (questionId: string): Progress => ({
 })
 
 const lessonProgress = (lessonId: string): LessonProgress => ({
+  trackId: 'react',
   lessonId,
   answeredQuestionIds: [qid(1)],
   completedAt: NOW,
@@ -41,7 +45,7 @@ describe('progress round-trip', () => {
     expect(await getAllProgress()).toEqual([progress(qid(1))])
   })
 
-  it('put overwrites by questionId', async () => {
+  it('put overwrites by track and question id', async () => {
     await putProgress(progress(qid(1)))
     await putProgress({ ...progress(qid(1)), box: 5 })
     const all = await getAllProgress()
@@ -57,12 +61,28 @@ describe('lessonProgress round-trip', () => {
   })
 })
 
+describe('track isolation', () => {
+  it('keeps the same question and lesson ids independent across tracks', async () => {
+    await putProgress(progress(qid(1)))
+    await putProgress({ ...progress(qid(1)), trackId: 'ai-engineering', box: 5 })
+    await putLessonProgress(lessonProgress('lesson-1'))
+    await putLessonProgress({ ...lessonProgress('lesson-1'), trackId: 'ai-engineering' })
+
+    expect(await getProgressForTrack('react')).toEqual([progress(qid(1))])
+    expect(await getProgressForTrack('ai-engineering')).toEqual([
+      { ...progress(qid(1)), trackId: 'ai-engineering', box: 5 },
+    ])
+    expect(await getLessonProgressForTrack('react')).toHaveLength(1)
+    expect(await getLessonProgressForTrack('ai-engineering')).toHaveLength(1)
+  })
+})
+
 describe('read validation (ADR-0004 boundary)', () => {
   it('drops a corrupt record and warns instead of crashing', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     await putProgress(progress(qid(1)))
     // A row that never passed through the schema — e.g. an older shape missing `box`.
-    await db.progress.put({ questionId: qid(2) } as unknown as Progress)
+    await db.progress.put({ trackId: 'react', questionId: qid(2) } as unknown as Progress)
 
     const all = await getAllProgress()
     expect(all).toEqual([progress(qid(1))])
@@ -97,8 +117,40 @@ describe('export / import', () => {
     expect(await getAllProgress()).toEqual([progress(qid(2))])
   })
 
-  it('exports a version-2 payload', async () => {
-    expect(JSON.parse(await exportData()).version).toBe(2)
+  it('exports a version-3 payload', async () => {
+    expect(JSON.parse(await exportData()).version).toBe(3)
+  })
+
+  it('imports a v2 file as React progress without changing its state', async () => {
+    const v2 = JSON.stringify({
+      version: 2,
+      progress: [
+        {
+          questionId: qid(3),
+          box: 4,
+          dueAt: NOW + 123,
+          history: [{ at: NOW, score: 4 }],
+          updatedAt: NOW,
+        },
+      ],
+      lessonProgress: [
+        {
+          lessonId: 'lesson-1',
+          answeredQuestionIds: [qid(3)],
+          completedAt: NOW,
+          updatedAt: NOW,
+        },
+      ],
+    })
+
+    await importData(v2)
+
+    expect(await getAllProgress()).toEqual([
+      { ...progress(qid(3)), box: 4, dueAt: NOW + 123, history: [{ at: NOW, score: 4 }] },
+    ])
+    expect(await getAllLessonProgress()).toEqual([
+      { ...lessonProgress('lesson-1'), answeredQuestionIds: [qid(3)] },
+    ])
   })
 
   it('imports a v1 file by backfilling updatedAt (ADR-0020)', async () => {
@@ -127,10 +179,13 @@ describe('export / import', () => {
 })
 
 describe('schema persistence and migration', () => {
-  it('opens at version 2 with both stores', async () => {
+  it('opens at version 4 with both track-scoped stores', async () => {
     await clearAll() // forces open
-    expect(db.verno).toBe(2)
-    expect(db.tables.map((t) => t.name).sort()).toEqual(['lessonProgress', 'progress'])
+    expect(db.verno).toBe(4)
+    expect(db.tables.map((t) => t.name).sort()).toEqual([
+      'trackLessonProgress',
+      'trackProgress',
+    ])
   })
 
   it('data survives a reopen (real IndexedDB round-trip)', async () => {
@@ -158,8 +213,26 @@ describe('schema persistence and migration', () => {
     // Reopening with the current schema runs the upgrade.
     const migrated = new RepsDb(name)
     await migrated.open()
-    expect((await migrated.progress.get(qid(9)))?.updatedAt).toBe(222) // last review
-    expect((await migrated.lessonProgress.get('L9'))?.updatedAt).toBe(333) // completion
+    const migratedProgress = await migrated.progress.get(['react', qid(9)])
+    const migratedLesson = await migrated.lessonProgress.get(['react', 'L9'])
+    expect(migratedProgress).toMatchObject({
+      trackId: 'react',
+      questionId: qid(9),
+      box: 3,
+      dueAt: NOW,
+      history: [
+        { at: 111, score: 3 },
+        { at: 222, score: 4 },
+      ],
+      updatedAt: 222,
+    })
+    expect(migratedLesson).toMatchObject({
+      trackId: 'react',
+      lessonId: 'L9',
+      answeredQuestionIds: [],
+      completedAt: 333,
+      updatedAt: 333,
+    })
     migrated.close()
     await Dexie.delete(name)
   })

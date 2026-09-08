@@ -69,18 +69,19 @@ async function syncProgress(userId: string): Promise<void> {
     if (parsed.success) remote.push(parsed.data)
   }
 
-  const { toPush, toPull } = reconcile(local, remote, (p) => p.questionId)
+  const { toPush, toPull } = reconcile(local, remote, progressKey)
   for (const p of toPull) await pullProgress(p)
   if (toPush.length > 0) {
     const rows = toPush.map((p) => ({
       user_id: userId,
+      track_id: p.trackId,
       question_id: p.questionId,
       updated_at: p.updatedAt,
       data: p,
     }))
     const { error: upsertError } = await supabase
       .from('progress')
-      .upsert(rows, { onConflict: 'user_id,question_id' })
+      .upsert(rows, { onConflict: 'user_id,track_id,question_id' })
     if (upsertError) throw upsertError
   }
 }
@@ -100,18 +101,27 @@ async function syncLessonProgress(userId: string): Promise<void> {
     if (parsed.success) remote.push(parsed.data)
   }
 
-  const { toPush, toPull } = reconcile(local, remote, (l) => l.lessonId)
+  const { toPush, toPull } = reconcile(local, remote, lessonProgressKey)
   for (const l of toPull) await pullLessonProgress(l)
   if (toPush.length > 0) {
     const rows = toPush.map((l) => ({
       user_id: userId,
+      track_id: l.trackId,
       lesson_id: l.lessonId,
       updated_at: l.updatedAt,
       data: l,
     }))
     const { error: upsertError } = await supabase
       .from('lesson_progress')
-      .upsert(rows, { onConflict: 'user_id,lesson_id' })
+      .upsert(rows, { onConflict: 'user_id,track_id,lesson_id' })
     if (upsertError) throw upsertError
   }
+}
+
+function progressKey(progress: Progress): string {
+  return `${progress.trackId}:${progress.questionId}`
+}
+
+function lessonProgressKey(progress: LessonProgress): string {
+  return `${progress.trackId}:${progress.lessonId}`
 }

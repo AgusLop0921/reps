@@ -45,8 +45,8 @@ export function review(progress: Progress, score: Score, now: number): Progress 
   }
 }
 
-export function initialProgress(questionId: string, now: number): Progress {
-  return { questionId, box: 1, dueAt: now, history: [], updatedAt: now }
+export function initialProgress(trackId: string, questionId: string, now: number): Progress {
+  return { trackId, questionId, box: 1, dueAt: now, history: [], updatedAt: now }
 }
 
 export function isDue(progress: Progress, now: number): boolean {

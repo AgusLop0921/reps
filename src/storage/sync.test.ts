@@ -28,7 +28,7 @@ const h = vi.hoisted(() => ({
     gate: null as Promise<void> | null,
     // How many times the `progress` table was selected — one per started cycle.
     progressSelects: 0,
-    upserts: [] as { table: string; rows: unknown[] }[],
+    upserts: [] as { table: string; rows: unknown[]; options: unknown }[],
   },
 }))
 
@@ -44,8 +44,8 @@ vi.mock('./supabaseClient', () => ({
           return { data: h.state.remote[table] ?? [], error: null }
         },
       }),
-      upsert: async (rows: unknown[]) => {
-        h.state.upserts.push({ table, rows })
+      upsert: async (rows: unknown[], options: unknown) => {
+        h.state.upserts.push({ table, rows, options })
         return { error: null }
       },
     }),
@@ -57,7 +57,8 @@ import { syncNow } from './sync'
 
 const qid = (n: number) => String(n).padStart(12, 'q')
 
-const progressAt = (questionId: string, updatedAt: number): Progress => ({
+const progressAt = (questionId: string, updatedAt: number, trackId = 'react'): Progress => ({
+  trackId,
   questionId,
   box: 2,
   dueAt: updatedAt,
@@ -106,6 +107,34 @@ describe('mid-sync write is not clobbered by an older remote row', () => {
     expect(stored).toHaveLength(1)
     // The fresher local answer (300) must survive the older remote row (200).
     expect(stored[0].updatedAt).toBe(300)
+  })
+
+  it('never overwrites the same question id in another track', async () => {
+    await putProgress(progressAt(qid(1), 300, 'react'))
+    h.state.remote.progress = [{ data: progressAt(qid(1), 400, 'ai-engineering') }]
+
+    await syncNow('user-1')
+
+    const stored = await getAllProgress()
+    expect(stored).toHaveLength(2)
+    expect(stored).toContainEqual(progressAt(qid(1), 300, 'react'))
+    expect(stored).toContainEqual(progressAt(qid(1), 400, 'ai-engineering'))
+  })
+
+  it('pushes same-id progress as two track-qualified remote rows', async () => {
+    await putProgress(progressAt(qid(1), 300, 'react'))
+    await putProgress(progressAt(qid(1), 400, 'ai-engineering'))
+
+    await syncNow('user-1')
+
+    const push = h.state.upserts.find((entry) => entry.table === 'progress')
+    expect(push?.rows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ track_id: 'react', question_id: qid(1) }),
+        expect.objectContaining({ track_id: 'ai-engineering', question_id: qid(1) }),
+      ]),
+    )
+    expect(push?.options).toEqual({ onConflict: 'user_id,track_id,question_id' })
   })
 })
 

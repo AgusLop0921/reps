@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import type { LessonProgress, Progress, Score } from '../content/schema'
 import { initialProgress, review } from '../core/scheduler'
 import {
-  getAllLessonProgress,
-  getAllProgress,
+  getLessonProgressForTrack,
+  getProgressForTrack,
   putLessonProgress,
   putProgress,
 } from '../storage/repository'
@@ -29,38 +29,59 @@ type AnswerInput = {
  * passes `now` in, and the scheduler (`review`) is pure. This hook is the seam between the
  * pure domain and IndexedDB.
  */
-export function useProgress() {
+export function useProgress(trackId: string | null) {
   const [loading, setLoading] = useState(true)
+  const [loadedTrackId, setLoadedTrackId] = useState<string | null>(null)
   const [progress, setProgress] = useState<Progress[]>([])
   const [lessonProgress, setLessonProgress] = useState<LessonProgress[]>([])
 
   useEffect(() => {
     let active = true
     void (async () => {
-      const [p, lp] = await Promise.all([getAllProgress(), getAllLessonProgress()])
+      if (trackId === null) {
+        if (active) {
+          setProgress([])
+          setLessonProgress([])
+          setLoadedTrackId(null)
+          setLoading(false)
+        }
+        return
+      }
+      setLoading(true)
+      const [p, lp] = await Promise.all([
+        getProgressForTrack(trackId),
+        getLessonProgressForTrack(trackId),
+      ])
       if (!active) return
       setProgress(p)
       setLessonProgress(lp)
+      setLoadedTrackId(trackId)
       setLoading(false)
     })()
     return () => {
       active = false
     }
-  }, [])
+  }, [trackId])
 
   async function reload(): Promise<{ progress: Progress[]; lessonProgress: LessonProgress[] }> {
-    const [p, lp] = await Promise.all([getAllProgress(), getAllLessonProgress()])
+    if (trackId === null) return { progress: [], lessonProgress: [] }
+    const [p, lp] = await Promise.all([
+      getProgressForTrack(trackId),
+      getLessonProgressForTrack(trackId),
+    ])
     setProgress(p)
     setLessonProgress(lp)
     return { progress: p, lessonProgress: lp }
   }
 
   async function answer(input: AnswerInput): Promise<void> {
+    if (trackId === null) return
     const { lessonId, lessonQuestionIds, questionId, isLessonQuestion, score, now } = input
 
     if (score !== null) {
       const current =
-        progress.find((p) => p.questionId === questionId) ?? initialProgress(questionId, now)
+        progress.find((p) => p.questionId === questionId) ??
+        initialProgress(trackId, questionId, now)
       const updated = review(current, score, now)
       await putProgress(updated)
       setProgress((prev) => [...prev.filter((p) => p.questionId !== questionId), updated])
@@ -68,6 +89,7 @@ export function useProgress() {
 
     if (isLessonQuestion) {
       const lp = lessonProgress.find((l) => l.lessonId === lessonId) ?? {
+        trackId,
         lessonId,
         answeredQuestionIds: [],
         completedAt: null,
@@ -88,5 +110,5 @@ export function useProgress() {
     }
   }
 
-  return { loading, progress, lessonProgress, answer, reload }
+  return { loading, loadedTrackId, progress, lessonProgress, answer, reload }
 }

@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
-import { checksByQuestionId, curriculum, questionsById } from '../content/load'
-import type { Lesson, LessonProgress, Progress, Score, Section } from '../content/schema'
+import { useMemo, useState } from 'react'
+import { checksByQuestionId, questionsById, tracks, tracksById } from '../content/load'
+import { findLesson } from '../content/catalog'
+import type { LessonProgress, Progress, Score, Track } from '../content/schema'
 import { orderedOptions, scoreForCheck } from '../core/checks'
 import {
   buildLessonDeck,
@@ -21,34 +22,29 @@ import { Onboarding } from './Onboarding'
 import { Path } from './Path'
 import repsIcon from './reps-icon.svg'
 import { ThemeControl } from './ThemeControl'
+import { TrackSelector } from './TrackSelector'
 import { useAuth } from './useAuth'
 import { useProgress } from './useProgress'
 import { useSync } from './useSync'
 import { useTheme } from './useTheme'
 
 /** Questions actually on the path (not the raw import total), for the landing's scale line. */
-const PATH_QUESTION_COUNT = pathQuestionCount(curriculum)
+const reactTrack = tracksById.get('react')
+if (!reactTrack) throw new Error('missing React track')
+const REACT_PATH_QUESTION_COUNT = pathQuestionCount(reactTrack.curriculum)
 
 /** A card answered incorrectly, kept so the end screen can resurface its explanation. */
 type MissedCard = { questionId: string; title: string; explanation: string }
 
-/** The section a lesson belongs to, plus the lesson itself, looked up by id. */
-function locate(lessonId: string | null): { lesson: Lesson; section: Section } | null {
-  for (const section of curriculum.sections) {
-    const lesson = section.lessons.find((l) => l.id === lessonId)
-    if (lesson) return { lesson, section }
-  }
-  return null
-}
-
 /** The deck for a lesson, built from progress at the moment it opens (not on every answer). */
 function deckFor(
+  track: Track,
   lessonId: string | null,
   progress: Progress[],
   lessonProgress: LessonProgress[],
   now: number,
 ): DeckCard[] {
-  const located = locate(lessonId)
+  const located = findLesson(track, lessonId)
   if (!located) return []
   const lp = lessonProgress.find((l) => l.lessonId === located.lesson.id) ?? null
   return buildLessonDeck({ lesson: located.lesson, progress, lessonProgress: lp, now })
@@ -56,18 +52,20 @@ function deckFor(
 
 /**
  * The screens (ADR-0022): opening the app never drops you into a lesson. It lands on the home
- * — the path when signed in, the landing otherwise — and the card is reached only by tapping
- * "Empezar" or a trail node. Progress loads at boot and is written back on every answer
- * (ADR-0005). Business logic lives in core/; this renders, tracks position, passes `now` in.
+ * — track selection when signed in, the landing otherwise — and a card is reached only by
+ * choosing a track and tapping a trail node. Progress loads per track and is written back on
+ * every answer (ADR-0005, ADR-0023). Business logic stays in core/.
  */
 export function App() {
-  const { loading, progress, lessonProgress, answer, reload } = useProgress()
+  const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null)
+  const selectedTrack = selectedTrackId ? (tracksById.get(selectedTrackId) ?? null) : null
+  const { loading, loadedTrackId, progress, lessonProgress, answer, reload } =
+    useProgress(selectedTrackId)
   const auth = useAuth()
   const { theme, setTheme } = useTheme()
 
-  const [booted, setBooted] = useState(false)
   // null = not navigated yet, so the app shows the home screen (see `activeScreen`).
-  const [screen, setScreen] = useState<'card' | 'path' | 'landing' | null>(null)
+  const [screen, setScreen] = useState<'card' | 'path' | 'tracks' | 'landing' | null>(null)
   const [lessonId, setLessonId] = useState<string | null>(null)
   const [deck, setDeck] = useState<DeckCard[]>([])
   const [index, setIndex] = useState(0)
@@ -81,10 +79,10 @@ export function App() {
   // more elsewhere picks up there rather than at lesson 1.
   const refreshFromStorage = async (reposition: boolean): Promise<void> => {
     const { progress: p, lessonProgress: lp } = await reload()
-    if (reposition) {
-      const id = nextLesson(curriculum, lp)?.id ?? null
+    if (reposition && selectedTrack) {
+      const id = nextLesson(selectedTrack.curriculum, lp)?.id ?? null
       setLessonId(id)
-      setDeck(deckFor(id, p, lp, Date.now()))
+      setDeck(deckFor(selectedTrack, id, p, lp, Date.now()))
       setIndex(0)
       setPicked(null)
       setMissed([])
@@ -94,23 +92,27 @@ export function App() {
   // Two-way sync while signed in (ADR-0020). No-op with no session or no Supabase.
   useSync(auth.userId, (isInitial) => refreshFromStorage(isInitial))
 
-  // Once storage has loaded, land on the resumed lesson and build its deck a single time.
-  useEffect(() => {
-    if (loading || booted) return
-    const id = nextLesson(curriculum, lessonProgress)?.id ?? null
-    setLessonId(id)
-    setDeck(deckFor(id, progress, lessonProgress, Date.now()))
-    setBooted(true)
-  }, [loading, booted, lessonProgress, progress])
-
   const openLesson = (id: string): void => {
+    if (!selectedTrack) return
     setLessonId(id)
-    setDeck(deckFor(id, progress, lessonProgress, Date.now()))
+    setDeck(deckFor(selectedTrack, id, progress, lessonProgress, Date.now()))
     setIndex(0)
     setPicked(null)
     setMissed([])
     setNotice(null)
     setScreen('card')
+  }
+
+  const selectTrack = (trackId: string): void => {
+    if (!tracksById.has(trackId)) return
+    setSelectedTrackId(trackId)
+    setLessonId(null)
+    setDeck([])
+    setIndex(0)
+    setPicked(null)
+    setMissed([])
+    setNotice(null)
+    setScreen('path')
   }
 
 
@@ -129,14 +131,14 @@ export function App() {
   const startFromLanding = (): void => {
     const { step, persist } = advanceFromLanding(auth.configured)
     if (persist) markOnboarded()
-    if (step === 'app') setScreen('path') // no account step → land on the path, not the card
+    if (step === 'app') setScreen('tracks')
     setFirstRunStep(step)
   }
 
-  // Any account-choice action ends the sequence; go to the path, not back to the landing or
-  // into a lesson (ADR-0022). The onboarding flag was already set on the landing.
+  // Any account-choice action ends the sequence at track selection, never inside a lesson.
+  // The onboarding flag was already set on the landing.
   const finishAccount = (): void => {
-    setScreen('path')
+    setScreen('tracks')
     setFirstRunStep('app')
   }
 
@@ -169,10 +171,13 @@ export function App() {
     })()
   }
 
-  const located = useMemo(() => locate(lessonId), [lessonId])
+  const located = useMemo(
+    () => (selectedTrack ? findLesson(selectedTrack, lessonId) : null),
+    [selectedTrack, lessonId],
+  )
 
   // Wait on auth too: the home depends on whether we're signed in (ADR-0022).
-  if (loading || !booted || auth.loading) {
+  if (auth.loading || (selectedTrackId !== null && (loading || loadedTrackId !== selectedTrackId))) {
     return (
       <main className="app">
         <p className="empty">{copy.loading}</p>
@@ -189,7 +194,7 @@ export function App() {
       <main className="landing-shell">
         <Landing
           source={SOURCES['midudev-react']}
-          questionCount={PATH_QUESTION_COUNT}
+          questionCount={REACT_PATH_QUESTION_COUNT}
           syncConfigured={auth.configured}
           theme={theme}
           onSetTheme={setTheme}
@@ -211,31 +216,45 @@ export function App() {
     )
   }
 
-  // The home when nothing is navigated: path if signed in, else the landing — never the card
-  // (ADR-0022). Auth is resolved by now (gated above), so this doesn't flicker.
-  const activeScreen = screen ?? (auth.email ? 'path' : 'landing')
+  // The home when nothing is navigated: track selection if signed in, else the landing —
+  // never the card (ADR-0022, ADR-0023). Auth is resolved, so this doesn't flicker.
+  const activeScreen = screen ?? (auth.email ? 'tracks' : 'landing')
 
-  // The landing as home: "Empezar" goes to the path, not a lesson.
+  // The landing as home: "Empezar" goes to track selection, not a lesson.
   if (activeScreen === 'landing') {
     return (
       <main className="landing-shell">
         <Landing
           source={SOURCES['midudev-react']}
-          questionCount={PATH_QUESTION_COUNT}
+          questionCount={REACT_PATH_QUESTION_COUNT}
           syncConfigured={auth.configured}
           theme={theme}
           onSetTheme={setTheme}
-          onStart={() => setScreen('path')}
+          onStart={() => setScreen('tracks')}
         />
       </main>
     )
   }
 
-  if (activeScreen === 'path') {
+  if (activeScreen === 'tracks') {
+    return (
+      <main className="app app-wide">
+        <TrackSelector
+          tracks={tracks}
+          theme={theme}
+          onSetTheme={setTheme}
+          onSelect={selectTrack}
+          onBack={() => setScreen('landing')}
+        />
+      </main>
+    )
+  }
+
+  if (activeScreen === 'path' && selectedTrack) {
     return (
       <main className="app app-wide">
         <Path
-          curriculum={curriculum}
+          curriculum={selectedTrack.curriculum}
           progress={lessonProgress}
           notice={notice}
           authConfigured={auth.configured}
@@ -247,13 +266,13 @@ export function App() {
           onDeleteAccount={handleDeleteAccount}
           theme={theme}
           onSetTheme={setTheme}
-          onBack={() => setScreen('landing')}
+          onBack={() => setScreen('tracks')}
         />
       </main>
     )
   }
 
-  if (!located) {
+  if (!selectedTrack || !located) {
     return (
       <main className="app">
         <p className="empty">{copy.noLesson}</p>
@@ -290,7 +309,7 @@ export function App() {
   )
 
   if (index >= deck.length) {
-    const upcoming = lessonAfter(curriculum, lesson.id)
+    const upcoming = lessonAfter(selectedTrack.curriculum, lesson.id)
     // The next lesson has no title (ADR-0016); its first question is its topic. Announcing
     // it lets curiosity, not a generic label, pull the next tap (ADR-0018).
     const nextTopic = upcoming

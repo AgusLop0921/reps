@@ -11,7 +11,15 @@ import {
   type Check,
   type Curriculum,
   type Question,
+  type Track,
 } from './schema'
+import { createContentCatalog } from './catalog'
+import {
+  aiEngineeringCheck,
+  aiEngineeringQuestion,
+  aiEngineeringTrack,
+} from './seed/ai-engineering'
+import { sources } from './sources'
 
 /**
  * The generated content, validated at the boundary (ADR-0004). If the committed JSON ever
@@ -21,17 +29,13 @@ export const curriculum: Curriculum = curriculumSchema.parse(curriculumJson)
 
 const questionsFile = questionsFileSchema.parse(questionsJson)
 
-export const questionsById: ReadonlyMap<string, Question> = new Map(
-  questionsFile.questions.map((q) => [q.id, q]),
-)
-
 /**
  * Generated checks (ADR-0017), indexed by questionId. Unlike questions/curriculum, these
  * are best-effort: a malformed or missing checks file is skipped with a warning rather than
  * crashing — a question without a check still teaches (read, continue).
  */
-function loadChecks(): ReadonlyMap<string, Check> {
-  const map = new Map<string, Check>()
+function loadChecks(): Check[] {
+  const checks: Check[] = []
   const files: unknown[] = [
     checksPrincipianteJson,
     checksIntermedioJson,
@@ -44,9 +48,33 @@ function loadChecks(): ReadonlyMap<string, Check> {
       console.warn('[reps] skipping a malformed checks file:', parsed.error.message)
       continue
     }
-    for (const check of parsed.data.checks) map.set(check.questionId, check)
+    checks.push(...parsed.data.checks)
   }
-  return map
+  return checks
 }
 
-export const checksByQuestionId: ReadonlyMap<string, Check> = loadChecks()
+const reactTrack: Track = {
+  id: 'react',
+  title: 'React',
+  description: 'Practicá conceptos y preguntas reales de entrevista.',
+  sourceReferences: [{ sourceId: questionsFile.sourceId }],
+  curriculum,
+}
+
+export const catalog = createContentCatalog({
+  sources,
+  tracks: [reactTrack, aiEngineeringTrack],
+  questions: [...questionsFile.questions, aiEngineeringQuestion],
+  checks: [...loadChecks(), aiEngineeringCheck],
+})
+
+export const tracks = catalog.tracks
+export const tracksById: ReadonlyMap<string, Track> = new Map(
+  catalog.tracks.map((track) => [track.id, track]),
+)
+export const questionsById: ReadonlyMap<string, Question> = new Map(
+  catalog.questions.map((question) => [question.id, question]),
+)
+export const checksByQuestionId: ReadonlyMap<string, Check> = new Map(
+  catalog.checks.map((check) => [check.questionId, check]),
+)

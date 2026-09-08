@@ -1,6 +1,6 @@
 # Reps
 
-Short daily lessons on React, JavaScript and TypeScript. Built to sit where the
+Short daily lessons on React and AI Engineering. Built to sit where the
 mindless scrolling used to be.
 
 > Status: work in progress.
@@ -35,9 +35,14 @@ Content belongs to its original authors and is used under their licenses.
 | Source | Content | License |
 |---|---|---|
 | [midudev/preguntas-entrevista-react](https://github.com/midudev/preguntas-entrevista-react) | React, Spanish | MIT |
+| [Microsoft Generative AI for Beginners](https://github.com/microsoft/generative-ai-for-beginners) | Registered for AI Engineering; content not imported yet | MIT |
 
-Every question shows where it came from and links back to the original repository.
-Answers are never edited: errors are reported upstream.
+The current AI Engineering seed is small editorial Reps content and is not attributed to
+Microsoft. Sources and learning tracks are separate: a track may eventually combine several
+approved sources.
+
+Every question shows where it came from; imported questions link back to their original
+repository. Imported answers are never edited: errors are reported upstream.
 
 ## Stack
 
@@ -59,7 +64,8 @@ Architecture decisions live in [`docs/adr/`](docs/adr/), working conventions in
 
 - [ ] v1 — React path (midudev), lesson runner, unlocking, review cards, local progress,
       optional cross-device sync (Supabase accounts, ADR-0020)
-- [ ] v1.1 — second content source (JavaScript)
+- [x] Multi-track foundation — React and an editorial AI Engineering seed, isolated progress
+- [ ] AI Engineering source adapter and reviewed curriculum
 - [ ] v1.2 — code exercises: "what does this print" and fill-the-gap
 - [ ] v2 — interview simulation: a conversational mock interview at a chosen seniority,
       powered by the user's own API key (ADR-0013)

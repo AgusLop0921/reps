@@ -6,13 +6,17 @@ import type { LessonProgress, Progress } from '../content/schema'
  * that touches Dexie; everything else goes through the repository, so swapping the engine
  * stays a single-module change.
  *
- * Two stores: per-question Leitner state (`Progress`, keyed by questionId, indexed by
- * `dueAt` for the "due before now" query) and path position (`LessonProgress`, keyed by
- * lessonId).
+ * Two current stores: per-question Leitner state and path position, both keyed by track plus
+ * their content id. The older unscoped stores remain in schema history only.
  */
 export class RepsDb extends Dexie {
-  progress!: Table<Progress, string>
-  lessonProgress!: Table<LessonProgress, string>
+  get progress(): Table<Progress, [string, string]> {
+    return this.table('trackProgress')
+  }
+
+  get lessonProgress(): Table<LessonProgress, [string, string]> {
+    return this.table('trackLessonProgress')
+  }
 
   constructor(name = 'reps') {
     super(name)
@@ -43,6 +47,32 @@ export class RepsDb extends Dexie {
             row.updatedAt = row.completedAt ?? 0
           })
       })
+    // Dexie cannot change a store's primary key in place. v3 copies legacy rows into new
+    // compound-key stores; v4 removes the old stores after that copy has completed. Every
+    // pre-track row belongs to React, and every existing value is spread through unchanged.
+    this.version(3)
+      .stores({
+        progress: 'questionId, dueAt, updatedAt',
+        lessonProgress: 'lessonId, updatedAt',
+        trackProgress: '[trackId+questionId], trackId, dueAt, updatedAt',
+        trackLessonProgress: '[trackId+lessonId], trackId, updatedAt',
+      })
+      .upgrade(async (tx) => {
+        const legacyProgress = await tx.table('progress').toArray()
+        const legacyLessonProgress = await tx.table('lessonProgress').toArray()
+        await tx
+          .table('trackProgress')
+          .bulkPut(legacyProgress.map((row) => ({ ...row, trackId: 'react' })))
+        await tx
+          .table('trackLessonProgress')
+          .bulkPut(legacyLessonProgress.map((row) => ({ ...row, trackId: 'react' })))
+      })
+    this.version(4).stores({
+      progress: null,
+      lessonProgress: null,
+      trackProgress: '[trackId+questionId], trackId, dueAt, updatedAt',
+      trackLessonProgress: '[trackId+lessonId], trackId, updatedAt',
+    })
   }
 }
 
