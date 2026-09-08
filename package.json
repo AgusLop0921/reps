@@ -15,6 +15,7 @@
     "content:import": "tsx scripts/import/index.ts",
     "content:normalize:microsoft": "tsx scripts/import/normalize-microsoft.ts",
     "content:check:microsoft": "tsx scripts/import/normalize-microsoft.ts --check",
+    "content:analyze:microsoft": "tsx scripts/import/analyze-microsoft.ts",
     "verify": "pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {

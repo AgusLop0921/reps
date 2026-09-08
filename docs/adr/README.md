@@ -49,3 +49,4 @@ change contracts.
 | [0022](0022-open-to-the-home-not-the-lesson.md) | Open to the home, not straight into a lesson | Accepted |
 | [0023](0023-source-driven-multi-track-content.md) | Source-driven multi-track content architecture | Accepted |
 | [0024](0024-normalized-source-documents.md) | Normalize approved source documents before curriculum generation | Accepted |
+| [0025](0025-grounded-source-analysis.md) | Ground source analysis in exact normalized-document evidence | Accepted |
