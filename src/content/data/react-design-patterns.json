@@ -2,47 +2,130 @@
   "track": {
     "id": "react-design-patterns",
     "title": "React Design Patterns",
-    "description": "Entrená decisiones de arquitectura en React moderno: APIs de componentes, ownership de estado, efectos, composición, async UI y trade-offs reales.",
+    "description": "Aprendé a tomar mejores decisiones de diseño en React: reconocé el problema, compará opciones y entendé los trade-offs antes de elegir un pattern.",
     "sourceReferences": [
       {
         "sourceId": "reps-manual"
       }
     ],
     "curriculum": {
-      "generatedAt": "2026-09-08T21:03:00.000Z",
+      "generatedAt": "2026-09-08T22:10:00.000Z",
       "sections": [
+        {
+          "id": "react-design-patterns:design-patterns-foundations",
+          "title": "Design Patterns Foundations",
+          "sourceId": "reps-manual",
+          "lessons": [
+            {
+              "id": "react-design-patterns:design-patterns-foundations:1",
+              "order": 1,
+              "questionIds": [
+                "fa21ebbc76d4",
+                "869c0e330176"
+              ]
+            },
+            {
+              "id": "react-design-patterns:design-patterns-foundations:2",
+              "order": 2,
+              "questionIds": [
+                "288e02fb18da",
+                "7c538ef01786"
+              ]
+            },
+            {
+              "id": "react-design-patterns:design-patterns-foundations:3",
+              "order": 3,
+              "questionIds": [
+                "af864d9496a2",
+                "ff318d156981"
+              ]
+            },
+            {
+              "id": "react-design-patterns:design-patterns-foundations:4",
+              "order": 4,
+              "questionIds": [
+                "2d12b9e35045",
+                "20960ee2518b"
+              ]
+            },
+            {
+              "id": "react-design-patterns:design-patterns-foundations:5",
+              "order": 5,
+              "questionIds": [
+                "84cf89a2842d",
+                "412b7e9c0ff0"
+              ]
+            }
+          ]
+        },
         {
           "id": "react-design-patterns:component-api-design",
           "title": "Component API Design",
           "sourceId": "reps-manual",
           "lessons": [
             {
-              "id": "react-design-patterns:component-api-design:1",
+              "id": "react-design-patterns:component-api-design:1:rep-1",
               "order": 1,
               "questionIds": [
                 "508635497c8b",
-                "84b04bd2b517",
-                "c569561361f0",
+                "84b04bd2b517"
+              ]
+            },
+            {
+              "id": "react-design-patterns:component-api-design:1:rep-2",
+              "order": 2,
+              "questionIds": [
+                "c569561361f0"
+              ]
+            },
+            {
+              "id": "react-design-patterns:component-api-design:1:rep-3",
+              "order": 3,
+              "questionIds": [
                 "9d4af6fad40d"
               ]
             },
             {
-              "id": "react-design-patterns:component-api-design:2",
-              "order": 2,
+              "id": "react-design-patterns:component-api-design:2:rep-4",
+              "order": 4,
               "questionIds": [
                 "49641c36c7e5",
-                "7043f0c896e0",
-                "ba100306b566",
+                "7043f0c896e0"
+              ]
+            },
+            {
+              "id": "react-design-patterns:component-api-design:2:rep-5",
+              "order": 5,
+              "questionIds": [
+                "ba100306b566"
+              ]
+            },
+            {
+              "id": "react-design-patterns:component-api-design:2:rep-6",
+              "order": 6,
+              "questionIds": [
                 "cd1933eec1c0"
               ]
             },
             {
-              "id": "react-design-patterns:component-api-design:3",
-              "order": 3,
+              "id": "react-design-patterns:component-api-design:3:rep-7",
+              "order": 7,
               "questionIds": [
                 "a827c62fc54a",
-                "e0df2141deb4",
-                "50d11dcb16b4",
+                "e0df2141deb4"
+              ]
+            },
+            {
+              "id": "react-design-patterns:component-api-design:3:rep-8",
+              "order": 8,
+              "questionIds": [
+                "50d11dcb16b4"
+              ]
+            },
+            {
+              "id": "react-design-patterns:component-api-design:3:rep-9",
+              "order": 9,
+              "questionIds": [
                 "72a89a3551dd"
               ]
             }
@@ -54,42 +137,90 @@
           "sourceId": "reps-manual",
           "lessons": [
             {
-              "id": "react-design-patterns:state-ownership:1",
+              "id": "react-design-patterns:state-ownership:1:rep-1",
               "order": 1,
               "questionIds": [
                 "55159ec333e9",
-                "cb33fc880cbd",
-                "5809a8860ad0",
+                "cb33fc880cbd"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:1:rep-2",
+              "order": 2,
+              "questionIds": [
+                "5809a8860ad0"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:1:rep-3",
+              "order": 3,
+              "questionIds": [
                 "5739514f83aa"
               ]
             },
             {
-              "id": "react-design-patterns:state-ownership:2",
-              "order": 2,
+              "id": "react-design-patterns:state-ownership:2:rep-4",
+              "order": 4,
               "questionIds": [
                 "2afd8d8d90a5",
-                "d64a465e6029",
-                "19f3ea91848f",
+                "d64a465e6029"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:2:rep-5",
+              "order": 5,
+              "questionIds": [
+                "19f3ea91848f"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:2:rep-6",
+              "order": 6,
+              "questionIds": [
                 "7fac30ddbb11"
               ]
             },
             {
-              "id": "react-design-patterns:state-ownership:3",
-              "order": 3,
+              "id": "react-design-patterns:state-ownership:3:rep-7",
+              "order": 7,
               "questionIds": [
                 "71aafe03d560",
-                "5863bc5333c5",
-                "5e05571d96ab",
+                "5863bc5333c5"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:3:rep-8",
+              "order": 8,
+              "questionIds": [
+                "5e05571d96ab"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:3:rep-9",
+              "order": 9,
+              "questionIds": [
                 "b933fed5563e"
               ]
             },
             {
-              "id": "react-design-patterns:state-ownership:4",
-              "order": 4,
+              "id": "react-design-patterns:state-ownership:4:rep-10",
+              "order": 10,
               "questionIds": [
                 "11d2814fb4f5",
-                "6bd3eab77259",
-                "e6312f9f8ed7",
+                "6bd3eab77259"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:4:rep-11",
+              "order": 11,
+              "questionIds": [
+                "e6312f9f8ed7"
+              ]
+            },
+            {
+              "id": "react-design-patterns:state-ownership:4:rep-12",
+              "order": 12,
+              "questionIds": [
                 "f7361181b9da"
               ]
             }
@@ -101,52 +232,112 @@
           "sourceId": "reps-manual",
           "lessons": [
             {
-              "id": "react-design-patterns:behavioral-architecture:1",
+              "id": "react-design-patterns:behavioral-architecture:1:rep-1",
               "order": 1,
               "questionIds": [
                 "d50d17b12337",
-                "38da20faf401",
-                "f7565752aba3",
+                "38da20faf401"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:1:rep-2",
+              "order": 2,
+              "questionIds": [
+                "f7565752aba3"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:1:rep-3",
+              "order": 3,
+              "questionIds": [
                 "165b84afb2f0"
               ]
             },
             {
-              "id": "react-design-patterns:behavioral-architecture:2",
-              "order": 2,
+              "id": "react-design-patterns:behavioral-architecture:2:rep-4",
+              "order": 4,
               "questionIds": [
                 "b666db63d608",
-                "f2ae11b6ab9e",
-                "8d37a242135f",
+                "f2ae11b6ab9e"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:2:rep-5",
+              "order": 5,
+              "questionIds": [
+                "8d37a242135f"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:2:rep-6",
+              "order": 6,
+              "questionIds": [
                 "ebbaa25ea77d"
               ]
             },
             {
-              "id": "react-design-patterns:behavioral-architecture:3",
-              "order": 3,
+              "id": "react-design-patterns:behavioral-architecture:3:rep-7",
+              "order": 7,
               "questionIds": [
                 "bc47b690f83a",
-                "e16140d7a00f",
-                "b1ef9a8f5d55",
+                "e16140d7a00f"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:3:rep-8",
+              "order": 8,
+              "questionIds": [
+                "b1ef9a8f5d55"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:3:rep-9",
+              "order": 9,
+              "questionIds": [
                 "0fb135349758"
               ]
             },
             {
-              "id": "react-design-patterns:behavioral-architecture:4",
-              "order": 4,
+              "id": "react-design-patterns:behavioral-architecture:4:rep-10",
+              "order": 10,
               "questionIds": [
                 "4b6e4c700ce9",
-                "4ffef3cf0ad1",
-                "290df4b964c8",
+                "4ffef3cf0ad1"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:4:rep-11",
+              "order": 11,
+              "questionIds": [
+                "290df4b964c8"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:4:rep-12",
+              "order": 12,
+              "questionIds": [
                 "de8364bf6f08"
               ]
             },
             {
-              "id": "react-design-patterns:behavioral-architecture:5",
-              "order": 5,
+              "id": "react-design-patterns:behavioral-architecture:5:rep-13",
+              "order": 13,
               "questionIds": [
                 "57caa8ec0614",
-                "47041225a75a",
-                "417cb64f6677",
+                "47041225a75a"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:5:rep-14",
+              "order": 14,
+              "questionIds": [
+                "417cb64f6677"
+              ]
+            },
+            {
+              "id": "react-design-patterns:behavioral-architecture:5:rep-15",
+              "order": 15,
+              "questionIds": [
                 "db73257758e3"
               ]
             }
@@ -158,32 +349,68 @@
           "sourceId": "reps-manual",
           "lessons": [
             {
-              "id": "react-design-patterns:flexible-components:1",
+              "id": "react-design-patterns:flexible-components:1:rep-1",
               "order": 1,
               "questionIds": [
                 "06b75507fc25",
-                "d38834f65bd0",
-                "c63802440fdf",
+                "d38834f65bd0"
+              ]
+            },
+            {
+              "id": "react-design-patterns:flexible-components:1:rep-2",
+              "order": 2,
+              "questionIds": [
+                "c63802440fdf"
+              ]
+            },
+            {
+              "id": "react-design-patterns:flexible-components:1:rep-3",
+              "order": 3,
+              "questionIds": [
                 "c4f4445bf058"
               ]
             },
             {
-              "id": "react-design-patterns:flexible-components:2",
-              "order": 2,
+              "id": "react-design-patterns:flexible-components:2:rep-4",
+              "order": 4,
               "questionIds": [
                 "38e44627f77e",
-                "debc1518dd8a",
-                "9e91da8b653f",
+                "debc1518dd8a"
+              ]
+            },
+            {
+              "id": "react-design-patterns:flexible-components:2:rep-5",
+              "order": 5,
+              "questionIds": [
+                "9e91da8b653f"
+              ]
+            },
+            {
+              "id": "react-design-patterns:flexible-components:2:rep-6",
+              "order": 6,
+              "questionIds": [
                 "b490217d939b"
               ]
             },
             {
-              "id": "react-design-patterns:flexible-components:3",
-              "order": 3,
+              "id": "react-design-patterns:flexible-components:3:rep-7",
+              "order": 7,
               "questionIds": [
                 "c31fa3163e28",
-                "9525543c7f99",
-                "9fcf62c92c02",
+                "9525543c7f99"
+              ]
+            },
+            {
+              "id": "react-design-patterns:flexible-components:3:rep-8",
+              "order": 8,
+              "questionIds": [
+                "9fcf62c92c02"
+              ]
+            },
+            {
+              "id": "react-design-patterns:flexible-components:3:rep-9",
+              "order": 9,
+              "questionIds": [
                 "a9b8e112c15c"
               ]
             }
@@ -195,32 +422,68 @@
           "sourceId": "reps-manual",
           "lessons": [
             {
-              "id": "react-design-patterns:async-ui-patterns:1",
+              "id": "react-design-patterns:async-ui-patterns:1:rep-1",
               "order": 1,
               "questionIds": [
                 "46b1a4e01c1f",
-                "ceb4e9adcdfc",
-                "86c569ef6975",
+                "ceb4e9adcdfc"
+              ]
+            },
+            {
+              "id": "react-design-patterns:async-ui-patterns:1:rep-2",
+              "order": 2,
+              "questionIds": [
+                "86c569ef6975"
+              ]
+            },
+            {
+              "id": "react-design-patterns:async-ui-patterns:1:rep-3",
+              "order": 3,
+              "questionIds": [
                 "d03724b7bff8"
               ]
             },
             {
-              "id": "react-design-patterns:async-ui-patterns:2",
-              "order": 2,
+              "id": "react-design-patterns:async-ui-patterns:2:rep-4",
+              "order": 4,
               "questionIds": [
                 "96dc6de8cfed",
-                "a2858627703e",
-                "1e1379e54fdb",
+                "a2858627703e"
+              ]
+            },
+            {
+              "id": "react-design-patterns:async-ui-patterns:2:rep-5",
+              "order": 5,
+              "questionIds": [
+                "1e1379e54fdb"
+              ]
+            },
+            {
+              "id": "react-design-patterns:async-ui-patterns:2:rep-6",
+              "order": 6,
+              "questionIds": [
                 "99616ec45af4"
               ]
             },
             {
-              "id": "react-design-patterns:async-ui-patterns:3",
-              "order": 3,
+              "id": "react-design-patterns:async-ui-patterns:3:rep-7",
+              "order": 7,
               "questionIds": [
                 "eff4f9eb69e5",
-                "0df8984f446b",
-                "adea74b20f0b",
+                "0df8984f446b"
+              ]
+            },
+            {
+              "id": "react-design-patterns:async-ui-patterns:3:rep-8",
+              "order": 8,
+              "questionIds": [
+                "adea74b20f0b"
+              ]
+            },
+            {
+              "id": "react-design-patterns:async-ui-patterns:3:rep-9",
+              "order": 9,
+              "questionIds": [
                 "a0033d149a28"
               ]
             }
@@ -232,32 +495,68 @@
           "sourceId": "reps-manual",
           "lessons": [
             {
-              "id": "react-design-patterns:senior-design-decisions:1",
+              "id": "react-design-patterns:senior-design-decisions:1:rep-1",
               "order": 1,
               "questionIds": [
                 "58638ac17e39",
-                "eef5a806aafb",
-                "e1c624197862",
+                "eef5a806aafb"
+              ]
+            },
+            {
+              "id": "react-design-patterns:senior-design-decisions:1:rep-2",
+              "order": 2,
+              "questionIds": [
+                "e1c624197862"
+              ]
+            },
+            {
+              "id": "react-design-patterns:senior-design-decisions:1:rep-3",
+              "order": 3,
+              "questionIds": [
                 "2650de12a324"
               ]
             },
             {
-              "id": "react-design-patterns:senior-design-decisions:2",
-              "order": 2,
+              "id": "react-design-patterns:senior-design-decisions:2:rep-4",
+              "order": 4,
               "questionIds": [
                 "48305944486d",
-                "c418918419d6",
-                "0a0ff0384173",
+                "c418918419d6"
+              ]
+            },
+            {
+              "id": "react-design-patterns:senior-design-decisions:2:rep-5",
+              "order": 5,
+              "questionIds": [
+                "0a0ff0384173"
+              ]
+            },
+            {
+              "id": "react-design-patterns:senior-design-decisions:2:rep-6",
+              "order": 6,
+              "questionIds": [
                 "451a9db3eff6"
               ]
             },
             {
-              "id": "react-design-patterns:senior-design-decisions:3",
-              "order": 3,
+              "id": "react-design-patterns:senior-design-decisions:3:rep-7",
+              "order": 7,
               "questionIds": [
                 "f61901b69411",
-                "112b5cd36a01",
-                "f26225f46fb1",
+                "112b5cd36a01"
+              ]
+            },
+            {
+              "id": "react-design-patterns:senior-design-decisions:3:rep-8",
+              "order": 8,
+              "questionIds": [
+                "f26225f46fb1"
+              ]
+            },
+            {
+              "id": "react-design-patterns:senior-design-decisions:3:rep-9",
+              "order": 9,
+              "questionIds": [
                 "24cdba672246"
               ]
             }
@@ -267,6 +566,136 @@
     }
   },
   "questions": [
+    {
+      "id": "fa21ebbc76d4",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-what-is-a-pattern-definition",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "¿Qué es un design pattern?",
+      "format": "open",
+      "question": "¿Qué significa realmente hablar de un design pattern en React?",
+      "answerMd": "# Un patrón es una respuesta recurrente, no una receta\n\n## Escenario\nDos equipos encuentran el mismo problema: un componente se volvió difícil de extender sin agregar props y condiciones. Sus implementaciones concretas son distintas, pero ambos necesitan decidir cómo repartir responsabilidades.\n\n## Idea central\nUn design pattern es una forma reconocible de resolver una clase de problemas que aparece repetidamente. No es un snippet obligatorio ni una API que debas copiar literalmente.\n\n## Decisión\nPrimero identificá el problema y sus restricciones. Después preguntate si un patrón conocido te ayuda a razonar sobre una solución.\n\n## Trade-off\nUn patrón acelera comunicación y reutiliza experiencia previa, pero puede empujarte a forzar problemas distintos dentro de la misma solución.\n\n## Error común\nAprender el nombre del patrón antes de entender qué problema resuelve."
+    },
+    {
+      "id": "869c0e330176",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-what-is-a-pattern-vocabulary",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "¿Qué es un design pattern?",
+      "format": "open",
+      "question": "¿Para qué sirve aprender nombres como compound components, controlled o headless si las implementaciones cambian?",
+      "answerMd": "# Los patrones también son vocabulario de diseño\n\n## Escenario\nEn una review alguien dice: 'Esta API está acumulando configuración estructural; quizá composition nos da una frontera mejor'. El equipo puede discutir la decisión sin describir desde cero todo el problema.\n\n## Idea central\nEl vocabulario compartido comprime experiencia: permite nombrar problemas, opciones y trade-offs de manera precisa.\n\n## Decisión\nUsá el nombre como punto de partida para discutir una decisión, nunca como argumento final.\n\n## Trade-off\nEl vocabulario acelera conversaciones, pero puede transformarse en jerga vacía si no podés explicar el problema concreto.\n\n## Error común\nDecir 'usemos compound components porque es un patrón senior'."
+    },
+    {
+      "id": "288e02fb18da",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-problem-first-recognition",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "El problema viene antes que el patrón",
+      "format": "open",
+      "question": "¿Cuál es el orden correcto al diseñar una solución con patterns?",
+      "answerMd": "# Problem first\n\n## Escenario\nUn developer acaba de aprender compound components y empieza a buscar componentes donde aplicarlos. Otro observa primero qué APIs están fallando y por qué.\n\n## Idea central\nLos patterns son herramientas de respuesta. Elegir la herramienta antes de conocer el problema suele producir abstracciones innecesarias.\n\n## Decisión\nPartí de síntomas observables: combinaciones inválidas, ownership confuso, sincronización frágil, consumidores que necesitan más control.\n\n## Trade-off\nProblem-first puede llevar a una solución menos 'interesante', pero normalmente más ajustada al dominio.\n\n## Error común\nBuscar lugares donde aplicar un patrón recién aprendido."
+    },
+    {
+      "id": "7c538ef01786",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-problem-first-no-pattern",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "El problema viene antes que el patrón",
+      "format": "open",
+      "question": "¿Puede la mejor decisión ser no aplicar ningún pattern sofisticado?",
+      "answerMd": "# A veces la solución simple gana\n\n## Escenario\nUn Button tiene variant, size, disabled y loading. Alguien propone compound components para hacerlo más flexible.\n\n## Idea central\nSi una API simple representa bien un dominio acotado, agregar una abstracción puede empeorarla.\n\n## Decisión\nCompará el costo de la solución actual con el costo real de la abstracción propuesta.\n\n## Trade-off\nMantener una solución simple limita extensibilidad futura, pero evita pagar complejidad que hoy no produce valor.\n\n## Error común\nAsumir que una solución con más patrones demuestra mejor arquitectura."
+    },
+    {
+      "id": "af864d9496a2",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-patterns-not-rules-context",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Patterns ≠ reglas",
+      "format": "open",
+      "question": "¿Por qué frases como 'Context está mal' o 'composition siempre gana' son peligrosas?",
+      "answerMd": "# Los patterns no eliminan trade-offs\n\n## Escenario\nDos features usan Context: una distribuye locale a todo un subárbol; otra mete user, cart, modals y filters en un único AppContext.\n\n## Idea central\nLa misma herramienta puede ser adecuada o inadecuada según la frontera, frecuencia de cambio y consumidores.\n\n## Decisión\nEvaluá una decisión en su contexto y explicá qué compra y qué cuesta.\n\n## Trade-off\nLas heurísticas son útiles para detectar riesgos, pero dejan de ser útiles cuando se convierten en prohibiciones absolutas.\n\n## Error común\nMemorizar 'X es bueno / Y es malo' en lugar de entender cuándo cambian los trade-offs."
+    },
+    {
+      "id": "ff318d156981",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-patterns-not-rules-seniority",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Patterns ≠ reglas",
+      "format": "open",
+      "question": "¿Qué hace 'senior' a una decisión de arquitectura?",
+      "answerMd": "# Seniority es justificar, no coleccionar patrones\n\n## Escenario\nDos soluciones funcionan. Una usa una abstracción conocida; la otra es más simple. El developer senior no elige por prestigio del patrón.\n\n## Idea central\nLa madurez está en reconocer restricciones, anticipar costos y explicar por qué una opción encaja mejor ahora.\n\n## Decisión\nElegí la solución que preserve mejor las invariantes importantes con complejidad proporcional al problema.\n\n## Trade-off\nUna decisión contextual puede cambiar si cambian requisitos, equipo o escala.\n\n## Error común\nUsar cantidad de patterns como proxy de calidad."
+    },
+    {
+      "id": "2d12b9e35045",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-decision-framework-five-steps",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Cómo pensar una decisión",
+      "format": "open",
+      "question": "¿Qué marco simple podés usar antes de elegir un pattern?",
+      "answerMd": "# Problem → Constraints → Options → Trade-offs → Decision\n\n## Escenario\nUn Modal tiene demasiadas variantes. Antes de refactorizar, el equipo lista qué casos existen, cuáles deben ser imposibles y cuánto control necesita cada consumidor.\n\n## Idea central\nUn marco de decisión evita saltar directamente desde un síntoma hacia la primera solución conocida.\n\n## Decisión\nDefiní el problema, restricciones, opciones plausibles, costos de cada una y recién entonces elegí.\n\n## Trade-off\nEl proceso lleva más tiempo que aplicar una regla, pero produce decisiones explicables y revisables.\n\n## Error común\nComparar implementaciones sin haber acordado primero qué problema se intenta resolver."
+    },
+    {
+      "id": "20960ee2518b",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-decision-framework-missing-info",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Cómo pensar una decisión",
+      "format": "open",
+      "question": "¿Por qué 'depende' puede ser una buena respuesta técnica?",
+      "answerMd": "# La información faltante también es parte de la decisión\n\n## Escenario\nTe preguntan si un Select debería aceptar options o children, pero no sabés si las opciones son homogéneas, serializables o necesitan markup arbitrario.\n\n## Idea central\nA veces no existe suficiente información para elegir responsablemente. Identificar qué dato falta es mejor que inventar certeza.\n\n## Decisión\nRespondé 'depende de...' y nombrá las variables que cambiarían la decisión.\n\n## Trade-off\nPedir más contexto retrasa una respuesta inmediata, pero evita universalizar soluciones.\n\n## Error común\nUsar 'depende' para no tomar posición sin explicar de qué depende."
+    },
+    {
+      "id": "84cf89a2842d",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-first-challenge-modal",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Primer desafío de diseño",
+      "format": "open",
+      "question": "Un Modal tiene title, hideHeader, customHeader, headerActions, footerActions y renderFooter. ¿Qué analizarías antes de refactorizar?",
+      "answerMd": "# Diagnóstico antes de solución\n\n## Escenario\nLa API mezcla configuración de contenido con decisiones estructurales. Eso es una señal, pero todavía no dice cuál debe ser la API final.\n\n## Idea central\nAntes de elegir composition, identificá qué regiones necesitan variar, cuáles deben permanecer restringidas y qué combinaciones son válidas.\n\n## Decisión\nPodrías terminar con props más claras, slots, compound components o una combinación. La evidencia del dominio decide.\n\n## Trade-off\nAbrir composición aumenta flexibilidad y responsabilidad del consumidor; mantener configuración aumenta garantías pero puede explotar en combinaciones.\n\n## Error común\nSaltar de 'muchas props' a una reescritura completa sin clasificar qué representan."
+    },
+    {
+      "id": "412b7e9c0ff0",
+      "sourceId": "reps-manual",
+      "slug": "react-design-patterns-foundations-first-challenge-review",
+      "sourceSection": "Design Patterns Foundations",
+      "tech": "react",
+      "lang": "es",
+      "level": "intermediate",
+      "topic": "Primer desafío de diseño",
+      "format": "open",
+      "question": "Dos APIs de Modal funcionan. ¿Cómo elegís entre una muy restringida y otra muy composable?",
+      "answerMd": "# No existe flexibilidad gratis\n\n## Escenario\nLa API restringida cubre el producto actual con pocas variantes. La composable soporta layouts arbitrarios que ningún requisito actual necesita.\n\n## Idea central\nCada grado de libertad amplía lo que el consumidor puede hacer y también lo que el sistema debe soportar, documentar y testear.\n\n## Decisión\nElegí la menor flexibilidad que satisfaga necesidades reales y deje una vía razonable de evolución.\n\n## Trade-off\nUna API cerrada puede requerir cambios futuros; una demasiado abierta paga complejidad desde hoy.\n\n## Error común\nOptimizar para todos los futuros imaginables."
+    },
     {
       "id": "508635497c8b",
       "sourceId": "reps-manual",
@@ -1361,6 +1790,236 @@
     }
   ],
   "checks": [
+    {
+      "questionId": "fa21ebbc76d4",
+      "stem": "¿Cuál descripción representa mejor un design pattern?",
+      "options": [
+        {
+          "text": "Una solución recurrente y adaptable para una clase de problemas de diseño.",
+          "correct": true
+        },
+        {
+          "text": "Un snippet exacto que debe copiarse.",
+          "correct": false
+        },
+        {
+          "text": "Una regla oficial de React.",
+          "correct": false
+        },
+        {
+          "text": "Una librería que instala arquitectura.",
+          "correct": false
+        }
+      ],
+      "explanation": "El valor del patrón está en reconocer una estructura de problema y un conjunto de trade-offs, no en copiar una implementación."
+    },
+    {
+      "questionId": "869c0e330176",
+      "stem": "¿Qué hace útil el vocabulario de patterns en una code review?",
+      "options": [
+        {
+          "text": "Permite discutir estructuras y trade-offs conocidos con mayor precisión.",
+          "correct": true
+        },
+        {
+          "text": "Garantiza que la decisión sea correcta.",
+          "correct": false
+        },
+        {
+          "text": "Elimina la necesidad de contexto.",
+          "correct": false
+        },
+        {
+          "text": "Hace innecesario explicar restricciones.",
+          "correct": false
+        }
+      ],
+      "explanation": "El nombre ayuda a razonar y comunicar; no reemplaza la justificación."
+    },
+    {
+      "questionId": "288e02fb18da",
+      "stem": "¿Cuál secuencia es más saludable?",
+      "options": [
+        {
+          "text": "Problema → restricciones → opciones → trade-offs → decisión.",
+          "correct": true
+        },
+        {
+          "text": "Patrón → código → buscar problema.",
+          "correct": false
+        },
+        {
+          "text": "Librería → patrón → requisitos.",
+          "correct": false
+        },
+        {
+          "text": "Abstracción → naming → problema.",
+          "correct": false
+        }
+      ],
+      "explanation": "La decisión debe surgir del problema y sus restricciones."
+    },
+    {
+      "questionId": "7c538ef01786",
+      "stem": "Un componente simple cubre todas sus variantes válidas con cuatro props claras. ¿Qué deberías hacer?",
+      "options": [
+        {
+          "text": "Mantenerlo simple hasta que aparezca una necesidad concreta que justifique otra frontera.",
+          "correct": true
+        },
+        {
+          "text": "Convertirlo a compound components inmediatamente.",
+          "correct": false
+        },
+        {
+          "text": "Moverlo a Context.",
+          "correct": false
+        },
+        {
+          "text": "Agregar un reducer para prepararlo para el futuro.",
+          "correct": false
+        }
+      ],
+      "explanation": "La ausencia de una abstracción sofisticada puede ser una decisión deliberada y correcta."
+    },
+    {
+      "questionId": "af864d9496a2",
+      "stem": "¿Cuál afirmación muestra mejor criterio?",
+      "options": [
+        {
+          "text": "Context puede ser una buena frontera para una dependencia de subárbol y una mala solución para un estado gigante sin cohesión.",
+          "correct": true
+        },
+        {
+          "text": "Context siempre debe evitarse.",
+          "correct": false
+        },
+        {
+          "text": "Context reemplaza cualquier store.",
+          "correct": false
+        },
+        {
+          "text": "Composition siempre elimina la necesidad de Context.",
+          "correct": false
+        }
+      ],
+      "explanation": "La herramienta no es correcta o incorrecta fuera del problema que intenta resolver."
+    },
+    {
+      "questionId": "ff318d156981",
+      "stem": "¿Qué respuesta demuestra mejor criterio senior?",
+      "options": [
+        {
+          "text": "Puedo explicar qué problema resuelve esta opción, qué sacrificamos y qué haría cambiar la decisión.",
+          "correct": true
+        },
+        {
+          "text": "Usé tres patterns conocidos.",
+          "correct": false
+        },
+        {
+          "text": "Es la solución más flexible posible.",
+          "correct": false
+        },
+        {
+          "text": "Es la solución que usa más hooks modernos.",
+          "correct": false
+        }
+      ],
+      "explanation": "El criterio se demuestra razonando sobre consecuencias, no acumulando técnicas."
+    },
+    {
+      "questionId": "2d12b9e35045",
+      "stem": "¿Qué debería ocurrir antes de comparar compound components contra props?",
+      "options": [
+        {
+          "text": "Acordar el problema y las restricciones de la API.",
+          "correct": true
+        },
+        {
+          "text": "Elegir el patrón favorito del equipo.",
+          "correct": false
+        },
+        {
+          "text": "Implementar ambas soluciones completas.",
+          "correct": false
+        },
+        {
+          "text": "Agregar memoización.",
+          "correct": false
+        }
+      ],
+      "explanation": "Sin problema y restricciones no existe un criterio claro para comparar opciones."
+    },
+    {
+      "questionId": "20960ee2518b",
+      "stem": "¿Cuál es una buena respuesta ante información insuficiente?",
+      "options": [
+        {
+          "text": "Explicar qué datos faltan y cómo cada uno cambiaría la decisión.",
+          "correct": true
+        },
+        {
+          "text": "Elegir siempre la opción más flexible.",
+          "correct": false
+        },
+        {
+          "text": "Responder solo 'depende'.",
+          "correct": false
+        },
+        {
+          "text": "Copiar la API de una librería popular.",
+          "correct": false
+        }
+      ],
+      "explanation": "Una respuesta contextual debe hacer explícitas las variables relevantes."
+    },
+    {
+      "questionId": "84cf89a2842d",
+      "stem": "¿Cuál es el mejor primer paso?",
+      "options": [
+        {
+          "text": "Clasificar qué props representan variantes acotadas y cuáles están describiendo estructura.",
+          "correct": true
+        },
+        {
+          "text": "Convertir todo a children.",
+          "correct": false
+        },
+        {
+          "text": "Agregar Context.",
+          "correct": false
+        },
+        {
+          "text": "Eliminar todas las props booleanas sin analizar.",
+          "correct": false
+        }
+      ],
+      "explanation": "El diagnóstico separa configuración legítima de estructura variable antes de elegir una frontera."
+    },
+    {
+      "questionId": "412b7e9c0ff0",
+      "stem": "Si ambas APIs cubren los requisitos actuales, ¿qué favorece a la más restringida?",
+      "options": [
+        {
+          "text": "Menor superficie de estados y garantías más fuertes para consumidores.",
+          "correct": true
+        },
+        {
+          "text": "Que usa menos JSX siempre.",
+          "correct": false
+        },
+        {
+          "text": "Que no necesita tests.",
+          "correct": false
+        },
+        {
+          "text": "Que evita cualquier cambio futuro.",
+          "correct": false
+        }
+      ],
+      "explanation": "La restricción puede ser una feature cuando expresa correctamente el dominio."
+    },
     {
       "questionId": "508635497c8b",
       "stem": "Un Modal acumula customHeader, hideHeader, headerIcon, headerActions y renderHeader. ¿Qué señal es la más importante?",

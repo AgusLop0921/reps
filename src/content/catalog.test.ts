@@ -18,13 +18,13 @@ describe('content catalog', () => {
 
   it('loads every approved React Design Patterns question and check', () => {
     const track = tracksById.get('react-design-patterns')
-    expect(track?.curriculum.sections).toHaveLength(6)
+    expect(track?.curriculum.sections).toHaveLength(7)
 
     const lessons = track?.curriculum.sections.flatMap((section) => section.lessons) ?? []
     const questionIds = lessons.flatMap((lesson) => lesson.questionIds)
-    expect(lessons).toHaveLength(21)
-    expect(questionIds).toHaveLength(84)
-    expect(new Set(questionIds).size).toBe(84)
+    expect(lessons).toHaveLength(68)
+    expect(questionIds).toHaveLength(94)
+    expect(new Set(questionIds).size).toBe(94)
     expect(questionIds.every((questionId) => questionsById.has(questionId))).toBe(true)
     expect(questionIds.every((questionId) => checksByQuestionId.has(questionId))).toBe(true)
   })
