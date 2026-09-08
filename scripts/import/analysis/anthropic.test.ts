@@ -16,9 +16,15 @@ describe('Anthropic source analyzer', () => {
       const request = JSON.parse(String(init?.body)) as {
         model: string
         output_config: { format: { type: string } }
+        system: string
       }
       expect(request.model).toBe(ANTHROPIC_ANALYSIS_MODEL)
       expect(request.output_config.format.type).toBe('json_schema')
+      expect(request.system).toContain('literal substrings')
+      expect(request.system).toContain('link URLs')
+      expect(request.system).toContain('`Label explica X` is invalid')
+      expect(request.system).toContain('`### Heading`, return `Heading`')
+      expect(request.system).toContain('Never render, simplify, normalize, or repair')
       return new Response(
         JSON.stringify({
           model: ANTHROPIC_ANALYSIS_MODEL,
@@ -55,5 +61,28 @@ describe('Anthropic source analyzer', () => {
     await expect(
       new AnthropicSourceAnalyzer('test-key').extractDocument(document),
     ).rejects.toThrow(/Anthropic model mismatch/)
+  })
+
+  it('retries a transient network failure before accepting a structured response', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('socket reset'))
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            model: ANTHROPIC_ANALYSIS_MODEL,
+            stop_reason: 'end_turn',
+            content: [{ type: 'text', text: '{"documentId":"aaaaaaaaaaaa","concepts":[]}' }],
+          }),
+          { status: 200 },
+        ),
+      )
+    vi.stubGlobal('fetch', fetchMock)
+
+    await expect(new AnthropicSourceAnalyzer('test-key').extractDocument(document)).resolves.toEqual({
+      documentId: 'aaaaaaaaaaaa',
+      concepts: [],
+    })
+    expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 })

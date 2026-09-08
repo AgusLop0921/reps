@@ -4,10 +4,14 @@ import checksIntermedioJson from './data/checks-intermedio.json'
 import checksPrincipianteJson from './data/checks-principiante.json'
 import curriculumJson from './data/curriculum.json'
 import questionsJson from './data/questions.json'
+import reactDesignPatternsJson from './data/react-design-patterns.json'
 import {
+  checkSchema,
   checksFileSchema,
   curriculumSchema,
+  questionSchema,
   questionsFileSchema,
+  trackSchema,
   type Check,
   type Curriculum,
   type Question,
@@ -28,6 +32,12 @@ import { sources } from './sources'
 export const curriculum: Curriculum = curriculumSchema.parse(curriculumJson)
 
 const questionsFile = questionsFileSchema.parse(questionsJson)
+const reactDesignPatternsTrack = trackSchema.parse(reactDesignPatternsJson.track)
+const reactDesignPatternsQuestions = questionSchema
+  .array()
+  .min(1)
+  .parse(reactDesignPatternsJson.questions)
+const reactDesignPatternsChecks = checkSchema.array().min(1).parse(reactDesignPatternsJson.checks)
 
 /**
  * Generated checks (ADR-0017), indexed by questionId. Unlike questions/curriculum, these
@@ -63,9 +73,13 @@ const reactTrack: Track = {
 
 export const catalog = createContentCatalog({
   sources,
-  tracks: [reactTrack, aiEngineeringTrack],
-  questions: [...questionsFile.questions, aiEngineeringQuestion],
-  checks: [...loadChecks(), aiEngineeringCheck],
+  tracks: [reactTrack, aiEngineeringTrack, reactDesignPatternsTrack],
+  questions: [
+    ...questionsFile.questions,
+    aiEngineeringQuestion,
+    ...reactDesignPatternsQuestions,
+  ],
+  checks: [...loadChecks(), aiEngineeringCheck, ...reactDesignPatternsChecks],
 })
 
 export const tracks = catalog.tracks
