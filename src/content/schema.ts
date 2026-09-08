@@ -6,9 +6,40 @@ import { z } from 'zod'
  * changes the contract between both ends and requires an ADR.
  */
 
-export const techSchema = z.enum(['react', 'js', 'ts'])
+export const techSchema = z.enum(['react', 'js', 'ts', 'ai'])
 export const levelSchema = z.enum(['basic', 'intermediate', 'advanced', 'expert'])
 export const langSchema = z.enum(['es', 'en'])
+
+export const sourceTypeSchema = z.enum([
+  'github_repository',
+  'documentation',
+  'course',
+  'web_page',
+  'uploaded_document',
+  'manual',
+])
+
+/** Source identity and attribution are independent from the tracks that use the source. */
+export const sourceSchema = z.object({
+  id: z.string().min(1),
+  type: sourceTypeSchema,
+  name: z.string().min(1),
+  url: z.string().url().optional(),
+  author: z.string().min(1),
+  license: z.string().min(1),
+  attribution: z.string().min(1),
+})
+
+/**
+ * A track-level provenance link. Optional locator fields let later importers pin a path or
+ * revision without putting GitHub-specific fields on Source itself.
+ */
+export const sourceReferenceSchema = z.object({
+  sourceId: z.string().min(1),
+  sourceUrl: z.string().url().optional(),
+  sourcePath: z.string().min(1).optional(),
+  sourceRevision: z.string().min(1).optional(),
+})
 
 /** `open` = open question with self-grading. `mcq` = multiple choice. */
 export const formatSchema = z.enum(['open', 'mcq'])
@@ -78,6 +109,15 @@ export const curriculumSchema = z.object({
   sections: z.array(sectionSchema).min(1),
 })
 
+/** A learning track owns one existing Curriculum and may draw from multiple Sources. */
+export const trackSchema = z.object({
+  id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  sourceReferences: z.array(sourceReferenceSchema).min(1),
+  curriculum: curriculumSchema,
+})
+
 export const questionsFileSchema = z.object({
   generatedAt: z.string(),
   sourceId: z.string(),
@@ -89,6 +129,7 @@ export const questionsFileSchema = z.object({
  * Only answered cards ever produce one of these (ADR-0012).
  */
 export const progressSchema = z.object({
+  trackId: z.string().min(1),
   questionId: z.string().length(12),
   box: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
   /** Timestamp in ms of the next review. A date in the past carries no urgency. */
@@ -108,6 +149,7 @@ export const progressSchema = z.object({
  * because lesson composition can shift when upstream inserts questions (ADR-0011).
  */
 export const lessonProgressSchema = z.object({
+  trackId: z.string().min(1),
   lessonId: z.string().min(1),
   answeredQuestionIds: z.array(z.string().length(12)),
   completedAt: z.number().int().nullable(),
@@ -117,19 +159,25 @@ export const lessonProgressSchema = z.object({
 
 /**
  * The JSON export/import payload (ADR-0005): all local progress in one file. `version` is
- * literal so import can detect an old shape and migrate it. v2 adds `updatedAt` (ADR-0020);
- * v1 files predate it and are backfilled on import (see `repository.importData`).
+ * literal so import can migrate older shapes. v2 added `updatedAt`; v3 adds `trackId`.
+ * Pre-track files are assigned to React in `repository.importData` (ADR-0020, ADR-0023).
  */
 export const progressExportSchema = z.object({
-  version: z.literal(2),
+  version: z.literal(3),
   progress: z.array(progressSchema),
   lessonProgress: z.array(lessonProgressSchema),
 })
 
+export const progressExportV2Schema = z.object({
+  version: z.literal(2),
+  progress: z.array(progressSchema.omit({ trackId: true })),
+  lessonProgress: z.array(lessonProgressSchema.omit({ trackId: true })),
+})
+
 export const progressExportV1Schema = z.object({
   version: z.literal(1),
-  progress: z.array(progressSchema.omit({ updatedAt: true })),
-  lessonProgress: z.array(lessonProgressSchema.omit({ updatedAt: true })),
+  progress: z.array(progressSchema.omit({ trackId: true, updatedAt: true })),
+  lessonProgress: z.array(lessonProgressSchema.omit({ trackId: true, updatedAt: true })),
 })
 
 /**
@@ -159,10 +207,14 @@ export const checksFileSchema = z.object({
 export type Tech = z.infer<typeof techSchema>
 export type Level = z.infer<typeof levelSchema>
 export type Format = z.infer<typeof formatSchema>
+export type SourceType = z.infer<typeof sourceTypeSchema>
+export type Source = z.infer<typeof sourceSchema>
+export type SourceReference = z.infer<typeof sourceReferenceSchema>
 export type Question = z.infer<typeof questionSchema>
 export type Lesson = z.infer<typeof lessonSchema>
 export type Section = z.infer<typeof sectionSchema>
 export type Curriculum = z.infer<typeof curriculumSchema>
+export type Track = z.infer<typeof trackSchema>
 export type QuestionsFile = z.infer<typeof questionsFileSchema>
 export type Progress = z.infer<typeof progressSchema>
 export type LessonProgress = z.infer<typeof lessonProgressSchema>

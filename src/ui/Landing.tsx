@@ -1,4 +1,4 @@
-import type { SourceInfo } from '../content/sources'
+import type { Source } from '../content/schema'
 import { type Theme } from '../core/theme'
 import { copy } from './copy'
 import { HeroConstellation } from './HeroConstellation'
@@ -27,7 +27,7 @@ export function Landing({
   onStart,
   onBack,
 }: {
-  source: SourceInfo
+  source: Source
   questionCount: number
   syncConfigured: boolean
   theme: Theme

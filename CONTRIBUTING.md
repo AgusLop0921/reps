@@ -2,8 +2,9 @@
 
 ## Language
 
-The repository is in English — code, comments, docs, commits, PRs. User-facing UI
-strings are in Spanish and live in `src/ui/copy.ts`. See ADR-0008.
+The repository is in English — code, comments, docs, commits, PRs. User-facing UI chrome
+is in Spanish and lives in `src/ui/copy.ts`; canonical learning content may carry its source
+or reviewed editorial language. See ADR-0008 and ADR-0023.
 
 ## Branches
 

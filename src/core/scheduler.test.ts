@@ -22,14 +22,14 @@ describe('nextBox', () => {
 
 describe('review', () => {
   it('reschedules to one day on failure, regardless of the box', () => {
-    const progress = { ...initialProgress('abc123abc123', NOW), box: 5 as const }
+    const progress = { ...initialProgress('react', 'abc123abc123', NOW), box: 5 as const }
     const after = review(progress, 1, NOW)
     expect(after.box).toBe(1)
     expect(after.dueAt).toBe(NOW + DAY)
   })
 
   it('uses the next box interval on a perfect score', () => {
-    const progress = initialProgress('abc123abc123', NOW)
+    const progress = initialProgress('react', 'abc123abc123', NOW)
     // box 1 -> 2 with score 4: uses the box 3 interval (7 days)
     expect(review(progress, 4, NOW).dueAt).toBe(NOW + 7 * DAY)
     // box 1 -> 2 with score 3: uses the box 2 interval (3 days)
@@ -37,7 +37,7 @@ describe('review', () => {
   })
 
   it('appends to history without mutating the input', () => {
-    const progress = initialProgress('abc123abc123', NOW)
+    const progress = initialProgress('react', 'abc123abc123', NOW)
     const after = review(progress, 3, NOW)
     expect(after.history).toHaveLength(1)
     expect(progress.history).toHaveLength(0)
@@ -46,14 +46,14 @@ describe('review', () => {
 
 describe('isDue', () => {
   it('treats a brand new question as due immediately', () => {
-    expect(isDue(initialProgress('abc123abc123', NOW), NOW)).toBe(true)
+    expect(isDue(initialProgress('react', 'abc123abc123', NOW), NOW)).toBe(true)
   })
 })
 
 describe('currentStreak', () => {
   const withReviews = (dayOffsets: number[]) => [
     {
-      ...initialProgress('a'.repeat(12), NOW),
+      ...initialProgress('react', 'a'.repeat(12), NOW),
       history: dayOffsets.map((d) => ({ at: NOW - d * DAY, score: 3 as const })),
     },
   ]

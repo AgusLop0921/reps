@@ -6,9 +6,9 @@ runs local-only, exactly as before.
 ## Setup
 
 1. Create a Supabase project.
-2. Run `migrations/0001_progress_sync.sql` — either `supabase db push`, or paste it into the
-   project's SQL editor. It creates the `progress` and `lesson_progress` tables, their
-   Row-Level Security policies, and the `delete_account()` function.
+2. Run every migration in order — either `supabase db push`, or apply the SQL files through
+   the project's SQL editor. `0001` creates progress sync; `0002` scopes it by track and maps
+   every existing row to React. Apply `0002` before deploying a frontend built after ADR-0023.
 3. **Authentication → Providers**: enable **Email** with "Confirm email" on (magic link), and
    **Google** (OAuth client ID + secret from Google Cloud) — both are offered at first run and
    on the path screen (ADR-0021).
@@ -24,8 +24,8 @@ committed.
 
 ## What is stored
 
-Progress only: box, due date, grade history, lesson position, and the account email. No
-content, no question or answer text — the corpus stays static and client-side (ADR-0004).
+Progress only: track id, box, due date, grade history, lesson position, and the account email.
+No content, no question or answer text — the corpus stays static and client-side (ADR-0004).
 
 ## Security notes
 

@@ -5,6 +5,7 @@ import {
   type ProgressExport,
   progressExportSchema,
   progressExportV1Schema,
+  progressExportV2Schema,
   progressSchema,
 } from '../content/schema'
 import { db } from './db'
@@ -28,6 +29,10 @@ export async function getAllProgress(): Promise<Progress[]> {
   return valid
 }
 
+export async function getProgressForTrack(trackId: string): Promise<Progress[]> {
+  return (await getAllProgress()).filter((progress) => progress.trackId === trackId)
+}
+
 export async function getAllLessonProgress(): Promise<LessonProgress[]> {
   const rows = await db.lessonProgress.toArray()
   const valid: LessonProgress[] = []
@@ -37,6 +42,10 @@ export async function getAllLessonProgress(): Promise<LessonProgress[]> {
     else console.warn('storage: dropping invalid lessonProgress record', parsed.error.issues)
   }
   return valid
+}
+
+export async function getLessonProgressForTrack(trackId: string): Promise<LessonProgress[]> {
+  return (await getAllLessonProgress()).filter((progress) => progress.trackId === trackId)
 }
 
 export async function putProgress(progress: Progress): Promise<void> {
@@ -57,7 +66,7 @@ export async function putLessonProgress(lessonProgress: LessonProgress): Promise
  */
 export async function pullProgress(remote: Progress): Promise<void> {
   await db.transaction('rw', db.progress, async () => {
-    const current = await db.progress.get(remote.questionId)
+    const current = await db.progress.get([remote.trackId, remote.questionId])
     const currentAt = current?.updatedAt ?? Number.NEGATIVE_INFINITY
     if (remote.updatedAt > currentAt) await db.progress.put(remote)
   })
@@ -65,7 +74,7 @@ export async function pullProgress(remote: Progress): Promise<void> {
 
 export async function pullLessonProgress(remote: LessonProgress): Promise<void> {
   await db.transaction('rw', db.lessonProgress, async () => {
-    const current = await db.lessonProgress.get(remote.lessonId)
+    const current = await db.lessonProgress.get([remote.trackId, remote.lessonId])
     const currentAt = current?.updatedAt ?? Number.NEGATIVE_INFINITY
     if (remote.updatedAt > currentAt) await db.lessonProgress.put(remote)
   })
@@ -87,21 +96,34 @@ export async function exportData(): Promise<string> {
     getAllProgress(),
     getAllLessonProgress(),
   ])
-  const payload: ProgressExport = { version: 2, progress, lessonProgress }
+  const payload: ProgressExport = { version: 3, progress, lessonProgress }
   return JSON.stringify(payload, null, 2)
 }
 
-/** Normalize an imported payload to the current shape, backfilling `updatedAt` on v1 files. */
+/** Normalize exports, assigning pre-track v1/v2 data to React and backfilling v1 timestamps. */
 function normalizeExport(raw: unknown): ProgressExport | null {
-  const v2 = progressExportSchema.safeParse(raw)
-  if (v2.success) return v2.data
+  const v3 = progressExportSchema.safeParse(raw)
+  if (v3.success) return v3.data
+
+  const legacyV2 = progressExportV2Schema.safeParse(raw)
+  if (legacyV2.success) {
+    return {
+      version: 3,
+      progress: legacyV2.data.progress.map((p) => ({ ...p, trackId: 'react' })),
+      lessonProgress: legacyV2.data.lessonProgress.map((l) => ({ ...l, trackId: 'react' })),
+    }
+  }
 
   const v1 = progressExportV1Schema.safeParse(raw)
   if (v1.success) {
     return {
-      version: 2,
-      progress: v1.data.progress.map((p) => ({ ...p, updatedAt: 0 })),
-      lessonProgress: v1.data.lessonProgress.map((l) => ({ ...l, updatedAt: 0 })),
+      version: 3,
+      progress: v1.data.progress.map((p) => ({ ...p, trackId: 'react', updatedAt: 0 })),
+      lessonProgress: v1.data.lessonProgress.map((l) => ({
+        ...l,
+        trackId: 'react',
+        updatedAt: 0,
+      })),
     }
   }
   return null

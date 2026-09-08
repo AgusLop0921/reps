@@ -72,6 +72,11 @@ export const copy = {
   onboardingBack: 'Volver',
   onboardingStart: 'Empezar',
 
+  trackSelectEyebrow: 'Entrenamiento',
+  trackSelectTitle: '¿Qué querés entrenar?',
+  trackQuestionCount: (count: number): string =>
+    count === 1 ? '1 concepto para empezar' : `${count} preguntas`,
+
   lessonLabel: 'Lección',
   reviewBadge: 'Repaso',
   cardCount: (current: number, total: number): string => `${current}/${total}`,

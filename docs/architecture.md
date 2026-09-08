@@ -5,7 +5,7 @@ Living document: how the system looks today. The *why* lives in [`docs/adr/`](ad
 ## Data flow
 
 ```
-third-party repositories (markdown)
+approved sources (repositories today; more source types later)
         │  pnpm content:import   (build time, offline)
         ▼
 scripts/import/sources/*.ts      one adapter per source
@@ -17,28 +17,45 @@ curriculum generation            chunk into lessons, apply src/content/order.ts
 Zod (src/content/schema.ts)      validates or fails the build
         │
         ▼
-src/content/data/                questions.json + curriculum.json
+src/content/data/                imported React questions + curriculum
         │                        generated, committed, never edited by hand
+        ├──────────┐
+        │          │ reviewed editorial seed
+        ▼          ▼
+validated content catalog        Source != Track; Track wraps Curriculum
+        │
         ▼
 src/core/
    curriculum.ts ──── path position, unlocking, lesson deck
    scheduler.ts  ──── when a card comes back
         │
-        ├──────────► src/storage/ (Dexie)   lesson progress + per-question progress
+        ├──────────► src/storage/ (Dexie)   progress keyed by track + content id
         ▼
 src/ui/                                     React
 ```
 
-Content enters at build time; progress lives only in the browser. They meet in `core/`,
-joined by `questionId` and `lessonId`.
+Content enters at build time or as reviewed editorial seed; progress lives in the browser and
+optionally syncs. They meet in `core/`, selected by `trackId` and joined by `questionId` and
+`lessonId`.
+
+## Tracks and sources
+
+A `Track` owns one existing `Curriculum`; its sections and lessons keep the original path
+model. A track references one or more `Source` records, but source identity never determines
+track identity. Questions retain fine-grained attribution through `sourceId` and slug. The
+catalog rejects unresolved and duplicate references at startup.
+
+The runtime consumes only this canonical Reps model. Future repository, documentation,
+course, web, or upload adapters normalize outside the runtime and publish validated catalog
+artifacts after grounding and human review. See ADR-0023.
 
 ## The two progress models
 
 There are deliberately two, and conflating them is the mistake to avoid:
 
-- **`LessonProgress`** — where you are on the path. Drives unlocking and the "next
+- **`LessonProgress`** — where you are on one track's path. Drives unlocking and the "next
   lesson" landing. Advances forward only.
-- **`Progress`** — spaced repetition state per question. Drives which review cards open a
+- **`Progress`** — spaced repetition state per track/question. Drives which review cards open a
   lesson. Moves in both directions.
 
 A card only gets `Progress` once it has actually been answered (ADR-0012). Scrolling past
@@ -75,9 +92,8 @@ every component.
 
 ## What is missing
 
-The app itself: `storage/`, `ui/`, the lesson runner and the path screen. Plus the
-curriculum generation step in the importer. This scaffold defines the contract they get
-built inside.
+The source-ingestion and generation stages described in ADR-0023 are architectural only.
+AI Engineering currently has one editorial seed lesson, not an imported curriculum.
 
 Interview simulation (ADR-0013) is v2 and shares only the corpus — it does not touch the
 path, the scheduler or either progress model.

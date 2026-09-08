@@ -31,6 +31,7 @@ const section = (id: string, lessons: Lesson[]): Section => ({
 })
 
 const done = (lessonId: string): LessonProgress => ({
+  trackId: 'react',
   lessonId,
   answeredQuestionIds: [],
   completedAt: NOW,
@@ -144,7 +145,7 @@ describe('buildLessonDeck', () => {
   const current = lesson('b2', 2, [qid(10), qid(11), qid(12)])
 
   it('opens with due cards from earlier lessons, then the new ones', () => {
-    const progress = [{ ...initialProgress(qid(1), NOW), dueAt: NOW - DAY }]
+    const progress = [{ ...initialProgress('react', qid(1), NOW), dueAt: NOW - DAY }]
     const deck = buildLessonDeck({ lesson: current, progress, lessonProgress: null, now: NOW })
 
     expect(deck[0]).toEqual({ kind: 'review', questionId: qid(1) })
@@ -153,7 +154,7 @@ describe('buildLessonDeck', () => {
 
   it('caps review cards at three and drops the overflow', () => {
     const progress = [1, 2, 3, 4, 5].map((n) => ({
-      ...initialProgress(qid(n), NOW),
+      ...initialProgress('react', qid(n), NOW),
       dueAt: NOW - n * DAY,
     }))
     const deck = buildLessonDeck({ lesson: current, progress, lessonProgress: null, now: NOW })
@@ -163,8 +164,8 @@ describe('buildLessonDeck', () => {
 
   it('shows the most overdue review first', () => {
     const progress = [
-      { ...initialProgress(qid(1), NOW), dueAt: NOW - DAY },
-      { ...initialProgress(qid(2), NOW), dueAt: NOW - 9 * DAY },
+      { ...initialProgress('react', qid(1), NOW), dueAt: NOW - DAY },
+      { ...initialProgress('react', qid(2), NOW), dueAt: NOW - 9 * DAY },
     ]
     const deck = buildLessonDeck({ lesson: current, progress, lessonProgress: null, now: NOW })
 
@@ -172,14 +173,14 @@ describe('buildLessonDeck', () => {
   })
 
   it('excludes cards that are not due yet', () => {
-    const progress = [{ ...initialProgress(qid(1), NOW), dueAt: NOW + DAY }]
+    const progress = [{ ...initialProgress('react', qid(1), NOW), dueAt: NOW + DAY }]
     const deck = buildLessonDeck({ lesson: current, progress, lessonProgress: null, now: NOW })
 
     expect(deck.every((c) => c.kind === 'new')).toBe(true)
   })
 
   it('never reviews a question that belongs to the lesson itself', () => {
-    const progress = [{ ...initialProgress(qid(10), NOW), dueAt: NOW - DAY }]
+    const progress = [{ ...initialProgress('react', qid(10), NOW), dueAt: NOW - DAY }]
     const deck = buildLessonDeck({ lesson: current, progress, lessonProgress: null, now: NOW })
 
     expect(deck.filter((c) => c.kind === 'review')).toHaveLength(0)
@@ -189,7 +190,7 @@ describe('buildLessonDeck', () => {
     const deck = buildLessonDeck({
       lesson: current,
       progress: [],
-      lessonProgress: { lessonId: 'b2', answeredQuestionIds: [qid(10)], completedAt: null, updatedAt: NOW },
+      lessonProgress: { trackId: 'react', lessonId: 'b2', answeredQuestionIds: [qid(10)], completedAt: null, updatedAt: NOW },
       now: NOW,
     })
 
@@ -226,6 +227,7 @@ describe('pathQuestionCount', () => {
 describe('isCompleted', () => {
   it('does not count a lesson left halfway as completed', () => {
     const half: LessonProgress = {
+      trackId: 'react',
       lessonId: 'b1',
       answeredQuestionIds: [qid(1)],
       completedAt: null,
