@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { checksByQuestionId, questionsById, tracks, tracksById } from '../content/load'
 import { findLesson } from '../content/catalog'
 import type { LessonProgress, Progress, Score, Track } from '../content/schema'
@@ -11,9 +11,17 @@ import {
   pathQuestionCount,
 } from '../core/curriculum'
 import { SOURCES } from '../content/sources'
-import { advanceFromLanding, type FirstRunStep, initialStep, screenForStep } from '../core/firstRun'
+import {
+  advanceFromLanding,
+  type FirstRunStep,
+  initialStep,
+  screenForStep,
+  shouldOfferAccountChoice,
+} from '../core/firstRun'
 import { hasOnboarded, markOnboarded } from '../storage/onboarding'
 import { Card } from './Card'
+import { Account } from './Account'
+import { AccountControl } from './AccountControl'
 import { copy } from './copy'
 import { EndOfLesson } from './EndOfLesson'
 import { ErrorBoundary } from './ErrorBoundary'
@@ -32,6 +40,8 @@ import { useTheme } from './useTheme'
 const reactTrack = tracksById.get('react')
 if (!reactTrack) throw new Error('missing React track')
 const REACT_PATH_QUESTION_COUNT = pathQuestionCount(reactTrack.curriculum)
+const PENDING_TRACK_ID_KEY = 'reps:pending-track-id'
+type AccountReturnScreen = 'tracks' | 'path' | 'card'
 
 /** A card answered incorrectly, kept so the end screen can resurface its explanation. */
 type MissedCard = { questionId: string; title: string; explanation: string }
@@ -65,14 +75,23 @@ export function App() {
   const { theme, setTheme } = useTheme()
 
   // null = not navigated yet, so the app shows the home screen (see `activeScreen`).
-  const [screen, setScreen] = useState<'card' | 'path' | 'tracks' | 'landing' | null>(null)
+  const [screen, setScreen] = useState<
+    'card' | 'path' | 'tracks' | 'landing' | 'account' | 'account-choice' | null
+  >(null)
+  const [accountReturnScreen, setAccountReturnScreen] = useState<AccountReturnScreen>('tracks')
+  const [pendingTrackId, setPendingTrackId] = useState<string | null>(null)
   const [lessonId, setLessonId] = useState<string | null>(null)
   const [deck, setDeck] = useState<DeckCard[]>([])
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
   const [missed, setMissed] = useState<MissedCard[]>([])
   const [notice, setNotice] = useState<string | null>(null)
-  const [firstRunStep, setFirstRunStep] = useState<FirstRunStep>(() => initialStep(hasOnboarded()))
+  const [isSigningIn, setIsSigningIn] = useState(false)
+  const [firstRunStep, setFirstRunStep] = useState<FirstRunStep>(() =>
+    initialStep(
+      hasOnboarded() || window.sessionStorage.getItem(PENDING_TRACK_ID_KEY) !== null,
+    ),
+  )
 
   // Reload progress from storage after it changes underneath us (import, sync). On the
   // initial sync after sign-in, also re-land on the resumed lesson so a device that had done
@@ -92,6 +111,25 @@ export function App() {
   // Two-way sync while signed in (ADR-0020). No-op with no session or no Supabase.
   useSync(auth.userId, (isInitial) => refreshFromStorage(isInitial))
 
+  // OAuth reloads the app. Keep the chosen track through that redirect, then open it once the
+  // returned session has resolved instead of making the learner choose it a second time.
+  useEffect(() => {
+    if (auth.loading || auth.userId === null) return
+    const trackId = window.sessionStorage.getItem(PENDING_TRACK_ID_KEY)
+    if (!trackId) return
+    window.sessionStorage.removeItem(PENDING_TRACK_ID_KEY)
+    if (!tracksById.has(trackId)) return
+    if (!hasOnboarded()) markOnboarded()
+    setFirstRunStep('app')
+    setSelectedTrackId(trackId)
+    setLessonId(null)
+    setDeck([])
+    setIndex(0)
+    setPicked(null)
+    setMissed([])
+    setScreen('path')
+  }, [auth.loading, auth.userId])
+
   const openLesson = (id: string): void => {
     if (!selectedTrack) return
     setLessonId(id)
@@ -103,7 +141,7 @@ export function App() {
     setScreen('card')
   }
 
-  const selectTrack = (trackId: string): void => {
+  const openTrack = (trackId: string): void => {
     if (!tracksById.has(trackId)) return
     setSelectedTrackId(trackId)
     setLessonId(null)
@@ -115,42 +153,64 @@ export function App() {
     setScreen('path')
   }
 
+  const selectTrack = (trackId: string): void => {
+    if (!tracksById.has(trackId)) return
+    if (
+      shouldOfferAccountChoice({
+        hasOnboarded: hasOnboarded(),
+        authConfigured: auth.configured,
+        signedIn: auth.userId !== null,
+      })
+    ) {
+      setPendingTrackId(trackId)
+      setNotice(null)
+      setScreen('account-choice')
+      return
+    }
+    if (!hasOnboarded()) {
+      markOnboarded()
+      setFirstRunStep('app')
+    }
+    openTrack(trackId)
+  }
 
   const handleGoogleSignIn = (): void => {
+    setIsSigningIn(true)
+    if (pendingTrackId) window.sessionStorage.setItem(PENDING_TRACK_ID_KEY, pendingTrackId)
     void (async () => {
       try {
         await auth.signInWithGoogle()
       } catch {
+        setIsSigningIn(false)
         setNotice(copy.syncError)
       }
     })()
   }
 
-  // Leaving the landing ("Empezar"): record the choice now — before the account screen — so the
-  // sequence never recurs even if abandoned there (ADR-0021), then advance per the pure rule.
+  const openAccount = (returnScreen: AccountReturnScreen): void => {
+    setAccountReturnScreen(returnScreen)
+    setNotice(null)
+    setScreen('account')
+  }
+
+  // Leaving the landing opens track selection. The one-time account choice happens only after
+  // the learner gives it context by selecting a track.
   const startFromLanding = (): void => {
-    const { step, persist } = advanceFromLanding(auth.configured)
-    if (persist) markOnboarded()
-    if (step === 'app') setScreen('tracks')
+    const { step } = advanceFromLanding()
+    setScreen('tracks')
     setFirstRunStep(step)
   }
 
-  // Any account-choice action ends the sequence at track selection, never inside a lesson.
-  // The onboarding flag was already set on the landing.
-  const finishAccount = (): void => {
-    setScreen('tracks')
+  const finishTrackAccountChoice = (): void => {
+    const trackId = pendingTrackId
+    if (!trackId) {
+      setScreen('tracks')
+      return
+    }
+    markOnboarded()
     setFirstRunStep('app')
-  }
-
-  const handleSignIn = (email: string): void => {
-    void (async () => {
-      try {
-        await auth.signIn(email)
-        setNotice(copy.syncCheckEmail)
-      } catch {
-        setNotice(copy.syncError)
-      }
-    })()
+    setPendingTrackId(null)
+    openTrack(trackId)
   }
 
   const handleSignOut = (): void => {
@@ -185,9 +245,8 @@ export function App() {
     )
   }
 
-  // First run: landing, then the account choice (ADR-0021). Once past, never again — a pure
-  // sequencer (core/firstRun) decides which shows. The landing appears regardless of sync
-  // config; the account screen only when there's something to sign into.
+  // First run starts on the landing. Track selection owns the later optional account decision,
+  // so learners choose a subject before deciding how its progress is stored.
   const firstRunScreen = screenForStep(firstRunStep)
   if (firstRunScreen === 'landing') {
     return (
@@ -203,14 +262,14 @@ export function App() {
       </main>
     )
   }
-  if (firstRunScreen === 'account') {
+  if (screen === 'account-choice') {
     return (
       <main className="app">
         <Onboarding
           onGoogle={handleGoogleSignIn}
-          onEmail={handleSignIn}
-          onContinue={finishAccount}
-          onSkip={finishAccount}
+          onSkip={finishTrackAccountChoice}
+          isSigningIn={isSigningIn}
+          notice={notice}
         />
       </main>
     )
@@ -245,6 +304,9 @@ export function App() {
           onSetTheme={setTheme}
           onSelect={selectTrack}
           onBack={() => setScreen('landing')}
+          authConfigured={auth.configured}
+          profile={auth.profile}
+          onOpenAccount={() => openAccount('tracks')}
         />
       </main>
     )
@@ -256,17 +318,30 @@ export function App() {
         <Path
           curriculum={selectedTrack.curriculum}
           progress={lessonProgress}
-          notice={notice}
           authConfigured={auth.configured}
-          authEmail={auth.email}
+          profile={auth.profile}
           onOpenLesson={openLesson}
-          onGoogleSignIn={handleGoogleSignIn}
-          onSignIn={handleSignIn}
-          onSignOut={handleSignOut}
-          onDeleteAccount={handleDeleteAccount}
+          onOpenAccount={() => openAccount('path')}
           theme={theme}
           onSetTheme={setTheme}
           onBack={() => setScreen('tracks')}
+        />
+      </main>
+    )
+  }
+
+  if (activeScreen === 'account') {
+    return (
+      <main className="app">
+        <Account
+          email={auth.email}
+          profile={auth.profile}
+          notice={notice}
+          isSigningIn={isSigningIn}
+          onGoogleSignIn={handleGoogleSignIn}
+          onSignOut={handleSignOut}
+          onDeleteAccount={handleDeleteAccount}
+          onBack={() => setScreen(accountReturnScreen)}
         />
       </main>
     )
@@ -304,6 +379,7 @@ export function App() {
       {index < deck.length && (
         <span className="card-count">{copy.cardCount(index + 1, deck.length)}</span>
       )}
+      {auth.configured && <AccountControl profile={auth.profile} onOpen={() => openAccount('card')} />}
       <ThemeControl theme={theme} onSetTheme={setTheme} />
     </header>
   )

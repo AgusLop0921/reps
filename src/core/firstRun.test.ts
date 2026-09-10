@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { advanceFromLanding, initialStep, screenForStep } from './firstRun'
+import { advanceFromLanding, initialStep, screenForStep, shouldOfferAccountChoice } from './firstRun'
 
 /** The screen a fresh load would render, given the persisted flag. */
 const screenOnLoad = (hasOnboarded: boolean) => screenForStep(initialStep(hasOnboarded))
@@ -23,28 +23,32 @@ describe('first-run sequencing (ADR-0021)', () => {
     expect(initialStep(true)).toBe('app')
   })
 
-  it('after "Empezar" with sync configured, shows the account screen', () => {
-    const { step } = advanceFromLanding(true)
-    expect(screenForStep(step)).toBe('account')
-  })
-
-  it('after "Empezar" without sync, goes straight to the app', () => {
-    const { step } = advanceFromLanding(false)
+  it('after "Empezar", opens track selection before the account decision', () => {
+    const { step } = advanceFromLanding()
     expect(screenForStep(step)).toBe('app')
   })
 
-  it('records the choice on leaving the landing, before the account screen', () => {
-    // This is what makes abandonment safe: the flag is persisted at "Empezar", not at the
-    // account choice.
-    expect(advanceFromLanding(true).persist).toBe(true)
-    expect(advanceFromLanding(false).persist).toBe(true)
+  it('does not record first run until the learner chooses an account mode for a track', () => {
+    expect(advanceFromLanding().persist).toBe(false)
   })
 
-  it('abandoning between the two steps never re-shows either', () => {
-    // User presses "Empezar" (sync configured) → account screen, and closes the app there.
-    const { persist } = advanceFromLanding(true)
-    // "Empezar" persisted the flag, so the next load reads hasOnboarded = true.
-    const nextLoad = screenOnLoad(persist)
-    expect(nextLoad).toBe('app')
+  it('offers the account choice only to a fresh, signed-out learner when sync is available', () => {
+    expect(
+      shouldOfferAccountChoice({ hasOnboarded: false, authConfigured: true, signedIn: false }),
+    ).toBe(true)
+    expect(
+      shouldOfferAccountChoice({ hasOnboarded: true, authConfigured: true, signedIn: false }),
+    ).toBe(false)
+    expect(
+      shouldOfferAccountChoice({ hasOnboarded: false, authConfigured: false, signedIn: false }),
+    ).toBe(false)
+    expect(
+      shouldOfferAccountChoice({ hasOnboarded: false, authConfigured: true, signedIn: true }),
+    ).toBe(false)
+  })
+
+  it('keeps the landing eligible when a learner abandons before choosing a track mode', () => {
+    const { persist } = advanceFromLanding()
+    expect(screenOnLoad(persist)).toBe('landing')
   })
 })

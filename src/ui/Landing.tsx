@@ -1,7 +1,6 @@
 import type { Source } from '../content/schema'
 import { type Theme } from '../core/theme'
 import { copy } from './copy'
-import { HeroConstellation } from './HeroConstellation'
 import repsIcon from './reps-icon.svg'
 import cardDark from './shots/card-dark.png'
 import cardLight from './shots/card-light.png'
@@ -62,7 +61,6 @@ export function Landing({
       </nav>
 
       <header className="landing-hero">
-        <HeroConstellation theme={theme} />
         <h1 className="landing-title">{copy.appName}</h1>
         <div className="landing-scale">
           <p className="landing-scale-main">{copy.landingScale(questionCount)}</p>

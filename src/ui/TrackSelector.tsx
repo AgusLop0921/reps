@@ -1,6 +1,8 @@
 import type { Track } from '../content/schema'
 import { pathQuestionCount } from '../core/curriculum'
 import { copy } from './copy'
+import { AccountControl } from './AccountControl'
+import type { AuthProfile } from './authProfile'
 import repsIcon from './reps-icon.svg'
 import { ThemeControl } from './ThemeControl'
 import type { Theme } from '../core/theme'
@@ -11,12 +13,18 @@ export function TrackSelector({
   onSetTheme,
   onSelect,
   onBack,
+  authConfigured,
+  profile,
+  onOpenAccount,
 }: {
   tracks: Track[]
   theme: Theme
   onSetTheme: (theme: Theme) => void
   onSelect: (trackId: string) => void
   onBack: () => void
+  authConfigured: boolean
+  profile: AuthProfile | null
+  onOpenAccount: () => void
 }) {
   return (
     <section className="track-select">
@@ -24,7 +32,10 @@ export function TrackSelector({
         <button type="button" className="path-home" aria-label={copy.pathHome} onClick={onBack}>
           <img className="path-home-icon" src={repsIcon} alt="" width="30" height="30" />
         </button>
-        <ThemeControl theme={theme} onSetTheme={onSetTheme} />
+        <div className="path-head-actions">
+          {authConfigured && <AccountControl profile={profile} onOpen={onOpenAccount} />}
+          <ThemeControl theme={theme} onSetTheme={onSetTheme} />
+        </div>
       </header>
 
       <div className="track-select-body">

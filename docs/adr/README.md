@@ -44,8 +44,12 @@ change contracts.
 | [0017](0017-generated-checks-build-time.md) | Multiple-choice checks are generated at build time | Accepted |
 | [0018](0018-long-sessions-from-content-pull.md) | Long sessions are welcome when they come from content pull | Amended by 0021 |
 | [0019](0019-check-outcome-to-leitner-score.md) | A check outcome maps to a Leitner score of 1 or 3 | Accepted |
-| [0020](0020-cross-device-sync-supabase.md) | Cross-device progress sync with Supabase, local-first | Amended by 0021 |
-| [0021](0021-first-run-account-choice.md) | A one-time first-run account choice | Amended by 0022 |
+| [0020](0020-cross-device-sync-supabase.md) | Cross-device progress sync with Supabase, local-first | Amended by 0021, 0026 |
+| [0021](0021-first-run-account-choice.md) | A one-time first-run account choice | Amended by 0022, 0026, 0027 |
 | [0022](0022-open-to-the-home-not-the-lesson.md) | Open to the home, not straight into a lesson | Accepted |
 | [0023](0023-source-driven-multi-track-content.md) | Source-driven multi-track content architecture | Accepted |
 | [0024](0024-normalized-source-documents.md) | Normalize approved source documents before curriculum generation | Accepted |
+| [0026](0026-google-only-sync-auth.md) | Google-only authentication for progress sync | Accepted |
+| [0027](0027-visible-account-and-google-sign-in.md) | Visible account management with Google as the sync action | Amended by 0028, 0029 |
+| [0028](0028-account-choice-after-track-selection.md) | Choose local or Google progress after selecting a track | Accepted |
+| [0029](0029-account-access-during-lessons.md) | Keep account access available during lessons | Accepted |

@@ -1,6 +1,6 @@
 # ADR-0020: Cross-device progress sync with Supabase, local-first
 
-- **Status:** Accepted — amended by ADR-0021
+- **Status:** Accepted — amended by ADR-0021 and ADR-0026
 - **Date:** 2026-08-27
 - **Supersedes:** the "no backend / no cross-device sync" decision of ADR-0003
 - **Amends:** ADR-0005

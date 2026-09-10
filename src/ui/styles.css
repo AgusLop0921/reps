@@ -18,7 +18,7 @@
 
   --radius: 14px;
   --space: 16px;
-  --maxw: 640px;
+  --maxw: 1080px;
 
   --font-serif: Georgia, "Times New Roman", serif;
   --font: var(--font-serif);
@@ -83,7 +83,7 @@ body::before {
   min-height: 100%;
   max-width: var(--maxw);
   margin-inline: auto;
-  padding: calc(var(--space) + env(safe-area-inset-top)) var(--space)
+  padding: calc(var(--space) + env(safe-area-inset-top)) clamp(var(--space), 5vw, 3rem)
     calc(var(--space) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
@@ -91,9 +91,7 @@ body::before {
 
 /* The path uses the same width and side padding as the landing so their edges line up. */
 .app-wide {
-  max-width: 1080px;
-  padding-left: clamp(var(--space), 5vw, 3rem);
-  padding-right: clamp(var(--space), 5vw, 3rem);
+  max-width: var(--maxw);
 }
 
 .empty {
@@ -222,22 +220,6 @@ body::before {
   flex-direction: column;
   gap: clamp(1.5rem, 4vh, 2.5rem);
   position: relative;
-}
-
-/* Decorative constellation behind the hero (ADR-0023). Absolutely positioned so it neither
-   affects the flex layout nor takes input; the hero's real content is lifted above it. */
-.hero-constellation {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.landing-hero > :not(.hero-constellation) {
-  position: relative;
-  z-index: 1;
 }
 
 .landing-title {
@@ -522,8 +504,7 @@ body::before {
   }
 }
 
-/* First-run account choice (ADR-0021). Three options of deliberately equal weight — same
-   size, same neutral treatment, no accent on any — so none reads as the real path. */
+/* First-run account choice (ADR-0027): Google is the sync action; local-only remains clear. */
 .onboarding {
   flex: 1;
   display: flex;
@@ -568,20 +549,25 @@ body::before {
   font-size: 0.95rem;
 }
 
+.onboarding-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
 .onboarding-icon {
   flex: none;
   width: 20px;
   height: 20px;
 }
 
-.onboarding-back {
-  min-height: 36px;
-  border: none;
-  background: none;
+.onboarding-note,
+.onboarding-notice {
+  margin: 0;
   color: var(--muted);
   font-size: 0.85rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  line-height: 1.5;
 }
 
 /* Track selection is a small home surface, not a marketplace: two editorial choices using
@@ -1097,9 +1083,57 @@ button {
   margin-bottom: var(--space);
 }
 
-/* Push the theme control to the top-right of the header. */
-.path-head .theme-control {
+.path-head-actions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.account-control {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--muted);
+  padding: 0;
+}
+
+.account-control:hover {
+  color: var(--text);
+}
+
+.account-control svg {
+  width: 20px;
+  height: 20px;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-avatar-initials {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  line-height: 1;
 }
 
 .path-body {
@@ -1211,26 +1245,25 @@ button {
   height: 24px;
 }
 
-/* Done: filled accent circle + check, raised on a darker-accent shadow. */
+/* Done: a filled accent circle, quietly distinct without visual lift. */
 .trail-node-done {
   background: var(--accent);
   color: var(--bg);
-  box-shadow: 0 5px 0 color-mix(in srgb, var(--accent) 62%, #000);
 }
 
-/* Current: dark fill, accent ring and number, a soft pulse — the only named, animated node. */
+/* Current: an accent ring and a barely-there breathing space — never a notification pulse. */
 .trail-node-current {
   background: var(--surface);
-  border: 2px solid var(--accent);
+  border: 1px solid var(--accent);
   color: var(--accent);
-  animation: trailPulse 2.6s ease-out infinite;
+  animation: trailPulse 5.5s ease-in-out infinite;
 }
 
 /* Locked: flat, dim number — no padlock, no dead grey. */
 .trail-node-locked {
   background: var(--surface);
   border: 1px solid var(--border);
-  color: color-mix(in srgb, var(--muted) 55%, var(--bg));
+  color: color-mix(in srgb, var(--muted) 42%, var(--bg));
   cursor: default;
 }
 
@@ -1239,15 +1272,14 @@ button {
   color: var(--text);
 }
 
-/* Subtle "you are here" pulse. Killed entirely by prefers-reduced-motion (see below), leaving
-   the current node marked by its ring and label alone. */
+/* A long, low-opacity cue. Reduced motion removes it entirely (see below). */
 @keyframes trailPulse {
-  0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 30%, transparent);
-  }
-  70%,
+  0%,
   100% {
-    box-shadow: 0 0 0 13px color-mix(in srgb, var(--accent) 0%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 10%, transparent);
   }
 }
 
@@ -1306,74 +1338,113 @@ button {
   border-radius: 10px;
 }
 
-.path-actions {
-  flex: none;
-  margin-top: var(--space);
-  padding-top: var(--space);
-  border-top: 1px solid var(--border);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.path-action {
-  min-height: 40px;
-  padding: 0 0.9rem;
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-size: 0.85rem;
-}
-
-.path-notice {
-  flex-basis: 100%;
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-/* Sync: one quiet affordance, never a nag (ADR-0018). */
-.path-sync {
-  flex-basis: 100%;
-  margin-top: 4px;
-  padding-top: var(--space);
-  border-top: 1px solid var(--border);
+.account {
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
-.path-sync-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.path-sync-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.path-email {
+.account-body {
   flex: 1;
-  min-width: 0;
-  min-height: 40px;
-  padding: 0 0.7rem;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font: inherit;
-  font-size: 0.9rem;
+  width: 100%;
+  max-width: 420px;
+  margin: auto;
+  padding: clamp(2rem, 8vh, 5rem) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
-.path-note {
+.account-eyebrow {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.account-title {
+  margin: 0;
+  font-size: clamp(2rem, 8vw, 3rem);
+  line-height: 1.08;
+  font-weight: 500;
+}
+
+.account-body-copy,
+.account-privacy,
+.account-notice {
   margin: 0;
   color: var(--muted);
-  font-size: 0.8rem;
-  line-height: 1.5;
+  line-height: 1.6;
+}
+
+.account-google {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.account-google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.account-status {
+  margin: 0.5rem 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--correct);
+  font-size: 0.95rem;
+}
+
+.account-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.account-avatar {
+  width: 56px;
+  height: 56px;
+}
+
+.account-avatar .user-avatar-initials {
+  font-size: 1rem;
+}
+
+.account-name {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.account-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.account-email {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.account-actions {
+  width: 100%;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.account-delete {
+  color: var(--danger);
 }
 
 /* ---- Markdown answers ------------------------------------------------------- */

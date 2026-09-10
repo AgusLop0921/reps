@@ -63,14 +63,12 @@ export const copy = {
   landingFooterMeta: (author: string, license: string): string =>
     `Contenido de ${author} · ${license}`,
 
-  // First-run account choice (ADR-0021). Honest, symmetric, no default. Shown once, ever.
-  onboardingTitle: 'Antes de empezar',
+  // First-run account choice (ADR-0027). Shown once, ever.
+  onboardingTitle: 'Guardá tu progreso',
   onboardingBody:
-    'Con una cuenta, tu progreso se guarda y te sigue entre dispositivos. Sin cuenta, queda en este navegador.',
-  onboardingEmail: 'Entrar con email',
-  onboardingSkip: 'Seguir sin cuenta',
-  onboardingBack: 'Volver',
-  onboardingStart: 'Empezar',
+    'Conectá Google para seguir donde quedaste en cualquier dispositivo. Sin cuenta, queda en este navegador.',
+  onboardingSkip: 'Usar solo este dispositivo',
+  onboardingLater: 'Podés conectar Google más tarde desde Cuenta.',
 
   trackSelectEyebrow: 'Entrenamiento',
   trackSelectTitle: '¿Qué querés entrenar?',
@@ -120,14 +118,18 @@ export const copy = {
   themeOptions: { dark: 'Oscuro', light: 'Claro' },
   themeGlyphs: { dark: '☾', light: '☼' },
 
-  // Cross-device sync (ADR-0020, ADR-0021). One affordance, never a nag (ADR-0018).
-  syncTitle: 'Sincronizar entre dispositivos',
+  // Cross-device sync (ADR-0020, ADR-0026, ADR-0027). Local use remains first-class.
   googleSignIn: 'Continuar con Google',
-  syncEmailPlaceholder: 'tu correo',
-  syncSend: 'Enviarme el enlace',
-  syncCheckEmail: 'Te mandamos un enlace. Revisá tu correo.',
-  syncError: 'No se pudo enviar el enlace. Probá de nuevo.',
-  syncedAs: (email: string): string => `Sincronizado como ${email}`,
+  accountOpen: 'Cuenta y sincronización',
+  accountBack: 'Volver',
+  accountEyebrow: 'Cuenta',
+  accountLocalTitle: 'Tu progreso está en este dispositivo',
+  accountLocalBody:
+    'Conectá Google para guardarlo también en otros dispositivos y retomar desde donde lo dejaste.',
+  accountSyncedTitle: 'Tu progreso está sincronizado',
+  accountSyncedStatus: 'Conectado con Google',
+  accountSigningIn: 'Abriendo Google…',
+  syncError: 'No se pudo iniciar sesión. Probá de nuevo.',
   signOut: 'Cerrar sesión',
   deleteAccount: 'Eliminar cuenta',
   deleteConfirm: '¿Eliminar tu cuenta y todo tu progreso? No se puede deshacer.',

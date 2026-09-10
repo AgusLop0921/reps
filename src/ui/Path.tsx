@@ -3,6 +3,8 @@ import type { Curriculum, Lesson, LessonProgress, Section } from '../content/sch
 import { isCompleted, nextLesson, nodeState, type NodeState } from '../core/curriculum'
 import { type Theme } from '../core/theme'
 import { copy } from './copy'
+import { AccountControl } from './AccountControl'
+import type { AuthProfile } from './authProfile'
 import repsIcon from './reps-icon.svg'
 import { ThemeControl } from './ThemeControl'
 
@@ -81,39 +83,24 @@ function TrailNode({
 export function Path({
   curriculum,
   progress,
-  notice,
   authConfigured,
-  authEmail,
+  profile,
   onOpenLesson,
-  onGoogleSignIn,
-  onSignIn,
-  onSignOut,
-  onDeleteAccount,
+  onOpenAccount,
   theme,
   onSetTheme,
   onBack,
 }: {
   curriculum: Curriculum
   progress: LessonProgress[]
-  notice: string | null
   authConfigured: boolean
-  authEmail: string | null
+  profile: AuthProfile | null
   onOpenLesson: (lessonId: string) => void
-  onGoogleSignIn: () => void
-  onSignIn: (email: string) => void
-  onSignOut: () => void
-  onDeleteAccount: () => void
+  onOpenAccount: () => void
   theme: Theme
   onSetTheme: (theme: Theme) => void
   onBack: () => void
 }) {
-  const [email, setEmail] = useState('')
-
-  const onSignInSubmit = (event: React.FormEvent): void => {
-    event.preventDefault()
-    if (email.trim()) onSignIn(email.trim())
-  }
-
   const sections = curriculum.sections
   // Open on the section holding the next actionable lesson; if the whole path is done, the last.
   const next = nextLesson(curriculum, progress)
@@ -137,7 +124,10 @@ export function Path({
         <button type="button" className="path-home" aria-label={copy.pathHome} onClick={onBack}>
           <img className="path-home-icon" src={repsIcon} alt="" width="30" height="30" />
         </button>
-        <ThemeControl theme={theme} onSetTheme={onSetTheme} />
+        <div className="path-head-actions">
+          {authConfigured && <AccountControl profile={profile} onOpen={onOpenAccount} />}
+          <ThemeControl theme={theme} onSetTheme={onSetTheme} />
+        </div>
       </header>
 
       <div className="path-body">
@@ -205,52 +195,6 @@ export function Path({
           </ol>
         )}
       </div>
-
-      <footer className="path-actions">
-        {authConfigured && (
-          <div className="path-sync">
-            {authEmail ? (
-              <>
-                <span className="path-note">{copy.syncedAs(authEmail)}</span>
-                <div className="path-sync-row">
-                  <button type="button" className="path-action" onClick={onSignOut}>
-                    {copy.signOut}
-                  </button>
-                  <button type="button" className="path-action" onClick={onDeleteAccount}>
-                    {copy.deleteAccount}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <span className="path-note">{copy.syncTitle}</span>
-                <button type="button" className="path-action" onClick={onGoogleSignIn}>
-                  {copy.googleSignIn}
-                </button>
-                <form className="path-sync-form" onSubmit={onSignInSubmit}>
-                  <div className="path-sync-row">
-                    <input
-                      id="sync-email"
-                      type="email"
-                      required
-                      className="path-email"
-                      placeholder={copy.syncEmailPlaceholder}
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
-                    />
-                    <button type="submit" className="path-action">
-                      {copy.syncSend}
-                    </button>
-                  </div>
-                </form>
-              </>
-            )}
-            <p className="path-note">{copy.syncPrivacy}</p>
-          </div>
-        )}
-
-        {notice && <p className="path-notice">{notice}</p>}
-      </footer>
     </section>
   )
 }

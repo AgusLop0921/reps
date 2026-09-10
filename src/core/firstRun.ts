@@ -1,5 +1,6 @@
 /**
- * The first-run sequence (ADR-0021): a landing, then the account choice, shown once, ever.
+ * The first-run sequence: a landing, then track selection. The optional account choice happens
+ * only after the first selected track, when the learner has context for the decision.
  *
  * Pure by design — no storage, no DOM. The persisted "has onboarded" flag and the localStorage
  * write live in `storage/`; the UI holds the current step. This module owns only the decision
@@ -9,7 +10,7 @@
  */
 
 /** `'app'` means the first run is over: render the card/path, not a first-run screen. */
-export type FirstRunStep = 'landing' | 'account' | 'app'
+export type FirstRunStep = 'landing' | 'app'
 
 /** Where the sequence starts on load: skipped entirely once the flag is set. */
 export function initialStep(hasOnboarded: boolean): FirstRunStep {
@@ -17,18 +18,30 @@ export function initialStep(hasOnboarded: boolean): FirstRunStep {
 }
 
 /** The screen a step maps to. Identity today, but the single place the mapping is defined. */
-export function screenForStep(step: FirstRunStep): 'landing' | 'account' | 'app' {
+export function screenForStep(step: FirstRunStep): 'landing' | 'app' {
   return step
 }
 
 /**
- * Leaving the landing ("Empezar"). The choice is recorded here (`persist: true`) — before the
- * account screen — so abandoning between the two steps still never re-shows the sequence. Then
- * it advances to the account screen when sync exists, or straight to the app when it doesn't.
+ * Leaving the landing ("Empezar") opens track selection but does not persist the first-run
+ * choice. The learner still has to choose the selected track's account mode.
  */
-export function advanceFromLanding(authConfigured: boolean): {
+export function advanceFromLanding(): {
   step: FirstRunStep
   persist: boolean
 } {
-  return { step: authConfigured ? 'account' : 'app', persist: true }
+  return { step: 'app', persist: false }
+}
+
+/** The account choice is relevant only for a fresh, local-only learner with sync available. */
+export function shouldOfferAccountChoice({
+  hasOnboarded,
+  authConfigured,
+  signedIn,
+}: {
+  hasOnboarded: boolean
+  authConfigured: boolean
+  signedIn: boolean
+}): boolean {
+  return !hasOnboarded && authConfigured && !signedIn
 }

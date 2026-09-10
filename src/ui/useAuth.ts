@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { clearAll } from '../storage/repository'
 import { isSyncConfigured, supabase } from '../storage/supabaseClient'
+import { profileForUser, type AuthProfile } from './authProfile'
 
-// Where OAuth / magic links return to: the app's own URL, base included. `origin` alone drops
+// Where OAuth returns to: the app's own URL, base included. `origin` alone drops
 // the project-page base (`/reps/`), so it must be appended. This URL must also be in Supabase's
 // redirect allowlist, or Supabase falls back to the project's Site URL.
 const appUrl = window.location.origin + import.meta.env.BASE_URL
 
 /**
- * Supabase auth, magic-link only (ADR-0020). When Supabase is not configured this reports
+ * Supabase auth through Google OAuth (ADR-0026). When Supabase is not configured this reports
  * `configured: false` and every method is a no-op, so the no-account, local-only path is
  * completely unaffected. Deleting the account removes the remote data and the auth user
  * (via the `delete_account` function) and then wipes local storage — "everything in it".
@@ -16,6 +17,7 @@ const appUrl = window.location.origin + import.meta.env.BASE_URL
 export function useAuth() {
   const [email, setEmail] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
+  const [profile, setProfile] = useState<AuthProfile | null>(null)
   // Until the initial session resolves we can't tell signed-in from out; the boot waits on
   // this so it can route the home screen (ADR-0022). No Supabase → resolved immediately.
   const [loading, setLoading] = useState(isSyncConfigured)
@@ -25,23 +27,16 @@ export function useAuth() {
     void supabase.auth.getSession().then(({ data }) => {
       setEmail(data.session?.user.email ?? null)
       setUserId(data.session?.user.id ?? null)
+      setProfile(profileForUser(data.session?.user ?? null))
       setLoading(false)
     })
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setEmail(session?.user.email ?? null)
       setUserId(session?.user.id ?? null)
+      setProfile(profileForUser(session?.user ?? null))
     })
     return () => sub.subscription.unsubscribe()
   }, [])
-
-  async function signIn(address: string): Promise<void> {
-    if (!supabase) return
-    const { error } = await supabase.auth.signInWithOtp({
-      email: address,
-      options: { emailRedirectTo: appUrl },
-    })
-    if (error) throw error
-  }
 
   async function signInWithGoogle(): Promise<void> {
     if (!supabase) return
@@ -70,7 +65,7 @@ export function useAuth() {
     loading,
     email,
     userId,
-    signIn,
+    profile,
     signInWithGoogle,
     signOut,
     deleteAccount,
